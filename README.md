@@ -13,6 +13,8 @@ A játék lényege, hogy telkeket és épületeket vásárolnak a játékosok, a
 - **Szerencse/Meglepetés kártya mező**: Ha erre a mezőre lép a játékos, akkor egy _szerencse/meglepetés_ kártyát kell húznia, és a rajta szereplő utasítsnak eleget kell tennie.
 
 ### A játék szabályai
+#### A játék kezdése
+A játék elején minden játékos igazságosan egyforma pénzösszeget kap a Banktól. Első lépésként minden játékos dob egy-egy számot a két dobókockával és aki a legtöbbet dobja, az kezdi a játékot. A _Start_ mezőről indul a játék, ekkor a kockákkal újra dobni kell és a dobott számnak megfelelő mezőt kell előre lépni. Ezután a következő játékos következik, majd a következő és így tovább. Minden játékos, aki áthalad újra a _Start_ mezőn, az egy adott összegű pénzösszeget kap. Egy adott mezőn akár több bábu is állhat. Ha egy játékos a két kockával azonos számokat dob, akkor miután előre lépett, és a mezőhöz tartozó utasítást is végrehajtotta, akkor újra dobnia kell. Ha ebben az esetben is egyforma számok szerepelnek a kockán, akkor hasonlóan kell eljárnia. Viszont ha harmadik esetben is egyforma számokat dob, akkor azonnal börtönbe kerül. A játékosok játék közben telkeket, közművet és vasútvonalakat vásárolhatnak, ha az adott mezőre lépnek. A játék lényege, hogy ha egy játékos telek mezőre lép, akkor a tulajdonosának bérleti díjat kell fizetnie.
 
 ### A játék tartozékai
 - 2 db dobókocka
