@@ -20,7 +20,8 @@ A játék elején minden játékos igazságosan egyforma pénzösszeget kap a Ba
 
 ### A házépítés szabályai
 Ha a játékosok magasabb jövedelemre szeretnének szert tenni, akkor a birtokukban lévő telkekre ingatlanokat kell építeniük. A más játékosoktól beszedhető bérleti díj annál magasabb, minél több ház áll az adott telken. Minden telekhez tartozik egy birtoklevél, amely meghatározza a beszedhető alap bérleti díjat és azt, hogy mennyibe kerül az adott telken egy ház építése. Ezen felül minden telek meg van jelölve egy adott színnel, ami alapján 4 különböző csoportba sorolhatóak. A telkek ára előre meghatározott összeg, amelyet vásárlás esetén a Banknak kell megfizetni. Ha egy játékosnak sikerül megszerezni egy adott színcsoportba tartozó összes telket, akkor a játékos megveheti az első házat az egyik tetszőlegesen választott, adott színcsoportba tartozó telekre. A következő házak vásárlásánál arra kell figyelnie a játékosnak, hogy színcsoportonként arányosan épüljenek be a telkek. A legelső ház vásárlása után a következő házat csak az üres telkekre építheti meg, függetlenül attól, hogy az milyen színcsoportba tartozik. Miután a játékosnak már minden telkén áll egy ház, amelyek egy színcsoportba tartoznak, akkor kezdheti építeni az azonos színű telkekre a második házat, majd ugynanígy a harmadikat, aztán legvégül minden telken maximum 4 darab ház állhat.
-> *Ha például egy játékosnak egy színcsoportba tartozó összes telkén áll 3 darab ház, és ezek közül egy házat eladni kényszerül, akkor addig nem építheti meg egyik azonos színű telkén sem a negyedik házat, amíg az emlíŧett telken csak 2 ház áll.* 
+> *Ha például egy játékosnak egy színcsoportba tartozó összes telkén áll 3 darab ház, és ezek közül egy házat eladni kényszerül, akkor addig nem építheti meg egyik azonos színű telkén sem a negyedik házat, amíg az emlíŧett telken csak 2 ház áll.*
+
 Fontos szabály még, hogy jelzálog alatt álló telekre nem lehet építkezni, illetve ha Bank kevesebb házat tud eladni, mint amennyit a játékosok vásárolni szeretnének, akkor a házakra licitálni kell, és a legmagasabb árat kínáló játékosé lesz az ingatlan.
 #### Szállodák
 Ha egy játékosnak egy színcsoporthoz tartozó telkein a maximális 4 darab ház áll, akkor dönthet úgy, egy tetszőlegesen választott telekre épít egy szállodát, amellyel még magasabb bérleti díjra lesz jogosult, ezzel tovább növelve a jövedelmét. Egy telken csak egy szálloda állhat. A szálloda árát szintén a telekhez tartozó Biroklevél határozza meg.
@@ -34,7 +35,8 @@ Egy játékos három különböző úton kerülhet börtönbe:
 2. ha olyan meglepetés kártyát húz, amely arra utasítja, hogy vonuljon börtönbe,
 3. illetve ha háromszor dob egymás után egyforma számokat a dobókockákkal.
 > Ha a játékos börtönbe kerül, akkor a bábuját azonnal a _Börtön mezőre_ kell elhelyeznie, ráaduásul a börtönbe vezető úton, ha áthalad a _Start_ mezőn, akkor sem veheti fel az elvileg neki járó pénzjualmat.
-A játékosnak három lehetősége adott, hogy kiszabduljon a börtönből.
+
+A játékosnak három lehetősége adott, hogy kiszabduljon a börtönből:
 1. Ha a börtönbe került játékos a következő alkalommal háromszor dob egymás után egyforma számokat a kockákkal. Ha sikerül neki, akkor a három dobás összegének megfelelő lépést tehet előre. Ezt a módszert három körön keresztül próbálhatja meg, ha egyszer sem sikerül, akkor a negyedik körben automatikusan kiszabadulhat.
 2. Ha a játékos birtokában van egy _Kiszabadulhatsz a börtönből_ kártya, akkor akár azonnali felhasználásával börtönbe sem kell vonulnia.
 3. Ezenfelül, ha a játékos a börtönbe vonulást követő körben kifizeti a bírságot, akkor is kiszabadulhat. 
