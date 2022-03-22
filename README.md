@@ -11,7 +11,7 @@ A játék lényege, hogy telkeket és épületeket vásárolnak a játékosok, a
 - **Közmű mező**: Ha erre a mezőre ér a játékos, akkor lehetősége van megvásárolni az adott közműt, amely bevételi forrást jelent.
 - **Vasúti társaság**: Hasonlóan a közmű mezőhöz, a mezőre lépett játékos megvásárolhatja az adott vasútvonalat, amely ugyan más szabály mentén, de ugyanúgy bevételi forrást jelent a tulajdonosnak, mint a közmű.
 - **Jövedelem adó mező**: Ha erre a mezőre ér a játékos, akkor a mezőn szereplő pénzösszeget kell fizetnie a Bank részére.
-- **Szerencse/Meglepetés kártya mező**: Ha erre a mezőre lép a játékos, akkor egy _szerencse/meglepetés_ kártyát kell húznia, és a rajta szereplő utasítsnak eleget kell tennie.
+- **Szerencse/Meglepetés kártya mező**: Ha erre a mezőre lép a játékos, akkor egy _szerencse/meglepetés_ kártyát kell húznia, és a rajta szereplő utasításnak eleget kell tennie.
 
 ## A játék szabályai
 
