@@ -18,6 +18,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         System.out.println("Hello world!");
         System.out.println("Hello world!");
+        System.out.println("Hello world!");
         Table table = new Table();
 
         GameElement field = null;
