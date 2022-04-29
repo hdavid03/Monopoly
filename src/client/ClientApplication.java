@@ -12,7 +12,10 @@ public class ClientApplication {
             Player testPlayer = new Player(0, 0, 200);
             ClientThread clientThread = new ClientThread(socket, testPlayer);
             clientThread.start();
+            clientThread.join();
         } catch(IOException e) {
+            e.printStackTrace();
+        } catch(InterruptedException e) {
             e.printStackTrace();
         }
     }

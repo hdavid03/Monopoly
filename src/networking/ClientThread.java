@@ -28,8 +28,11 @@ public class ClientThread extends Thread {
             ois = new ObjectInputStream(socket.getInputStream());
             while(true) {
                 oos.writeObject(player);
+                Thread.sleep(400);
             }
         } catch(IOException e) {
+            e.printStackTrace();
+        } catch(InterruptedException e) {
             e.printStackTrace();
         }
     }

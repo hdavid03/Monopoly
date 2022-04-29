@@ -28,10 +28,13 @@ public class ServerSocketHandler extends Thread {
     public void run() {
         while(true) {
             if(clientSocketHandlers.size() < MAX_NUM_OF_CLIENTS) {
-                try(Socket socket = serverSocket.accept()) {
-                    ClientSocketHandler clientSocketHandler = new ClientSocketHandler(socket);
-                    clientSocketHandlers.add(clientSocketHandler);
-                    executorService.execute(clientSocketHandler);
+                try {
+                    while(true) {
+                        Socket socket = serverSocket.accept();
+                        ClientSocketHandler clientSocketHandler = new ClientSocketHandler(socket);
+                        clientSocketHandlers.add(clientSocketHandler);
+                        executorService.execute(clientSocketHandler);
+                    }
                 } catch(IOException e) {
                     e.printStackTrace();
                 }

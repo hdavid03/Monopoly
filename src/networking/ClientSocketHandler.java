@@ -17,16 +17,20 @@ public class ClientSocketHandler implements Runnable {
 
     @Override
     public void run() {
-        while(true) {
-            try {
-                ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                Player player = (Player)ois.readObject();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+        try {
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            while(true) {
+                Player player = (Player) ois.readObject();
+                System.out.println(player.getPlayerID() + " " + player.getMoney() + " " + player.getOnFieldPosition());
+                Thread.sleep(500);
             }
+        } catch(IOException e) {
+            e.printStackTrace();
+        } catch(ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch(InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
