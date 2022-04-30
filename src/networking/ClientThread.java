@@ -6,6 +6,7 @@ import game_elements.Table;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 
 public class ClientThread extends Thread {
@@ -13,9 +14,8 @@ public class ClientThread extends Thread {
     private Table table;
     private Player player;
 
-    public ClientThread(Socket socket, Player player) {
+    public ClientThread(Socket socket) {
         this.socket = socket;
-        this.player = player;
         this.table = new Table();
     }
 
@@ -26,13 +26,16 @@ public class ClientThread extends Thread {
         try {
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
+            this.player = (Player) ois.readObject();
             while(true) {
                 oos.writeObject(player);
-                Thread.sleep(400);
+                Thread.sleep(600);
             }
         } catch(IOException e) {
             e.printStackTrace();
         } catch(InterruptedException e) {
+            e.printStackTrace();
+        } catch(ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

@@ -24,6 +24,11 @@ public class Player extends GameElement implements Serializable {
         this.isInJail = false;
     }
 
+    @Override
+    public String toString() {
+        return "Id: " + this.playerID + " position on field: " + this.onFieldPosition;
+    }
+
     public int getPlayerID() {
         return playerID;
     }

@@ -9,8 +9,7 @@ import java.net.Socket;
 public class ClientApplication {
     public static void main(String[] args) {
         try(Socket socket = new Socket(ServerApplication.HOST, ServerApplication.PORT)) {
-            Player testPlayer = new Player(0, 0, 200);
-            ClientThread clientThread = new ClientThread(socket, testPlayer);
+            ClientThread clientThread = new ClientThread(socket);
             clientThread.start();
             clientThread.join();
         } catch(IOException e) {

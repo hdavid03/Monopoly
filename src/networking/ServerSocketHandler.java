@@ -1,7 +1,6 @@
 package networking;
 
 import game_elements.Player;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,6 +11,7 @@ import java.util.concurrent.Executors;
 
 public class ServerSocketHandler extends Thread {
     private static final int MAX_NUM_OF_CLIENTS = 4;
+    private static final int SOCKET_TIMEOUT = 500;
     private ServerSocket serverSocket;
     private LinkedList<ClientSocketHandler> clientSocketHandlers;
     private ConcurrentLinkedQueue<Player> linkedPlayerQueue;
@@ -24,21 +24,34 @@ public class ServerSocketHandler extends Thread {
         this.executorService = Executors.newFixedThreadPool(MAX_NUM_OF_CLIENTS);
     }
 
+    private boolean gameIsReady() {
+        boolean playersAreReady = true;
+        boolean noMorePlayersThanAllowed = clientSocketHandlers.size() < MAX_NUM_OF_CLIENTS;
+        for(ClientSocketHandler ch : clientSocketHandlers) {
+            playersAreReady &= ch.isClientReady();
+        }
+        return noMorePlayersThanAllowed && playersAreReady;
+    }
+
     @Override
     public void run() {
-        while(true) {
-            if(clientSocketHandlers.size() < MAX_NUM_OF_CLIENTS) {
-                try {
-                    while(true) {
-                        Socket socket = serverSocket.accept();
-                        ClientSocketHandler clientSocketHandler = new ClientSocketHandler(socket);
-                        clientSocketHandlers.add(clientSocketHandler);
-                        executorService.execute(clientSocketHandler);
+        try {
+            serverSocket.setSoTimeout(SOCKET_TIMEOUT);
+            while(true) {
+                if(!gameIsReady()) {
+                    Socket socket = serverSocket.accept();
+                    Player player = new Player(linkedPlayerQueue.size(),linkedPlayerQueue.size(),200);
+                    linkedPlayerQueue.add(player);
+                    ClientSocketHandler clientSocketHandler = new ClientSocketHandler(socket, player);
+                    clientSocketHandlers.add(clientSocketHandler);
+                    executorService.execute(clientSocketHandler);
+                    for(ClientSocketHandler ch : clientSocketHandlers) {
+                        System.out.println(ch.getPlayer().toString());
                     }
-                } catch(IOException e) {
-                    e.printStackTrace();
                 }
             }
+        } catch(IOException e) {
+            e.printStackTrace();
         }
     }
 }
