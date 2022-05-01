@@ -21,6 +21,7 @@ public class ServerApplication {
             serverApplicationLogger.log(Level.SEVERE, e::getMessage);
         } catch(InterruptedException e) {
             serverApplicationLogger.log(Level.SEVERE, e::getMessage);
+            Thread.currentThread().interrupt();
         }
     }
 }

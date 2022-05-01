@@ -3,13 +3,10 @@ package networking;
 import client.ClientApplication;
 import game_elements.Player;
 import game_elements.Table;
-import server.ServerApplication;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.TimerTask;
 import java.util.logging.Level;
 
 public class ClientThread extends Thread {
@@ -43,17 +40,16 @@ public class ClientThread extends Thread {
             while(true) {
                 player.setMoney(player.getMoney() + 1);
                 player = new Player(player);
-                System.out.println(player.toString());
+                ClientApplication.clientApplicationLogger.log(Level.INFO, player::toString);
                 oos.writeObject(player);
                 oos.flush();
                 Thread.sleep(600);
             }
-        } catch(IOException e) {
+        } catch(IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } catch(InterruptedException e) {
             e.printStackTrace();
-        } catch(ClassNotFoundException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }

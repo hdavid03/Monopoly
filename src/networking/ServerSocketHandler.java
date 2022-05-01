@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
@@ -64,7 +63,6 @@ public class ServerSocketHandler extends Thread {
     @Override
     public void run() {
         try {
-            ArrayList<Integer> indexes = new ArrayList<>();
             serverSocket.setSoTimeout(SOCKET_TIMEOUT);
             while(true) {
                 if(!gameIsReady()) {
@@ -73,9 +71,8 @@ public class ServerSocketHandler extends Thread {
                 }
                 for(ClientSocketHandler ch : clientSocketHandlers) {
                     serverSocketHandlerLogger.log(Level.INFO, () -> ch.getPlayer().toString() + " player is online");
-                    System.out.println(ch.getPlayer().toString());
                 }
-                clientSocketHandlers.removeIf(c -> c.isLostConnection());
+                clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
             }
         } catch(IOException e) {
             serverSocketHandlerLogger.log(Level.SEVERE, e::getMessage);
