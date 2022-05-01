@@ -26,7 +26,7 @@ public class Player extends GameElement implements Serializable {
 
     @Override
     public String toString() {
-        return "Id: " + this.playerID + " position on field: " + this.onFieldPosition;
+        return "ID: " + this.playerID;
     }
 
     public int getPlayerID() {

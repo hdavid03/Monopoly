@@ -44,6 +44,7 @@ public class ClientSocketHandler implements Runnable {
             oos.flush();
             while(true) {
                 this.player = (Player)ois.readObject();
+                System.out.println(player.getPlayerID());
             }
         } catch(IOException e) {
             e.printStackTrace();

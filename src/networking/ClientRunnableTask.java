@@ -6,15 +6,14 @@ import game_elements.Table;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.Socket;
 
-public class ClientThread extends Thread {
+public class ClientRunnableTask implements Runnable {
     private Socket socket;
     private Table table;
     private Player player;
 
-    public ClientThread(Socket socket) {
+    public ClientRunnableTask(Socket socket) {
         this.socket = socket;
         this.table = new Table();
     }
@@ -29,6 +28,7 @@ public class ClientThread extends Thread {
             this.player = (Player) ois.readObject();
             while(true) {
                 oos.writeObject(player);
+                System.out.println("message send");
                 Thread.sleep(600);
             }
         } catch(IOException e) {
