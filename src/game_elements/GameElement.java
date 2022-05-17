@@ -25,5 +25,4 @@ public abstract class GameElement {
     public String toString(){
         return Integer.toString(position.getX() + position.getY());
     }
-
 }

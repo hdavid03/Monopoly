@@ -6,6 +6,6 @@ public class GoToJailField extends Field {
 
     @Override
     protected void action() {
-        // menj a börtönbe
+        //Ez itten nem tud SEMMIT se csinálni. Az ilyen logikát csak main-ben (UI) lehet ütemezni
     }
 }

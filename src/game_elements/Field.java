@@ -21,4 +21,5 @@ public abstract class Field extends GameElement {
         playerCounter--;
     }
 
+    public int getFieldID() { return fieldID; }
 }

@@ -2,5 +2,11 @@ package game_elements;
 
 public class Bank extends GameElement {
 
-    int cash;
+    int starterMoney;
+
+    public void moneyDistribution(Player P, int M) {
+        P.setMoney(M);
+    }
+
+    public void bidding() {}
 }
