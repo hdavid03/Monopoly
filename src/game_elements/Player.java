@@ -1,6 +1,8 @@
 package game_elements;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player extends GameElement implements Serializable {
 
@@ -12,6 +14,7 @@ public class Player extends GameElement implements Serializable {
     private int utilityCounter;
     private int fieldID;
     private boolean isInJail;
+
 
     public Player(int playerID, int onFieldPosition, int money) {
         this.playerID = playerID;
@@ -96,11 +99,22 @@ public class Player extends GameElement implements Serializable {
         this.fieldID = fieldID;
     }
 
-    public boolean isInJail() {
+    public boolean getIsInJail() {
         return isInJail;
     }
 
     public void setInJail(boolean inJail) {
         isInJail = inJail;
     }
+
+
+
+    public void changeBalance(int change) { this.setMoney(this.getMoney()+change); }
+
+    public int throwDice() { return (int)(Math.random()*6 + 1); }
+
+    public boolean startPassCheck(int Move) {
+        return this.getOnFieldPosition() + Move >= 40;
+    }
+
 }
