@@ -10,8 +10,12 @@ import java.util.logging.Logger;
 public class ClientApplication {
     public static final Logger clientApplicationLogger = Logger.getLogger(ClientApplication.class.getName());
     public static void main(String[] args) {
+        GUI.LaunchPage launchPage = new GUI.LaunchPage();
+    }
+
+    public static void connectToServer(String playerName) {
         try(Socket socket = new Socket(ServerApplication.HOST, ServerApplication.PORT)) {
-            ClientThread clientThread = new ClientThread(socket);
+            ClientThread clientThread = new ClientThread(socket, playerName);
             clientThread.start();
             clientThread.join();
         } catch(IOException e) {

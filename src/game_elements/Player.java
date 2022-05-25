@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Player extends GameElement implements Serializable {
 
+    private String playerName;
     private int playerID;
     private int onFieldPosition;
     private int inJailTimer;
@@ -35,7 +36,23 @@ public class Player extends GameElement implements Serializable {
         this.railRoadCounter = player.getRailRoadCounter();
         this.utilityCounter = player.getUtilityCounter();
         this.fieldID = player.getFieldID();
-        this.isInJail = player.isInJail();
+        //this.isInJail = player.isInJail();
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public boolean isInJail() {
+        return isInJail;
+    }
+
+    public Player(String playerName) {
+        this.playerName = playerName;
     }
 
     @Override

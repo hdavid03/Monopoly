@@ -151,6 +151,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 
         button1 = new custom_Button(50, 80, 250, 100, payButton, dollarLogoIcon);
         custom_Panel actionPanel = new custom_Panel(1000, 800, 800, 300, cyanBackground);
+        button1.addActionListener(this);
 
         actionPanel.add(actionTitleLabel);
         actionPanel.add(button1);
@@ -190,6 +191,8 @@ public class MonopolyGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == button1){
             System.out.println("Fizettél nekem, köszi!");
+            // legyen egy Ready button, ami megnyomás után eltűnik
+            // button1.setVisible(false);
         }
 
     }

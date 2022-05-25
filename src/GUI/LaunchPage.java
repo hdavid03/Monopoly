@@ -1,5 +1,7 @@
 package GUI;
 
+import client.ClientApplication;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -47,6 +49,9 @@ public class LaunchPage implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == submitButton){
+            // a felhasználónév megadásnál nem kell a portot megadni, mert azt majd a kliens tudni fogja
+            String userName = username_tF.getText();
+            ClientApplication.connectToServer(userName);
             System.out.println("Üdvözlégy "+ username_tF.getText()+ "!");
             Launchframe.dispose();        //close frame
             MonopolyGUI gameWindow = new MonopolyGUI();

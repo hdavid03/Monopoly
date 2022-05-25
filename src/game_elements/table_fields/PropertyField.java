@@ -18,7 +18,7 @@ public abstract class PropertyField extends Field {
     public int getOwnerID() { return this.ownerID; }
 
     public void setOwnership(boolean B) { this.isThereOwner = B; }
-    public int getOwnership() { return this.isThereOwner; }
+    //public int getOwnership() { return this.isThereOwner; }
 
     //public void rent(Player P) { ...; }       Ez itt nem megy.
 

@@ -13,12 +13,14 @@ public class ClientThread extends Thread {
     private Socket socket;
     private Table table;
     private Player player;
+    private String playerName;
     private boolean running;
 
-    public ClientThread(Socket socket) {
+    public ClientThread(Socket socket, String playerName) {
         this.table = new Table();
         this.running = false;
         this.socket = socket;
+        this.playerName = playerName;
     }
 
     public boolean isRunning() {
@@ -37,6 +39,7 @@ public class ClientThread extends Thread {
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
             this.player = (Player) ois.readObject();
+            this.player.setPlayerName(playerName);
             while(true) {
                 player.setMoney(player.getMoney() + 1);
                 player = new Player(player);
