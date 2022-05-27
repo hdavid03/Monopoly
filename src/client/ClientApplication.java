@@ -1,5 +1,7 @@
 package client;
 
+import GUI.LaunchPage;
+import GUI.MonopolyGUI;
 import networking.ClientThread;
 import server.ServerApplication;
 import java.io.IOException;
@@ -10,7 +12,21 @@ import java.util.logging.Logger;
 public class ClientApplication {
     public static final Logger clientApplicationLogger = Logger.getLogger(ClientApplication.class.getName());
     public static void main(String[] args) {
-        GUI.LaunchPage launchPage = new GUI.LaunchPage();
+        GUI.LaunchPage launchPage = new LaunchPage();
+        while(!launchPage.clientWantToConnect()) {
+            System.out.println("wait");
+            waitInMilliseconds(500);
+        }
+        MonopolyGUI gui = new MonopolyGUI(launchPage.getUsernameTextField().getText());
+        
+    }
+
+    private static void waitInMilliseconds(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void connectToServer(String playerName) {

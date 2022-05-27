@@ -15,10 +15,10 @@ import java.util.logging.Logger;
 public class ServerSocketHandler extends Thread {
     private static final int MAX_NUM_OF_CLIENTS = 4;
     private static final int SOCKET_TIMEOUT = 500;
-    private ServerSocket serverSocket;
-    private LinkedList<ClientSocketHandler> clientSocketHandlers;
-    private ConcurrentLinkedQueue<Player> linkedPlayerQueue;
-    private ExecutorService executorService;
+    private final ServerSocket serverSocket;
+    private final LinkedList<ClientSocketHandler> clientSocketHandlers;
+    private final ConcurrentLinkedQueue<Player> linkedPlayerQueue;
+    private final ExecutorService executorService;
     private static final Logger serverSocketHandlerLogger = Logger.getLogger(ServerSocketHandler.class.getName());
 
     public ServerSocketHandler(ServerSocket serverSocket) {

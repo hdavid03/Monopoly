@@ -1,5 +1,6 @@
 package networking;
 
+import GUI.MonopolyGUI;
 import client.ClientApplication;
 import game_elements.Player;
 import game_elements.Table;
@@ -11,13 +12,12 @@ import java.util.logging.Level;
 
 public class ClientThread extends Thread {
     private Socket socket;
-    private Table table;
     private Player player;
     private String playerName;
+    private MonopolyGUI gameBoard;
     private boolean running;
 
     public ClientThread(Socket socket, String playerName) {
-        this.table = new Table();
         this.running = false;
         this.socket = socket;
         this.playerName = playerName;

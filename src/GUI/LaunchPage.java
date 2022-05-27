@@ -1,9 +1,6 @@
 package GUI;
 
-import client.ClientApplication;
-
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,37 +8,40 @@ import java.awt.event.ActionListener;
 public class LaunchPage implements ActionListener {
 
     //FRAME
-    JFrame Launchframe = new JFrame();
+    JFrame launchFrame = new JFrame();
 
     //TEXTFIELDS
-    custom_textField username_tF;
-    custom_textField port_tF;
-    custom_textField others_tF;
+    CustomTextField usernameTextField;
+    private boolean clientWantsToConnect = false;
 
+    public CustomTextField getUsernameTextField() {
+        return usernameTextField;
+    }
+
+    public boolean clientWantToConnect() {
+        return clientWantsToConnect;
+    }
 
     //BUTTON
     JButton submitButton;
 
     public LaunchPage(){
 
-        Launchframe.setTitle("Launch Page");
-        Launchframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Launchframe.setSize(420, 420);
-        Launchframe.setLayout(null);
+        launchFrame.setTitle("Launch Page");
+        launchFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        launchFrame.setSize(420, 420);
+        launchFrame.setLayout(null);
 
-        submitButton = new custom_Button(75, 160, 200, 40, "Csatlakozás");
+        submitButton = new CustomButton(75, 160, 200, 40, "Csatlakozás");
         submitButton.addActionListener(this);
 
-        username_tF = new custom_textField(50, 50, 250, 40, "Felhasználónév");
-        port_tF = new custom_textField(50, 100, 250, 40, "port");
+        usernameTextField = new CustomTextField(50, 50, 250, 40, "Felhasználónév");
 
 
-        Launchframe.add(submitButton);
-        Launchframe.add(username_tF);
-        Launchframe.add(port_tF);
+        launchFrame.add(submitButton);
+        launchFrame.add(usernameTextField);
 
-
-        Launchframe.setVisible(true);
+        launchFrame.setVisible(true);
 
     }
 
@@ -50,11 +50,9 @@ public class LaunchPage implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == submitButton){
             // a felhasználónév megadásnál nem kell a portot megadni, mert azt majd a kliens tudni fogja
-            String userName = username_tF.getText();
-            ClientApplication.connectToServer(userName);
-            System.out.println("Üdvözlégy "+ username_tF.getText()+ "!");
-            Launchframe.dispose();        //close frame
-            MonopolyGUI gameWindow = new MonopolyGUI();
+            System.out.println("Üdvözlégy "+ usernameTextField.getText()+ "!");
+            launchFrame.dispose();        //close frame
+            clientWantsToConnect = true;
         }
     }
 }

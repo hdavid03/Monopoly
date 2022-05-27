@@ -3,9 +3,9 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 
-public class custom_textField extends JTextField {
+public class CustomTextField extends JTextField {
 
-    custom_textField(int x, int y, int w, int h, String text){
+    CustomTextField(int x, int y, int w, int h, String text){
 
         this.setBounds(x, y, w, h);
         this.setFont(new Font("Times New Roman", Font.PLAIN, 25));

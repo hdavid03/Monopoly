@@ -1,12 +1,11 @@
 package GUI;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 
-public class custom_Label extends JLabel {
+public class CustomLabel extends JLabel {
 
-    custom_Label(int x, int y, int w, int h, Icon picture){
+    CustomLabel(int x, int y, int w, int h, Icon picture){
 
         this.setIcon(picture);
         //this.setVerticalAlignment(vertical);
@@ -22,7 +21,7 @@ public class custom_Label extends JLabel {
     }
 
 
-    custom_Label(String text, int size, int x, int y, int w, int h){
+    CustomLabel(String text, int size, int x, int y, int w, int h){
 
         this.setText(text);
         this.setFont(new Font("Times New Roman", Font.BOLD, size));
@@ -32,7 +31,7 @@ public class custom_Label extends JLabel {
 
     }
 
-    custom_Label(int x, int y, int w, int h, Icon picture, String text){
+    CustomLabel(int x, int y, int w, int h, Icon picture, String text){
 
     }
 

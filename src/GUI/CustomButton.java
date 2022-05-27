@@ -3,9 +3,9 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 
-public class custom_Button extends JButton {
+public class CustomButton extends JButton {
 
-    custom_Button(int x, int y, int w, int h, String text, Icon icon){
+    CustomButton(int x, int y, int w, int h, String text, Icon icon){
         this.setText(text);
         this.setFont(new Font("Times New Roman", Font.BOLD, 25));
         this.setIcon(icon);
@@ -16,7 +16,7 @@ public class custom_Button extends JButton {
         this.setFocusable(false);
     }
 
-    custom_Button(int x, int y, int w, int h, String text){
+    CustomButton(int x, int y, int w, int h, String text){
         this.setText(text);
         this.setFont(new Font("Times New Roman", Font.BOLD, 25));
 
