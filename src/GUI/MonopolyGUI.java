@@ -14,6 +14,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         //Images
         //board
         ImageIcon boardThousandsIcon = new ImageIcon("src//Images//boardThousands.jpg");
+        ImageIcon boardIcon = new ImageIcon("src//Images//board.png");
         //pawns
         ImageIcon shoeIcon = new ImageIcon("src//Images//pawns//shoe.jpg");
         ImageIcon hatIcon = new ImageIcon("src//Images//pawns//hat.png");
@@ -70,7 +71,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 
 
         //board
-        custom_Label boardLabel = new custom_Label(0, 0, 1000, 1000, boardThousandsIcon);
+        custom_Label boardLabel = new custom_Label(0, 0, 1000, 1000, boardIcon);
         custom_Panel boardPanel = new custom_Panel(0, 0, 1000, 1100, whiteBackground);
 
         boardPanel.add(boardLabel);
