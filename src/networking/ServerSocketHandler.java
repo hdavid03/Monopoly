@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -16,14 +17,14 @@ public class ServerSocketHandler extends Thread {
     private static final int SOCKET_TIMEOUT = 500;
     private final ServerSocket serverSocket;
     private final LinkedList<ClientSocketHandler> clientSocketHandlers;
-    private final LinkedList<Player> players;
+    private final ConcurrentLinkedQueue<Player> players;
     private final ExecutorService executorService;
     private static final Logger serverSocketHandlerLogger = Logger.getLogger(ServerSocketHandler.class.getName());
 
     public ServerSocketHandler(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
         this.clientSocketHandlers = new LinkedList<>();
-        this.players = new LinkedList<>();
+        this.players = new ConcurrentLinkedQueue<>();
         this.executorService = Executors.newFixedThreadPool(MAX_NUM_OF_CLIENTS);
     }
 
@@ -66,6 +67,12 @@ public class ServerSocketHandler extends Thread {
         }
         players.clear();
         players.addAll(updatedPlayers);
+    }
+
+    void updateClientHandlers() {
+        for(ClientSocketHandler ch : clientSocketHandlers) {
+            ch.updatePlayerQueue(players);
+        }
     }
 
     @Override

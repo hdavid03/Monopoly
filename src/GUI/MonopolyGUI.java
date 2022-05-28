@@ -4,6 +4,9 @@ import game_elements.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class MonopolyGUI extends JFrame {
 
@@ -11,6 +14,7 @@ public class MonopolyGUI extends JFrame {
     CustomButton readyButton;
     private Player player;
     private String userName;
+    private LinkedList<Player> players;
     //Images
     //board
     ImageIcon boardThousandsIcon;
@@ -58,7 +62,7 @@ public class MonopolyGUI extends JFrame {
         //Images
         //board
         setImageIcons();
-
+        this.players = new LinkedList<>();
         //colors
         Color redBackground = Color.RED;
         Color blueBackground = Color.BLUE;
@@ -170,6 +174,10 @@ public class MonopolyGUI extends JFrame {
         return userName;
     }
 
+    private void initPlayerPanels() {
+
+    }
+
     private void setActionListeners() {
         this.payButton.addActionListener(e -> {
             System.out.println("Fizettél nekem");
@@ -196,6 +204,7 @@ public class MonopolyGUI extends JFrame {
         player1Moneylabel = new CustomLabel(playerMoney + player1Money, 20, 10, 30, 400, 30);
         player1Panel = new CustomPanel(1000, 100, 400, 150, greenBackground);
         player1Panel.add(player1Namelabel);
+        player1Panel.add(player1Moneylabel);
         player2Namelabel = new CustomLabel(playerName + player2Name, 20, 10, 0, 400, 30);
         player2Moneylabel = new CustomLabel(playerMoney + player2Money, 20, 10, 30, 400, 30);
         player2Panel = new CustomPanel(1400, 100, 400, 150, redBackground);
@@ -221,6 +230,11 @@ public class MonopolyGUI extends JFrame {
         dicePanel.add(diceTitleLabel);
         dicePanel.add(dice1Label);
         dicePanel.add(dice2Label);
+    }
+
+    public void updateGameBoard(Queue<Player> players) {
+        this.players.clear();
+        this.players.addAll(players);
     }
 
     private void setImageIcons() {

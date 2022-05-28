@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 
 public class ClientThread implements Runnable {
@@ -56,7 +58,7 @@ public class ClientThread implements Runnable {
                 StatusMessage message = new StatusMessage(new Player(player), false);
                 ClientApplication.clientApplicationLogger.log(Level.INFO, player::toString);
                 oos.writeObject(message);
-                oos.flush();
+                gameBoard.updateGameBoard((Queue<Player>) ois.readObject());
                 Thread.sleep(600);
             }
         } catch(IOException | ClassNotFoundException e) {

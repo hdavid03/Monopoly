@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,6 +13,7 @@ public class ClientSocketHandler implements Runnable {
 
     private Socket socket;
     private Player player;
+    private Queue<Player> playerQueue;
     private boolean clientReady;
     private boolean lostConnection;
     private static final Logger clientSocketHandlerLogger = Logger.getLogger(ClientSocketHandler.class.getName());
@@ -21,6 +23,12 @@ public class ClientSocketHandler implements Runnable {
         this.clientReady = false;
         this.lostConnection = false;
         this.player = player;
+    }
+
+    public void updatePlayerQueue(Queue<Player> players) {
+        this.playerQueue.clear();
+        this.playerQueue.addAll(players);
+        //this.playerQueue.remove(player);
     }
 
     public boolean isLostConnection() {
@@ -69,6 +77,7 @@ public class ClientSocketHandler implements Runnable {
 
             while(!lostConnection) {
                 updatePlayerStatus(ois);
+                oos.writeObject(playerQueue);
             }
         } catch(IOException e) {
             e.printStackTrace();
