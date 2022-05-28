@@ -33,12 +33,11 @@ public class LaunchPage implements ActionListener {
         submitButton.addActionListener(this);
 
         username_tF = new custom_textField(50, 50, 250, 40, "Felhasználónév");
-        port_tF = new custom_textField(50, 100, 250, 40, "port");
+
 
 
         Launchframe.add(submitButton);
         Launchframe.add(username_tF);
-        Launchframe.add(port_tF);
 
 
         Launchframe.setVisible(true);

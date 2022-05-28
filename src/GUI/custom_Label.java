@@ -35,5 +35,9 @@ public class custom_Label extends JLabel {
     custom_Label(int x, int y, int w, int h, Icon picture, String text){
 
     }
+/*
+    public void setLocation(Integer x, Integer y){
+        this.setLocation(x, y);
+    }*/
 
 }
