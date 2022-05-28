@@ -88,6 +88,7 @@ public class ServerSocketHandler extends Thread {
                     serverSocketHandlerLogger.log(Level.INFO, () -> ch.getPlayer().toString() + " player is on");
                 }
                 updateStatusOfPlayers();
+                updateClientHandlers();
                 clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
                 players.removeIf(Player::isOffline);
             }

@@ -26,8 +26,7 @@ public class ClientSocketHandler implements Runnable {
     }
 
     public void updatePlayerQueue(Queue<Player> players) {
-        this.playerQueue.clear();
-        this.playerQueue.addAll(players);
+        this.playerQueue = players;
         //this.playerQueue.remove(player);
     }
 
@@ -67,6 +66,16 @@ public class ClientSocketHandler implements Runnable {
         }
     }
 
+    private void sendUpdatedStatusToTheClient(ObjectOutputStream oos) {
+        try {
+            if (playerQueue != null) {
+                oos.writeObject(playerQueue);
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void run() {
         try {
@@ -77,7 +86,7 @@ public class ClientSocketHandler implements Runnable {
 
             while(!lostConnection) {
                 updatePlayerStatus(ois);
-                oos.writeObject(playerQueue);
+                sendUpdatedStatusToTheClient(oos);
             }
         } catch(IOException e) {
             e.printStackTrace();

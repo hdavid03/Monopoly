@@ -37,6 +37,8 @@ public class MonopolyGUI extends JFrame {
     CustomLabel dice2Label;
     CustomPanel dicePanel;
 
+    ArrayList<CustomLabel> playerNameLabels;
+    ArrayList<CustomLabel> playerMoneyLabels;
     CustomLabel player1Namelabel;
     CustomLabel player1Moneylabel;
     CustomPanel player1Panel;
@@ -63,6 +65,8 @@ public class MonopolyGUI extends JFrame {
         //board
         setImageIcons();
         this.players = new LinkedList<>();
+        this.playerNameLabels = new ArrayList<>();
+        this.playerMoneyLabels = new ArrayList<>();
         //colors
         Color redBackground = Color.RED;
         Color blueBackground = Color.BLUE;
@@ -73,27 +77,8 @@ public class MonopolyGUI extends JFrame {
         Color grayBackground = Color.GRAY;
         Color magentaBackground = Color.MAGENTA;
         Color cyanBackground = Color.CYAN;
-/*
-        Integer top = JLabel.TOP;
-        Integer left = JLabel.LEFT;
-        Integer center = JLabel.CENTER;
-*/
         //players
         String playerTitle =    "Játékosok";
-        String playerNameField =     "név:   ";
-        String playerMoneyField =    "pénz:  ";
-        //player1
-        String player1Name = "Valaki";
-        String player1Money = "500 Forint";
-        //player2
-        String player2Name = "Valaki2";
-        String player2Money = "1000 Forint";
-        //player3
-        String player3Name = "Valaki3";
-        String player3Money = "1500 Forint";
-        //player4
-        String player4Name = "Valaki4";
-        String player4Money = "2000 Forint";
         //cards
         String cardTitle = "Kártyák";
         //dice
@@ -118,8 +103,7 @@ public class MonopolyGUI extends JFrame {
 
         playerTitlePanel.add(playerTitleLabel);
         //players
-        setPlayers(redBackground, greenBackground, yellowBackground, magentaBackground, playerNameField,
-                playerMoneyField, player1Name, player1Money, player2Name, player2Money, player3Name, player3Money, player4Name, player4Money);
+        initPlayers(redBackground, greenBackground, yellowBackground, magentaBackground);
 
         //cards
         CustomLabel cardTitleLabel = new CustomLabel(cardTitle, 40, 10, 10, 200, 50);
@@ -174,8 +158,35 @@ public class MonopolyGUI extends JFrame {
         return userName;
     }
 
-    private void initPlayerPanels() {
-
+    private void initPlayers(Color redBackground, Color greenBackground, Color yellowBackground, Color magentaBackground) {
+        player1Namelabel = new CustomLabel("Név: Játékos 1", 20, 10, 0, 400, 30);
+        player1Moneylabel = new CustomLabel("Pénz: 0", 20, 10, 30, 400, 30);
+        player1Panel = new CustomPanel(1000, 100, 400, 150, greenBackground);
+        player1Panel.add(player1Namelabel);
+        player1Panel.add(player1Moneylabel);
+        player2Namelabel = new CustomLabel("Név: Játékos 2", 20, 10, 0, 400, 30);
+        player2Moneylabel = new CustomLabel("Pénz: 0", 20, 10, 30, 400, 30);
+        player2Panel = new CustomPanel(1400, 100, 400, 150, redBackground);
+        player2Panel.add(player2Namelabel);
+        player2Panel.add(player2Moneylabel);
+        player3Namelabel = new CustomLabel("Név: Játékos 3", 20, 10, 0, 400, 30);
+        player3Moneylabel = new CustomLabel("Pénz: 0", 20, 10, 30, 400, 30);
+        player3Panel = new CustomPanel(1000, 250, 400, 150, magentaBackground);
+        player3Panel.add(player3Namelabel);
+        player3Panel.add(player3Moneylabel);
+        player4Namelabel = new CustomLabel("Név: Játékos 4", 20, 10, 0, 400, 30);
+        player4Moneylabel = new CustomLabel("Pénz: 0", 20, 10, 30, 400, 30);
+        player4Panel = new CustomPanel(1400, 250, 400, 150, yellowBackground);
+        player4Panel.add(player4Namelabel);
+        player4Panel.add(player4Moneylabel);
+        playerNameLabels.add(player1Namelabel);
+        playerNameLabels.add(player2Namelabel);
+        playerNameLabels.add(player3Namelabel);
+        playerNameLabels.add(player4Namelabel);
+        playerMoneyLabels.add(player1Moneylabel);
+        playerMoneyLabels.add(player2Moneylabel);
+        playerMoneyLabels.add(player3Moneylabel);
+        playerMoneyLabels.add(player4Moneylabel);
     }
 
     private void setActionListeners() {
@@ -199,27 +210,14 @@ public class MonopolyGUI extends JFrame {
         pawnPanel.add(pawncarLabel);
     }
 
-    private void setPlayers(Color redBackground, Color greenBackground, Color yellowBackground, Color magentaBackground, String playerName, String playerMoney, String player1Name, String player1Money, String player2Name, String player2Money, String player3Name, String player3Money, String player4Name, String player4Money) {
-        player1Namelabel = new CustomLabel(playerName + player1Name, 20, 10, 0, 400, 30);
-        player1Moneylabel = new CustomLabel(playerMoney + player1Money, 20, 10, 30, 400, 30);
-        player1Panel = new CustomPanel(1000, 100, 400, 150, greenBackground);
-        player1Panel.add(player1Namelabel);
-        player1Panel.add(player1Moneylabel);
-        player2Namelabel = new CustomLabel(playerName + player2Name, 20, 10, 0, 400, 30);
-        player2Moneylabel = new CustomLabel(playerMoney + player2Money, 20, 10, 30, 400, 30);
-        player2Panel = new CustomPanel(1400, 100, 400, 150, redBackground);
-        player2Panel.add(player2Namelabel);
-        player2Panel.add(player2Moneylabel);
-        player3Namelabel = new CustomLabel(playerName + player3Name, 20, 10, 0, 400, 30);
-        player3Moneylabel = new CustomLabel(playerMoney + player3Money, 20, 10, 30, 400, 30);
-        player3Panel = new CustomPanel(1000, 250, 400, 150, magentaBackground);
-        player3Panel.add(player3Namelabel);
-        player3Panel.add(player3Moneylabel);
-        player4Namelabel = new CustomLabel(playerName + player4Name, 20, 10, 0, 400, 30);
-        player4Moneylabel = new CustomLabel(playerMoney + player4Money, 20, 10, 30, 400, 30);
-        player4Panel = new CustomPanel(1400, 250, 400, 150, yellowBackground);
-        player4Panel.add(player4Namelabel);
-        player4Panel.add(player4Moneylabel);
+    private void setPlayers() {
+        int i = 0;
+        for (Player player : this.players) {
+            CustomLabel label = playerNameLabels.get(i);
+            label.setText(player.getPlayerName());
+            label = playerMoneyLabels.get(i);
+            label.setText(String.valueOf(player.getMoney()));
+        }
     }
 
     private void setDicePanels(Color blueBackground, String diceTitle) {
@@ -235,6 +233,7 @@ public class MonopolyGUI extends JFrame {
     public void updateGameBoard(Queue<Player> players) {
         this.players.clear();
         this.players.addAll(players);
+        setPlayers();
     }
 
     private void setImageIcons() {
