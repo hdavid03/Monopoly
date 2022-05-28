@@ -16,7 +16,6 @@ public class Player extends GameElement implements Serializable {
     private int fieldID;
     private boolean isInJail;
 
-
     public Player(int playerID, int onFieldPosition, int money) {
         this.playerID = playerID;
         this.onFieldPosition = onFieldPosition;
@@ -125,13 +124,10 @@ public class Player extends GameElement implements Serializable {
     }
 
 
-
     public void changeBalance(int change) { this.setMoney(this.getMoney()+change); }
 
     public int throwDice() { return (int)(Math.random()*6 + 1); }
 
-    public boolean startPassCheck(int Move) {
-        return this.getOnFieldPosition() + Move >= 40;
-    }
+    public boolean startPassCheck(int Move) { return this.getOnFieldPosition() + Move >= 40; }
 
 }
