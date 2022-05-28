@@ -326,6 +326,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         Integer tablefieldsID = 21;
         Integer playerCount = 0;
         Integer playerID = 0;
+        Integer playerID2 = 0;
 
 
         pawns.get(playerID).setLocation(25, 25);
