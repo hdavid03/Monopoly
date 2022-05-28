@@ -1,7 +1,6 @@
 package networking;
 
 import game_elements.Player;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -50,10 +49,12 @@ public class ClientSocketHandler implements Runnable {
     private void updatePlayerStatus(ObjectInputStream ois) {
         try {
             if(!lostConnection) {
-                player = (Player)ois.readObject();
+                StatusMessage message = (StatusMessage)ois.readObject();
+                player = message.getPlayer();
             }
         } catch(IOException | ClassNotFoundException e) {
             clientSocketHandlerLogger.log(Level.SEVERE, e.getMessage());
+            player.setPlayerOnline(false);
             setLostConnection(true);
         }
     }
@@ -65,6 +66,7 @@ public class ClientSocketHandler implements Runnable {
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeObject(player);
             oos.flush();
+
             while(!lostConnection) {
                 updatePlayerStatus(ois);
             }

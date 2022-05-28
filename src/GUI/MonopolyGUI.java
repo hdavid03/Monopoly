@@ -10,7 +10,7 @@ public class MonopolyGUI extends JFrame {
     CustomButton payButton;
     CustomButton readyButton;
     private Player player;
-    private String playerName;
+    private String userName;
     //Images
     //board
     ImageIcon boardThousandsIcon;
@@ -54,7 +54,7 @@ public class MonopolyGUI extends JFrame {
 
     public MonopolyGUI(String userName){
 
-        playerName = userName;
+        this.userName = userName;
         //Images
         //board
         setImageIcons();
@@ -136,12 +136,7 @@ public class MonopolyGUI extends JFrame {
         this.payButton = new CustomButton(50, 80, 250, 100, payButtonTitle, dollarLogoIcon);
         this.readyButton = new CustomButton(320, 80, 250, 100, "Ready", dollarLogoIcon);
         CustomPanel actionPanel = new CustomPanel(1000, 800, 800, 300, cyanBackground);
-        this.payButton.addActionListener(e -> {
-            System.out.println("Fizettél nekem");
-        });
-        this.readyButton.addActionListener(e -> {
-            System.out.println("Kész vagyok");
-        });
+        setActionListeners();
 
         actionPanel.add(actionTitleLabel);
         actionPanel.add(this.payButton);
@@ -169,6 +164,19 @@ public class MonopolyGUI extends JFrame {
         this.add(cardsPanel);
         this.add(dicePanel);
         this.add(actionPanel);
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    private void setActionListeners() {
+        this.payButton.addActionListener(e -> {
+            System.out.println("Fizettél nekem");
+        });
+        this.readyButton.addActionListener(e -> {
+            System.out.println("Kész vagyok");
+        });
     }
 
     private void setPawns() {
@@ -230,9 +238,5 @@ public class MonopolyGUI extends JFrame {
         dice2Icon = new ImageIcon("src//Images//dices//dice2.png");
         //logos
         dollarLogoIcon = new ImageIcon("src//Images//logos//dollar.png");
-    }
-
-    public String getPlayerName() {
-        return playerName;
     }
 }

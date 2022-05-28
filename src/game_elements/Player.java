@@ -1,8 +1,6 @@
 package game_elements;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Player extends GameElement implements Serializable {
 
@@ -15,7 +13,7 @@ public class Player extends GameElement implements Serializable {
     private int utilityCounter;
     private int fieldID;
     private boolean isInJail;
-
+    private boolean playerOnline;
 
     public Player(int playerID, int onFieldPosition, int money) {
         this.playerID = playerID;
@@ -26,17 +24,27 @@ public class Player extends GameElement implements Serializable {
         this.utilityCounter = 0;
         this.fieldID = 0;
         this.isInJail = false;
+        this.playerOnline = true;
     }
 
     public Player(Player player) {
         this.playerID = player.getPlayerID();
+        this.playerName = player.getPlayerName();
         this.onFieldPosition = player.getOnFieldPosition();
         this.inJailTimer = player.getInJailTimer();
         this.money = player.getMoney();
         this.railRoadCounter = player.getRailRoadCounter();
         this.utilityCounter = player.getUtilityCounter();
         this.fieldID = player.getFieldID();
-        //this.isInJail = player.isInJail();
+        this.isInJail = player.isInJail();
+    }
+
+    public boolean isOffline() {
+        return !playerOnline;
+    }
+
+    public void setPlayerOnline(boolean playerOnline) {
+        this.playerOnline = playerOnline;
     }
 
     public String getPlayerName() {
@@ -57,7 +65,7 @@ public class Player extends GameElement implements Serializable {
 
     @Override
     public String toString() {
-        return "ID: " + this.playerID + " M: " + this.getMoney();
+        return "ID: " + this.playerID + "Name: " + this.playerName + " Money: " + this.money;
     }
 
     public int getPlayerID() {
@@ -123,8 +131,6 @@ public class Player extends GameElement implements Serializable {
     public void setInJail(boolean inJail) {
         isInJail = inJail;
     }
-
-
 
     public void changeBalance(int change) { this.setMoney(this.getMoney()+change); }
 
