@@ -13,7 +13,6 @@ public class ClientApplication {
     public static void main(String[] args) {
         GUI.LaunchPage launchPage = new LaunchPage();
         while (!launchPage.clientWantToConnect()) {
-            System.out.println("wait");
             waitInMilliseconds(500);
         }
         MonopolyGUI gui = new MonopolyGUI(launchPage.getUsernameTextField().getText());

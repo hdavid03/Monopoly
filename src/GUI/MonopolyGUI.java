@@ -10,63 +10,66 @@ import java.util.Queue;
 
 public class MonopolyGUI extends JFrame {
 
-    CustomButton payButton;
-    CustomButton readyButton;
+    private CustomButton payButton;
+    private CustomButton readyButton;
+    private CustomButton throwButton;
     private Player player;
     private String userName;
+    private boolean ready;
     private LinkedList<Player> players;
     //Images
     //board
-    ImageIcon boardThousandsIcon;
+    private ImageIcon boardIcon;
     //pawns
-    ImageIcon shoeIcon;
-    ImageIcon hatIcon;
-    ImageIcon boatIcon;
-    ImageIcon carIcon;
+    private ImageIcon shoeIcon;
+    private ImageIcon hatIcon;
+    private ImageIcon boatIcon;
+    private ImageIcon carIcon;
     //cards
-    ImageIcon meglepetes1Icon;
-    ImageIcon almagyarIcon;
+    private ImageIcon meglepetes1Icon;
+    private ImageIcon almagyarIcon;
     //dices
-    ImageIcon dice1Icon;
-    ImageIcon dice2Icon;
+    private ImageIcon dice1Icon;
+    private ImageIcon dice2Icon;
     //logos
-    ImageIcon dollarLogoIcon;
+    private ImageIcon dollarLogoIcon;
     //dice
-    CustomLabel diceTitleLabel;
-    CustomLabel dice1Label;
-    CustomLabel dice2Label;
-    CustomPanel dicePanel;
+    private CustomLabel diceTitleLabel;
+    private CustomLabel dice1Label;
+    private CustomLabel dice2Label;
+    private CustomPanel dicePanel;
 
-    ArrayList<CustomLabel> playerNameLabels;
-    ArrayList<CustomLabel> playerMoneyLabels;
-    CustomLabel player1Namelabel;
-    CustomLabel player1Moneylabel;
-    CustomPanel player1Panel;
-    CustomLabel player2Namelabel;
-    CustomLabel player2Moneylabel;
-    CustomPanel player2Panel;
-    CustomLabel player3Namelabel;
-    CustomLabel player3Moneylabel;
-    CustomPanel player3Panel;
-    CustomLabel player4Namelabel;
-    CustomLabel player4Moneylabel;
-    CustomPanel player4Panel;
+    private ArrayList<CustomLabel> playerNameLabels;
+    private ArrayList<CustomLabel> playerMoneyLabels;
+    private CustomLabel player1Namelabel;
+    private CustomLabel player1Moneylabel;
+    private CustomPanel player1Panel;
+    private CustomLabel player2Namelabel;
+    private CustomLabel player2Moneylabel;
+    private CustomPanel player2Panel;
+    private CustomLabel player3Namelabel;
+    private CustomLabel player3Moneylabel;
+    private CustomPanel player3Panel;
+    private CustomLabel player4Namelabel;
+    private CustomLabel player4Moneylabel;
+    private CustomPanel player4Panel;
 
-    CustomLabel pawnshoeLabel;
-    CustomLabel pawnhatLabel;
-    CustomLabel pawnboatLabel;
-    CustomLabel pawncarLabel;
-    CustomPanel pawnPanel;
+    private CustomLabel pawnshoeLabel;
+    private CustomLabel pawnhatLabel;
+    private CustomLabel pawnboatLabel;
+    private CustomLabel pawncarLabel;
+    private CustomPanel pawnPanel;
 
     public MonopolyGUI(String userName){
 
         this.userName = userName;
+        this.ready = false;
         setImageIcons();
         this.players = new LinkedList<>();
         this.playerNameLabels = new ArrayList<>();
         this.playerMoneyLabels = new ArrayList<>();
         //board
-        CustomLabel boardLabel = new CustomLabel(0, 0, 1000, 1000, boardThousandsIcon);
+        CustomLabel boardLabel = new CustomLabel(0, 0, 1000, 1000, boardIcon);
         CustomPanel boardPanel = new CustomPanel(0, 0, 1000, 1100, Color.WHITE);
         boardPanel.add(boardLabel);
 
@@ -93,7 +96,8 @@ public class MonopolyGUI extends JFrame {
         CustomLabel actionTitleLabel = new CustomLabel("Akciók", 40, 10, 10, 200, 50);
 
         this.payButton = new CustomButton(50, 80, 250, 100, "Fizetés", dollarLogoIcon);
-        this.readyButton = new CustomButton(320, 80, 250, 100, "Ready", dollarLogoIcon);
+        this.readyButton = new CustomButton(320, 80, 250, 100, "Játék", dollarLogoIcon);
+        this.throwButton = new CustomButton(590, 80, 100, 100, "Dobás", dollarLogoIcon);
         CustomPanel actionPanel = new CustomPanel(1000, 800, 800, 300, Color.CYAN);
         setActionListeners();
 
@@ -123,6 +127,10 @@ public class MonopolyGUI extends JFrame {
         this.add(cardsPanel);
         this.add(dicePanel);
         this.add(actionPanel);
+    }
+
+    public boolean isReady() {
+        return ready;
     }
 
     public String getUserName() {
@@ -164,8 +172,11 @@ public class MonopolyGUI extends JFrame {
         this.payButton.addActionListener(e -> {
             System.out.println("Fizettél nekem");
         });
+
         this.readyButton.addActionListener(e -> {
             System.out.println("Kész vagyok");
+            this.ready = true;
+            this.readyButton.setVisible(false);
         });
     }
 
@@ -208,7 +219,7 @@ public class MonopolyGUI extends JFrame {
     }
 
     private void setImageIcons() {
-        boardThousandsIcon = new ImageIcon("src//Images//boardThousands.jpg");
+        boardIcon = new ImageIcon("src//Images//board.png");
         //pawns
         shoeIcon = new ImageIcon("src//Images//pawns//shoe.jpg");
         hatIcon = new ImageIcon("src//Images//pawns//hat.png");

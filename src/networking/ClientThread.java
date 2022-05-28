@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 
@@ -46,7 +45,7 @@ public class ClientThread implements Runnable {
     private void sendPlayerStatusToTheServer(ObjectOutputStream oos) {
         try {
             player.setMoney(player.getMoney() + 1);
-            StatusMessage message = new StatusMessage(new Player(player), false);
+            StatusMessage message = new StatusMessage(new Player(player), gameBoard.isReady());
             ClientApplication.clientApplicationLogger.log(Level.INFO, player::toString);
             oos.writeObject(message);
             oos.flush();
