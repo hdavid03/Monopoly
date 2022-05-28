@@ -10,7 +10,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 
     custom_Button button1;
 
-    MonopolyGUI(){
+    MonopolyGUI() {
 
         //Images
         //board
@@ -113,9 +113,9 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         Integer center = JLabel.CENTER;
 */
         //players
-        String playerTitle =    "Játékosok";
-        String playerName =     "név:   ";
-        String playerMoney =    "pénz:  ";
+        String playerTitle = "Játékosok";
+        String playerName = "név:   ";
+        String playerMoney = "pénz:  ";
         String playerRr = "Vasút: ";
         String playerUt = " || Közmű: ";
         String playerJail = "Börtön: ";
@@ -168,12 +168,6 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         String payButton = "  Fizetés";
 
 
-
-
-
-
-
-
         //board
         custom_Label boardLabel = new custom_Label(0, 0, 1000, 1000, boardIcon);
         custom_Panel boardPanel = new custom_Panel(0, 0, 1000, 1100, whiteBackground);
@@ -193,9 +187,6 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         pawnPanel.add(pawncarLabel);
 
 
-
-
-
         //players title
         custom_Label playerTitleLabel = new custom_Label(playerTitle, 60, 260, 10, 400, 90);
         custom_Panel playerTitlePanel = new custom_Panel(1000, 0, 800, 100, pinkBackground);
@@ -207,7 +198,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         //player1
         custom_Label player1Namelabel = new custom_Label(playerName + player1Name, 20, 10, 0, 400, 30);
         custom_Label player1Moneylabel = new custom_Label(playerMoney + player1Money, 20, 10, 30, 400, 30);
-        custom_Label player1RrUtlabel = new custom_Label(playerRr + player1Rr + playerDb + playerUt + player1Ut + playerDb , 20, 10, 60, 400, 30);
+        custom_Label player1RrUtlabel = new custom_Label(playerRr + player1Rr + playerDb + playerUt + player1Ut + playerDb, 20, 10, 60, 400, 30);
         custom_Label player1Jaillabel = new custom_Label(playerJail + player1BoolJail + " - " + player1JailTime + playerJailTimeplus, 20, 10, 90, 400, 30);
         custom_Label player1Extralabel = new custom_Label(playerExtra + player1freejail + player1passgo, 20, 10, 120, 400, 30);
         custom_Panel player1Panel = new custom_Panel(1000, 100, 400, 150, greenBackground);
@@ -221,7 +212,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         //player2
         custom_Label player2Namelabel = new custom_Label(playerName + player2Name, 20, 10, 0, 400, 30);
         custom_Label player2Moneylabel = new custom_Label(playerMoney + player2Money, 20, 10, 30, 400, 30);
-        custom_Label player2RrUtlabel = new custom_Label(playerRr + player2Rr + playerDb + playerUt + player2Ut + playerDb , 20, 10, 60, 400, 30);
+        custom_Label player2RrUtlabel = new custom_Label(playerRr + player2Rr + playerDb + playerUt + player2Ut + playerDb, 20, 10, 60, 400, 30);
         custom_Label player2Jaillabel = new custom_Label(playerJail + player2BoolJail + " - " + player2JailTime + playerJailTimeplus, 20, 10, 90, 400, 30);
         custom_Label player2Extralabel = new custom_Label(playerExtra + player2freejail + player2passgo, 20, 10, 120, 400, 30);
         custom_Panel player2Panel = new custom_Panel(1400, 100, 400, 150, redBackground);
@@ -236,7 +227,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         //player3
         custom_Label player3Namelabel = new custom_Label(playerName + player3Name, 20, 10, 0, 400, 30);
         custom_Label player3Moneylabel = new custom_Label(playerMoney + player3Money, 20, 10, 30, 400, 30);
-        custom_Label player3RrUtlabel = new custom_Label(playerRr + player3Rr + playerDb + playerUt + player3Ut + playerDb , 20, 10, 60, 400, 30);
+        custom_Label player3RrUtlabel = new custom_Label(playerRr + player3Rr + playerDb + playerUt + player3Ut + playerDb, 20, 10, 60, 400, 30);
         custom_Label player3Jaillabel = new custom_Label(playerJail + player3BoolJail + " - " + player3JailTime + playerJailTimeplus, 20, 10, 90, 400, 30);
         custom_Label player3Extralabel = new custom_Label(playerExtra + player3freejail + player3passgo, 20, 10, 120, 400, 30);
         custom_Panel player3Panel = new custom_Panel(1000, 250, 400, 150, magentaBackground);
@@ -251,7 +242,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         //player4
         custom_Label player4Namelabel = new custom_Label(playerName + player4Name, 20, 10, 0, 400, 30);
         custom_Label player4Moneylabel = new custom_Label(playerMoney + player4Money, 20, 10, 30, 400, 30);
-        custom_Label player4RrUtlabel = new custom_Label(playerRr + player4Rr + playerDb + playerUt + player4Ut + playerDb , 20, 10, 60, 400, 30);
+        custom_Label player4RrUtlabel = new custom_Label(playerRr + player4Rr + playerDb + playerUt + player4Ut + playerDb, 20, 10, 60, 400, 30);
         custom_Label player4Jaillabel = new custom_Label(playerJail + player4BoolJail + " - " + player4JailTime + playerJailTimeplus, 20, 10, 90, 400, 30);
         custom_Label player4Extralabel = new custom_Label(playerExtra + player4freejail + player4passgo, 20, 10, 120, 400, 30);
         custom_Panel player4Panel = new custom_Panel(1400, 250, 400, 150, yellowBackground);
@@ -271,7 +262,6 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         cardsPanel.add(cardTitleLabel);
         cardsPanel.add(card1Label);
         //cardsPanel.add(card2Label);
-
 
 
         //dice
@@ -295,75 +285,12 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         actionPanel.add(button1);
 
 
-
-/*
-0:
-875
-900
-
-21:
-25
-25
-
-    */
-
-
-
-        //pawns arraylist
-        ArrayList<custom_Label> pawns = new ArrayList<>();
-        pawns.add(pawnshoeLabel);
-        pawns.add(pawnhatLabel);
-        pawns.add(pawnboatLabel);
-        pawns.add(pawncarLabel);
-
-        //x arrayList
-        ArrayList<Integer> pawnsX = new ArrayList<Integer>();
-
-        //y arrayList
-        ArrayList<custom_Label> pawnsY = new ArrayList<>();
-
-        //switch
-        Integer tablefieldsID = 21;
-        Integer playerCount = 0;
-        Integer playerID = 0;
-        Integer playerID2 = 0;
-
-
-        pawns.get(playerID).setLocation(25, 25);
-
-        //tablefiledsID switch szerkezet
-        switch(tablefieldsID) {
-            //case 0
-            case 0:
-
-
-
-
-        //playercount switch
-        Integer playercountX = pawns.get(playerID).getX();
-        Integer playercountY = pawns.get(playerID).getY();
-        switch(playerCount){
-            case 0:
-                break;
-            case 1:
-                pawns.get(playerID).setLocation(playercountX, playercountY + 25);
-            case 2:
-                pawns.get(playerID).setLocation(playercountX + 25, playercountY);
-            case 3:
-                pawns.get(playerID).setLocation(playercountX + 25, playercountY + 25);
-            default:
-                System.out.println("Hiba a playerCount switch szerkezetben!!");
-        }
-
-
-
         //LAYERED PANE
         //layers: default - 0 (JLayeredPane.DEFAULT_LAYER), palette - 1, modal - 2, popup - 3, drag - 4
         JLayeredPane layeredPaneBoard = new JLayeredPane();
         layeredPaneBoard.setBounds(0, 0, 1000, 1000);
         layeredPaneBoard.add(boardPanel, Integer.valueOf(1));
         layeredPaneBoard.add(pawnPanel, Integer.valueOf(0));
-
 
 
         this.setTitle("Monopoly");
@@ -383,20 +310,68 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         this.add(actionPanel);
 
 
-    }
+        //pawns arraylist
+        ArrayList<custom_Label> pawns = new ArrayList<>();
+        pawns.add(pawnshoeLabel);
+        pawns.add(pawnhatLabel);
+        pawns.add(pawnboatLabel);
+        pawns.add(pawncarLabel);
 
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == button1){
-            System.out.println("Fizettél nekem, köszi!");
-            // legyen egy Ready button, ami megnyomás után eltűnik
-            // button1.setVisible(false);
+        //arrayxy
+        int [40][2]arrayXY ={   {875, 925}, {800, 925}, {725, 925}, {635, 925}, {550, 925},         //0
+                                {475, 925}, {390, 925}, {310, 925}, {225, 925}, {150, 925},         //5
+                                {25, 925}, {25, 800}, {25, 720}, {25, 640}, {25, 550},              //10
+                                {25, 475}, {25, 390}, {25, 310}, {25, 235}, {25, 150},              //15
+                                {25, 25}, {25, 150}, {25, 230}, {25, 310}, {25, 390},               //20
+                                {25, 475}, {25, 550}, {25, 635}, {25, 715}, {25, 795},              //25
+                                {25, 890}, {150, 925}, {230, 925}, {315, 925}, {395, 925},          //30
+                                {480, 925}, {550, 925}, {635, 925}, {715, 925}, {800, 925}          //35
+                            };
+
+        //switch
+        Integer tablefieldsID = 0;
+        Integer playerCount = 0;
+        Integer playerID = 0;
+
+        for (tablefieldsID = 0; tablefieldsID < 40; tablefieldsID++) {
+            playerCount = 0;
+            for (playerID = 0; playerID < 4; playerID++) {
+                pawns.get(playerID).setLocation(arrayXY[tablefieldsID][1], arrayXY[tablefieldsID][2]);
+
+                //playercount switch
+                Integer playercountX = pawns.get(playerID).getX();
+                Integer playercountY = pawns.get(playerID).getY();
+                switch (playerCount) {
+                    case 0:
+                        break;
+                    case 1:
+                        pawns.get(playerID).setLocation(playercountX, playercountY + 25);
+                        break;
+                    case 2:
+                        pawns.get(playerID).setLocation(playercountX + 25, playercountY);
+                        break;
+                    case 3:
+                        pawns.get(playerID).setLocation(playercountX + 25, playercountY + 25);
+                        break;
+                    default:
+                        System.out.println("Hiba a playerCount switch szerkezetben!!");
+                }
+                playerCount++;
+                TimeUnit.SECONDS.sleep(3);
+            }
         }
 
+
+        @Override
+        public void actionPerformed (ActionEvent e){
+            if (e.getSource() == button1) {
+                System.out.println("Fizettél nekem, köszi!");
+                // legyen egy Ready button, ami megnyomás után eltűnik
+                // button1.setVisible(false);
+            }
+
+        }
     }
 }
-
-
-
 
