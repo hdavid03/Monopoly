@@ -61,69 +61,40 @@ public class MonopolyGUI extends JFrame {
     public MonopolyGUI(String userName){
 
         this.userName = userName;
-        //Images
-        //board
         setImageIcons();
         this.players = new LinkedList<>();
         this.playerNameLabels = new ArrayList<>();
         this.playerMoneyLabels = new ArrayList<>();
-        //colors
-        Color redBackground = Color.RED;
-        Color blueBackground = Color.BLUE;
-        Color greenBackground = Color.GREEN;
-        Color yellowBackground = Color.YELLOW;
-        Color whiteBackground = Color.WHITE;
-        Color pinkBackground = Color.PINK;
-        Color grayBackground = Color.GRAY;
-        Color magentaBackground = Color.MAGENTA;
-        Color cyanBackground = Color.CYAN;
-        //players
-        String playerTitle =    "Játékosok";
-        //cards
-        String cardTitle = "Kártyák";
-        //dice
-        String diceTitle = "Kockák";
-        //action
-        String actionTitle = "Akciók";
-        //buttons
-        String payButtonTitle = "  Fizetés";
-
-
         //board
         CustomLabel boardLabel = new CustomLabel(0, 0, 1000, 1000, boardThousandsIcon);
-        CustomPanel boardPanel = new CustomPanel(0, 0, 1000, 1100, whiteBackground);
-
+        CustomPanel boardPanel = new CustomPanel(0, 0, 1000, 1100, Color.WHITE);
         boardPanel.add(boardLabel);
 
         //pawns
         setPawns();
         //players title
-        CustomLabel playerTitleLabel = new CustomLabel(playerTitle, 60, 260, 10, 400, 90);
-        CustomPanel playerTitlePanel = new CustomPanel(1000, 0, 800, 100, pinkBackground);
+        CustomLabel playerTitleLabel = new CustomLabel("Játékosok", 60, 260, 10, 400, 90);
+        CustomPanel playerTitlePanel = new CustomPanel(1000, 0, 800, 100, Color.PINK);
 
         playerTitlePanel.add(playerTitleLabel);
         //players
-        initPlayers(redBackground, greenBackground, yellowBackground, magentaBackground);
+        initPlayers();
 
         //cards
-        CustomLabel cardTitleLabel = new CustomLabel(cardTitle, 40, 10, 10, 200, 50);
+        CustomLabel cardTitleLabel = new CustomLabel("Kártyák", 40, 10, 10, 200, 50);
         CustomLabel card1Label = new CustomLabel(110, 60, 600, 350, meglepetes1Icon);
         CustomLabel card2Label = new CustomLabel(110, 60, 600, 350, almagyarIcon);
-        CustomPanel cardsPanel = new CustomPanel(1000, 400, 600, 400, whiteBackground);
+        CustomPanel cardsPanel = new CustomPanel(1000, 400, 600, 400, Color.WHITE);
 
         cardsPanel.add(cardTitleLabel);
         cardsPanel.add(card1Label);
         //cardsPanel.add(card2Label);
+        setDicePanels(Color.BLUE, "Kockák");
+        CustomLabel actionTitleLabel = new CustomLabel("Akciók", 40, 10, 10, 200, 50);
 
-        //dice
-        setDicePanels(blueBackground, diceTitle);
-
-        //action
-        CustomLabel actionTitleLabel = new CustomLabel(actionTitle, 40, 10, 10, 200, 50);
-
-        this.payButton = new CustomButton(50, 80, 250, 100, payButtonTitle, dollarLogoIcon);
+        this.payButton = new CustomButton(50, 80, 250, 100, "Fizetés", dollarLogoIcon);
         this.readyButton = new CustomButton(320, 80, 250, 100, "Ready", dollarLogoIcon);
-        CustomPanel actionPanel = new CustomPanel(1000, 800, 800, 300, cyanBackground);
+        CustomPanel actionPanel = new CustomPanel(1000, 800, 800, 300, Color.CYAN);
         setActionListeners();
 
         actionPanel.add(actionTitleLabel);
@@ -158,25 +129,25 @@ public class MonopolyGUI extends JFrame {
         return userName;
     }
 
-    private void initPlayers(Color redBackground, Color greenBackground, Color yellowBackground, Color magentaBackground) {
-        player1Namelabel = new CustomLabel("Név: Játékos 1", 20, 10, 0, 400, 30);
-        player1Moneylabel = new CustomLabel("Pénz: 0", 20, 10, 30, 400, 30);
-        player1Panel = new CustomPanel(1000, 100, 400, 150, greenBackground);
+    private void initPlayers() {
+        player1Namelabel = new CustomLabel("Offline", 20, 10, 0, 400, 30);
+        player1Moneylabel = new CustomLabel("", 20, 10, 30, 400, 30);
+        player1Panel = new CustomPanel(1000, 100, 400, 150, Color.GREEN);
         player1Panel.add(player1Namelabel);
         player1Panel.add(player1Moneylabel);
-        player2Namelabel = new CustomLabel("Név: Játékos 2", 20, 10, 0, 400, 30);
-        player2Moneylabel = new CustomLabel("Pénz: 0", 20, 10, 30, 400, 30);
-        player2Panel = new CustomPanel(1400, 100, 400, 150, redBackground);
+        player2Namelabel = new CustomLabel("Offline", 20, 10, 0, 400, 30);
+        player2Moneylabel = new CustomLabel("", 20, 10, 30, 400, 30);
+        player2Panel = new CustomPanel(1400, 100, 400, 150, Color.RED);
         player2Panel.add(player2Namelabel);
         player2Panel.add(player2Moneylabel);
-        player3Namelabel = new CustomLabel("Név: Játékos 3", 20, 10, 0, 400, 30);
-        player3Moneylabel = new CustomLabel("Pénz: 0", 20, 10, 30, 400, 30);
-        player3Panel = new CustomPanel(1000, 250, 400, 150, magentaBackground);
+        player3Namelabel = new CustomLabel("Offline", 20, 10, 0, 400, 30);
+        player3Moneylabel = new CustomLabel("", 20, 10, 30, 400, 30);
+        player3Panel = new CustomPanel(1000, 250, 400, 150, Color.MAGENTA);
         player3Panel.add(player3Namelabel);
         player3Panel.add(player3Moneylabel);
-        player4Namelabel = new CustomLabel("Név: Játékos 4", 20, 10, 0, 400, 30);
-        player4Moneylabel = new CustomLabel("Pénz: 0", 20, 10, 30, 400, 30);
-        player4Panel = new CustomPanel(1400, 250, 400, 150, yellowBackground);
+        player4Namelabel = new CustomLabel("Offline", 20, 10, 0, 400, 30);
+        player4Moneylabel = new CustomLabel("", 20, 10, 30, 400, 30);
+        player4Panel = new CustomPanel(1400, 250, 400, 150, Color.YELLOW);
         player4Panel.add(player4Namelabel);
         player4Panel.add(player4Moneylabel);
         playerNameLabels.add(player1Namelabel);
