@@ -5,6 +5,10 @@ import game_elements.Field;
 public class GoField extends Field {
 
 
+    public GoField(int Pos) {
+        super(Pos);
+    }
+
     @Override
     protected void action() {
         // itt semmi tennivalód nincs
