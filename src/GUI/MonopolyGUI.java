@@ -22,7 +22,6 @@ public class MonopolyGUI extends JFrame {
     private boolean ready = false;
     private LinkedList<Player> players = new LinkedList<>();
     private ArrayList<CustomLabel> ownedPropertyIndicator = new ArrayList<>();
-    private ArrayList<ImageIcon> propertyCardIcons = new ArrayList<>();
     private ArrayList<ImageIcon> surpriseCardIcons = new ArrayList<>();
     private ArrayList<ImageIcon> chanceCardIcons = new ArrayList<>();
     private ArrayList<CustomLabel> playerNameLabels = new ArrayList<>();
@@ -56,7 +55,6 @@ public class MonopolyGUI extends JFrame {
         setActionListeners();
         setImageIcons(chanceCardIcons, "src//resources//szerencse.txt");
         setImageIcons(surpriseCardIcons, "src//resources//meglepetes.txt");
-        setImageIcons(propertyCardIcons, "src//resources//ter_kozmu.txt");
         setImageIcons(dieIcons, "src//resources//dice.txt");
         this.userName = userName;
         this.setTitle("Monopoly");
@@ -241,8 +239,7 @@ public class MonopolyGUI extends JFrame {
         CustomLabel ownednyugatiLabel    = new CustomLabel(865, 460, 30, 30, null);
         CustomLabel ownedvorosmartyLabel = new CustomLabel(865, 620, 30, 30, null);
         CustomLabel owneddunakorzoLabel  = new CustomLabel(865, 782, 30, 30, null);
-        CustomPanel ownedPanel = new CustomPanel(0, 0, 1000, 1000);
-
+        CustomPanel ownedPanel           = new CustomPanel(0, 0, 1000, 1000);
         ownedPropertyIndicator.add(null);
         ownedPropertyIndicator.add(ownedpiacLabel);
         ownedPropertyIndicator.add(null);
@@ -283,6 +280,77 @@ public class MonopolyGUI extends JFrame {
         ownedPropertyIndicator.add(ownedvorosmartyLabel);
         ownedPropertyIndicator.add(null);
         ownedPropertyIndicator.add(owneddunakorzoLabel);
+    }
+
+    private void setPropertyFieldIcons {
+        ImageIcon AlmagyarIcon = new ImageIcon("src//Images//cards//ar//Almagyar_utca_ar.jpg");
+        ImageIcon BethlenIcon = new ImageIcon("src//Images//cards//ar//Bethlen_utca_ar.jpg");
+        ImageIcon DeliVasutvonalIcon = new ImageIcon("src//Images//cards//ar//Deli_vasutvonal_ar.jpg");
+        ImageIcon DoboIcon = new ImageIcon("src//Images//cards//ar//Dobo_ter_ar.jpg");
+        ImageIcon DomIcon = new ImageIcon("src//Images//cards//ar//Dom_ter_ar.jpg");
+        ImageIcon DunakorzoIcon = new ImageIcon("src//Images//cards//ar//Dunakorzo_ar.jpg");
+        ImageIcon EgyetemIcon = new ImageIcon("src//Images//cards//ar//Egyetem_utca_ar.jpg");
+        ImageIcon ElektromosTarsasagIcon = new ImageIcon("src//Images//cards//ar//Elektromos_tarsasag_ar.jpg");
+        ImageIcon EszakiVasutvonalIcon = new ImageIcon("src//Images//cards//ar//Eszaki_vasutvonal_ar.jpg");
+        ImageIcon GardonyiIcon = new ImageIcon("src//Images//cards//ar//Gardonyi_ut_ar.jpg");
+        ImageIcon JanuspannoniusIcon = new ImageIcon("src//Images//cards//ar//Janus_Pannonius_ar.jpg");
+        ImageIcon KeletiVasutvonalIcon = new ImageIcon("src//Images//cards//ar//Keleti_vasutvonal_ar.jpg");
+        ImageIcon KisfaludyIcon = new ImageIcon("src//Images//cards//ar//Kisfaludy_ut_ar.jpg");
+        ImageIcon KofaragoIcon = new ImageIcon("src//Images//cards//ar//Kofarago_ter_ar.jpg");
+        ImageIcon LestarIcon = new ImageIcon("src//Images//cards//ar//Lestar_ar.jpg");
+        ImageIcon MoraIcon = new ImageIcon("src//Images//cards//ar//Mora_park_ar.jpg");
+        ImageIcon NagyerdoIcon = new ImageIcon("src//Images//cards//ar//Nagyerdo_ar.jpg");
+        ImageIcon NagykorosiIcon = new ImageIcon("src//Images//cards//ar//Nagykorosi_ut_ar.jpg");
+        ImageIcon NyugatiVasutvonalIcon = new ImageIcon("src//Images//cards//ar//Nyugati_vasutvonal_ar.jpg");
+        ImageIcon OskolaIcon = new ImageIcon("src//Images//cards//ar//Oskola_utca_ar.jpg");
+        ImageIcon OtvosIcon = new ImageIcon("src//Images//cards//ar//Otvos_utca_ar.jpg");
+        ImageIcon OvarosIcon = new ImageIcon("src//Images//cards//ar//Ovaros_ar.jpg");
+        ImageIcon PetofiIcon = new ImageIcon("src//Images//cards//ar//Petofi_ter_ar.jpg");
+        ImageIcon PiacIcon = new ImageIcon("src//Images//cards//ar//Piac_ter_ar.jpg");
+        ImageIcon SzinhazIcon = new ImageIcon("src//Images//cards//ar//Szinhaz_ter_ar.jpg");
+        ImageIcon TorokIcon = new ImageIcon("src//Images//cards//ar//Torok_udvar_ar.jpg");
+        ImageIcon VizmuTarsasagIcon = new ImageIcon("src//Images//cards//ar//Vizmu_tarsasag.jpg");
+        ImageIcon VorosmartyIcon = new ImageIcon("src//Images//cards//ar//Vorosmarty_ter_ar.jpg");
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(PiacIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(TorokIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(EszakiVasutvonalIcon);
+        propertycardsIcon.add(NagykorosiIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(LestarIcon);
+        propertycardsIcon.add(KisfaludyIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(EgyetemIcon);
+        propertycardsIcon.add(ElektromosTarsasagIcon);
+        propertycardsIcon.add(SzinhazIcon);
+        propertycardsIcon.add(JanuspannoniusIcon);
+        propertycardsIcon.add(KeletiVasutvonalIcon);
+        propertycardsIcon.add(PetofiIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(NagyerdoIcon);
+        propertycardsIcon.add(BethlenIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(MoraIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(OskolaIcon);
+        propertycardsIcon.add(DomIcon);
+        propertycardsIcon.add(DeliVasutvonalIcon);
+        propertycardsIcon.add(DoboIcon);
+        propertycardsIcon.add(AlmagyarIcon);
+        propertycardsIcon.add(VizmuTarsasagIcon);
+        propertycardsIcon.add(GardonyiIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(KofaragoIcon);
+        propertycardsIcon.add(OvarosIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(OtvosIcon);
+        propertycardsIcon.add(NyugatiVasutvonalIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(VorosmartyIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(DunakorzoIcon);
     }
 }
 
