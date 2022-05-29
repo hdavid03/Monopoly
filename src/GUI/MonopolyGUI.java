@@ -18,7 +18,7 @@ public class MonopolyGUI extends JFrame {
     private String userName;
     private boolean ready;
     private LinkedList<Player> players;
-    private ArrayList<String> dice;
+    private ArrayList<Image> dice;
     //Images
     //board
     private ImageIcon boardIcon;
@@ -185,10 +185,8 @@ public class MonopolyGUI extends JFrame {
 
         this.throwButton.addActionListener(e -> {
             SecureRandom random = new SecureRandom();
-            Image die1Image = Toolkit.getDefaultToolkit().getImage(dice.get(random.nextInt(7)));
-            Image die2Image = Toolkit.getDefaultToolkit().getImage(dice.get(random.nextInt(7)));
-            die1Icon.setImage(die1Image);
-            die2Icon.setImage(die2Image);
+            die1Icon.setImage(dice.get(random.nextInt(6)));
+            die2Icon.setImage(dice.get(random.nextInt(6)));
             dicePanel.repaint();
         });
     }
@@ -207,12 +205,12 @@ public class MonopolyGUI extends JFrame {
 
     private void setDice() {
         dice = new ArrayList<>();
-        dice.add("src//Images//dices//dice1.png");
-        dice.add("src//Images//dices//dice2.png");
-        dice.add("src//Images//dices//dice3.png");
-        dice.add("src//Images//dices//dice4.png");
-        dice.add("src//Images//dices//dice5.png");
-        dice.add("src//Images//dices//dice6.png");
+        dice.add(Toolkit.getDefaultToolkit().getImage("src//Images//dices//dice1.png"));
+        dice.add(Toolkit.getDefaultToolkit().getImage("src//Images//dices//dice2.png"));
+        dice.add(Toolkit.getDefaultToolkit().getImage("src//Images//dices//dice3.png"));
+        dice.add(Toolkit.getDefaultToolkit().getImage("src//Images//dices//dice4.png"));
+        dice.add(Toolkit.getDefaultToolkit().getImage("src//Images//dices//dice5.png"));
+        dice.add(Toolkit.getDefaultToolkit().getImage("src//Images//dices//dice6.png"));
     }
 
     private void setPlayers() {
@@ -249,8 +247,8 @@ public class MonopolyGUI extends JFrame {
         boatIcon = new ImageIcon("src//Images//pawns//boat.png");
         carIcon = new ImageIcon("src//Images//pawns//car.jpg");
         //cards
-        meglepetes1Icon = new ImageIcon("src//Images//cards//meglepetes1.jpg");
-        almagyarIcon = new ImageIcon("src//Images//cards//Almagyar_utca_ar.jpg");
+        meglepetes1Icon = new ImageIcon("src//Images//cards//meglepetes//meglepetes1.jpg");
+        almagyarIcon = new ImageIcon("src//Images//cards//ar//Almagyar_utca_ar.jpg");
         //dices
         die1Icon = new ImageIcon("src//Images//dices//dice1.png");
         die2Icon = new ImageIcon("src//Images//dices//dice2.png");
