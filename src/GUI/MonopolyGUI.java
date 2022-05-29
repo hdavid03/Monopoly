@@ -5,12 +5,25 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class MonopolyGUI extends JFrame implements ActionListener {
 
     custom_Button button1;
+    public static ArrayList<custom_Label> pawns = new ArrayList<>();
+    //arrayxy
+    public static int[][] arrayXY = {  {875,925},  {800,925},  {725,925},  {635,925},  {550,925},          //0
+                                {475,925},  {390,925},  {310,925},  {225,925},  {150,925},          //5
+                                {25,925},   {25,800},   {25,720},   {25,640},   {25,550},           //10
+                                {25,475},   {25,390},   {25,310},   {25,235},   {25,150},           //15
+                                {25,25},    {25,150},   {25,230},   {25,310},   {25,390},           //20
+                                {25,475},   {25,550},   {25,635},   {25,715},   {25,795},           //25
+                                {25,890},   {925,150},  {925,230},  {925,315},  {925,395},          //30
+                                {925,480},  {925,550},  {925,635},  {925,715},  {925,800}           //35
+                            };
 
-    MonopolyGUI() {
+    MonopolyGUI() throws InterruptedException {
+
 
         //Images
         //board
@@ -311,66 +324,61 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 
 
         //pawns arraylist
-        ArrayList<custom_Label> pawns = new ArrayList<>();
+
         pawns.add(pawnshoeLabel);
         pawns.add(pawnhatLabel);
         pawns.add(pawnboatLabel);
         pawns.add(pawncarLabel);
 
 
-        //arrayxy
-        int [40][2]arrayXY ={   {875, 925}, {800, 925}, {725, 925}, {635, 925}, {550, 925},         //0
-                                {475, 925}, {390, 925}, {310, 925}, {225, 925}, {150, 925},         //5
-                                {25, 925}, {25, 800}, {25, 720}, {25, 640}, {25, 550},              //10
-                                {25, 475}, {25, 390}, {25, 310}, {25, 235}, {25, 150},              //15
-                                {25, 25}, {25, 150}, {25, 230}, {25, 310}, {25, 390},               //20
-                                {25, 475}, {25, 550}, {25, 635}, {25, 715}, {25, 795},              //25
-                                {25, 890}, {150, 925}, {230, 925}, {315, 925}, {395, 925},          //30
-                                {480, 925}, {550, 925}, {635, 925}, {715, 925}, {800, 925}          //35
-                            };
-
         //switch
         Integer tablefieldsID = 0;
         Integer playerCount = 0;
         Integer playerID = 0;
 
-        for (tablefieldsID = 0; tablefieldsID < 40; tablefieldsID++) {
-            playerCount = 0;
-            for (playerID = 0; playerID < 4; playerID++) {
-                pawns.get(playerID).setLocation(arrayXY[tablefieldsID][1], arrayXY[tablefieldsID][2]);
+        System.out.println(arrayXY[0][0]);
+        System.out.println(arrayXY[0][1]);
+        System.out.println(arrayXY[1][0]);
+        System.out.println(arrayXY[1][1]);
+    }
+/*
+        pawns.get(playerID).setLocation(arrayXY[1][0], arrayXY[1][1]);
+        Integer playercountX = pawns.get(playerID).getX();
+        Integer playercountY = pawns.get(playerID).getY();
+        pawns.get(playerID).setLocation(playercountX, playercountY + 25);
+   */
 
-                //playercount switch
-                Integer playercountX = pawns.get(playerID).getX();
-                Integer playercountY = pawns.get(playerID).getY();
-                switch (playerCount) {
-                    case 0:
-                        break;
-                    case 1:
-                        pawns.get(playerID).setLocation(playercountX, playercountY + 25);
-                        break;
-                    case 2:
-                        pawns.get(playerID).setLocation(playercountX + 25, playercountY);
-                        break;
-                    case 3:
-                        pawns.get(playerID).setLocation(playercountX + 25, playercountY + 25);
-                        break;
-                    default:
-                        System.out.println("Hiba a playerCount switch szerkezetben!!");
-                }
-                playerCount++;
-                TimeUnit.SECONDS.sleep(3);
-            }
+
+
+    public static void goingonfields(Integer tablefieldsID, Integer playerCount, Integer playerID){
+        pawns.get(playerID).setLocation(arrayXY[tablefieldsID][0], arrayXY[tablefieldsID][1]);
+
+        //playercount switch
+        Integer playercountX = pawns.get(playerID).getX();
+        Integer playercountY = pawns.get(playerID).getY();
+        switch (playerCount) {
+            case 0:
+                break;
+            case 1:
+                pawns.get(playerID).setLocation(playercountX, playercountY + 25);
+                break;
+            case 2:
+                pawns.get(playerID).setLocation(playercountX + 25, playercountY);
+                break;
+            case 3:
+                pawns.get(playerID).setLocation(playercountX + 25, playercountY + 25);
+                break;
+            default:
+                System.out.println("Hiba a playerCount switch szerkezetben!!");
         }
+    }
 
-
-        @Override
-        public void actionPerformed (ActionEvent e){
-            if (e.getSource() == button1) {
-                System.out.println("Fizettél nekem, köszi!");
-                // legyen egy Ready button, ami megnyomás után eltűnik
-                // button1.setVisible(false);
-            }
-
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == button1) {
+            System.out.println("Fizettél nekem, köszi!");
+            // legyen egy Ready button, ami megnyomás után eltűnik
+            // button1.setVisible(false);
         }
     }
 }
