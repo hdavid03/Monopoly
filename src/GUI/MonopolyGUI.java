@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class MonopolyGUI extends JFrame implements ActionListener {
 
     custom_Button button1;
+    custom_Button button2;
     public static ArrayList<custom_Label> pawns = new ArrayList<>();
     public static custom_Label card1Label;
     public static ArrayList<ImageIcon> propertycardsIcon = new ArrayList<>();
@@ -116,6 +117,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         ImageIcon dice6Icon = new ImageIcon("src//Images//dices//dice6.png");
         //logos
         ImageIcon dollarLogoIcon = new ImageIcon("src//Images//logos//dollar.png");
+        ImageIcon readyLogoIcon = new ImageIcon("src//Images//logos//ready.png");
 
         //colors
         Color redBackground = Color.RED;
@@ -186,6 +188,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         String actionTitle = "Akciók";
         //buttons
         String payButton = "  Fizetés";
+        String readyButton = " Készen állok!";
 
 
         //board
@@ -419,12 +422,17 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         //comboBox.removeAllItems();
 
         button1 = new custom_Button(50, 120, 250, 100, payButton, dollarLogoIcon);
-        custom_Panel actionPanel = new custom_Panel(1000, 800, 800, 300, cyanBackground);
         button1.addActionListener(this);
+
+        button2 = new custom_Button(350, 120, 250, 100, readyButton, readyLogoIcon);
+        button2.addActionListener(this);
+
+        custom_Panel actionPanel = new custom_Panel(1000, 800, 800, 300, cyanBackground);
 
         actionPanel.add(actionTitleLabel);
         actionPanel.add(comboBox);
         actionPanel.add(button1);
+        actionPanel.add(button2);
 
 
 
@@ -603,6 +611,11 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         if (e.getSource() == comboBox){
             //System.out.println(comboBox.getSelectedItem());
             System.out.println(comboBox.getSelectedIndex());
+        }
+        if (e.getSource() == button2){
+            button2.setEnabled(false);          //kiszürkíti
+            //button2.setVisible(false);        //ha mindenki készen áll
+            System.out.println("ready");
         }
     }
 }
