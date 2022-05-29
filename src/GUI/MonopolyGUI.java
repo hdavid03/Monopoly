@@ -18,13 +18,13 @@ public class MonopolyGUI extends JFrame implements ActionListener {
     public static Integer playerID_local;
     public static custom_Label playerTitleLabel;
     //arrayxy
-    public static int[][] arrayXY = {  {875,925},  {800,925},  {725,925},  {635,925},  {550,925},          //0
+    public static int[][] arrayXY = {  {875,925},  {800,925},  {725,925},  {635,925},  {550,920},          //0
                                 {475,925},  {390,925},  {310,925},  {225,925},  {150,925},          //5
                                 {25,925},   {25,800},   {25,720},   {25,640},   {25,550},           //10
                                 {25,475},   {25,390},   {25,310},   {25,235},   {25,150},           //15
-                                {25,25},    {25,150},   {25,230},   {25,310},   {25,390},           //20
-                                {25,475},   {25,550},   {25,635},   {25,715},   {25,795},           //25
-                                {25,890},   {925,150},  {925,230},  {925,315},  {925,395},          //30
+                                {25,25},    {150,25},   {230,25},   {310,25},   {390,25},           //20
+                                {475,25},   {550,25},   {635,25},   {715,25},   {795,25},           //25
+                                {890,25},   {925,150},  {925,230},  {925,315},  {925,395},          //30
                                 {925,480},  {925,550},  {925,635},  {925,715},  {925,800}           //35
                             };
 
@@ -278,7 +278,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         ownedpropertyIndicator.add(owneddunakorzoLabel);
 
 
-        for(int i=0; i < 28; i++){
+        for(int i=0; i < 40; i++){
             if(ownedpropertyIndicator.get(i) != null){
                 ownedPanel.add(ownedpropertyIndicator.get(i));
             }
@@ -568,7 +568,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
             }
 
 
-            if(colour != null){
+            if(ownedpropertyIndicator.get(tablefieldsID_local) != null){
                 System.out.println(colour);
                 System.out.println(tablefieldsID_local);
 
@@ -576,10 +576,14 @@ public class MonopolyGUI extends JFrame implements ActionListener {
                 //playerTitleLabel.setOpaque(true);
                 ownedpropertyIndicator.get(tablefieldsID_local).setBackground(colour);
                 ownedpropertyIndicator.get(tablefieldsID_local).setOpaque(true);
+                System.out.println("Fizettél nekem, köszi!");
+
+            }
+            else {
+                System.out.println("Ezt te nem veheted meg!");
             }
 
 
-            System.out.println("Fizettél nekem, köszi!");
             // legyen egy Ready button, ami megnyomás után eltűnik
             // button1.setVisible(false);
         }
