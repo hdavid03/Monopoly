@@ -11,6 +11,12 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 
     custom_Button button1;
     public static ArrayList<custom_Label> pawns = new ArrayList<>();
+    public static custom_Label card1Label;
+    public static ArrayList<ImageIcon> propertycardsIcon = new ArrayList<>();
+    public static ArrayList<custom_Label> ownedpropertyIndicator = new ArrayList<>();
+    public static Integer tablefieldsID_local;
+    public static Integer playerID_local;
+    public static custom_Label playerTitleLabel;
     //arrayxy
     public static int[][] arrayXY = {  {875,925},  {800,925},  {725,925},  {635,925},  {550,925},          //0
                                 {475,925},  {390,925},  {310,925},  {225,925},  {150,925},          //5
@@ -70,7 +76,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         ImageIcon szerencse16Icon = new ImageIcon("src//Images//cards//szerencse//szerencse16.jpg");
 
         //ar
-        ImageIcon almagyarIcon = new ImageIcon("src//Images//cards//ar//Almagyar_utca_ar.jpg");
+        ImageIcon AlmagyarIcon = new ImageIcon("src//Images//cards//ar//Almagyar_utca_ar.jpg");
         ImageIcon BethlenIcon = new ImageIcon("src//Images//cards//ar//Bethlen_utca_ar.jpg");
         ImageIcon DeliVasutvonalIcon = new ImageIcon("src//Images//cards//ar//Deli_vasutvonal_ar.jpg");
         ImageIcon DoboIcon = new ImageIcon("src//Images//cards//ar//Dobo_ter_ar.jpg");
@@ -91,13 +97,13 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         ImageIcon NyugatiVasutvonalIcon = new ImageIcon("src//Images//cards//ar//Nyugati_vasutvonal_ar.jpg");
         ImageIcon OskolaIcon = new ImageIcon("src//Images//cards//ar//Oskola_utca_ar.jpg");
         ImageIcon OtvosIcon = new ImageIcon("src//Images//cards//ar//Otvos_utca_ar.jpg");
-        ImageIcon OvorosIcon = new ImageIcon("src//Images//cards//ar//Ovoros_ar.jpg");
+        ImageIcon OvarosIcon = new ImageIcon("src//Images//cards//ar//Ovaros_ar.jpg");
         ImageIcon PetofiIcon = new ImageIcon("src//Images//cards//ar//Petofi_ter_ar.jpg");
-        ImageIcon PiacIcon = new ImageIcon("src//Images//cards//ar//Piac_ter_ar_utca_ar.jpg");
-        ImageIcon SzinhazIcon = new ImageIcon("src//Images//cards//ar//Szinhaz_ter_ar_utca_ar.jpg");
-        ImageIcon TorokIcon = new ImageIcon("src//Images//cards//ar//Torok_udvar_ar_utca_ar.jpg");
-        ImageIcon VizmuTarsasagIcon = new ImageIcon("src//Images//cards//ar//Vizmu_tarsasag_ar_utca_ar.jpg");
-        ImageIcon VorosmartyIcon = new ImageIcon("src//Images//cards//ar//Vorosmarty_ter_ar_utca_ar.jpg");
+        ImageIcon PiacIcon = new ImageIcon("src//Images//cards//ar//Piac_ter_ar.jpg");
+        ImageIcon SzinhazIcon = new ImageIcon("src//Images//cards//ar//Szinhaz_ter_ar.jpg");
+        ImageIcon TorokIcon = new ImageIcon("src//Images//cards//ar//Torok_udvar_ar.jpg");
+        ImageIcon VizmuTarsasagIcon = new ImageIcon("src//Images//cards//ar//Vizmu_tarsasag.jpg");
+        ImageIcon VorosmartyIcon = new ImageIcon("src//Images//cards//ar//Vorosmarty_ter_ar.jpg");
 
 
         //dices
@@ -199,9 +205,122 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         pawnPanel.add(pawnboatLabel);
         pawnPanel.add(pawncarLabel);
 
+        //ownedpropertyIndicator
+        custom_Label ownedpiacLabel = new custom_Label(786, 860, 30, 30, null);
+        custom_Label ownedtorokLabel = new custom_Label(625, 860, 30, 30, null);
+        custom_Label ownedeszakLabel = new custom_Label(463, 860, 30, 30, null);
+        custom_Label ownednagykorosLabel = new custom_Label(384, 860, 30, 30, null);
+        custom_Label ownedlestarLabel = new custom_Label(220, 860, 30, 30, null);
+        custom_Label ownedkisfaludyLabel = new custom_Label(144, 860, 30, 30, null);
+        custom_Label ownedegyetemLabel = new custom_Label(110, 785, 30, 30, null);
+        custom_Label ownedeketromosLabel = new custom_Label(110, 700, 30, 30, null);
+        custom_Label ownedszinhazLabel = new custom_Label(110, 620, 30, 30, null);
+        custom_Label ownedjanusLabel = new custom_Label(110, 544, 30, 30, null);
+        custom_Label ownedkeletiLabel = new custom_Label(110, 457, 30, 30, null);
+        custom_Label ownedpetofiLabel = new custom_Label(110, 379, 30, 30, null);
+        custom_Label ownednagyerdoLabel = new custom_Label(110, 217, 30, 30, null);
+        custom_Label ownedbethlenLabel = new custom_Label(110, 137, 30, 30, null);
+        custom_Label ownedmoraLabel = new custom_Label(143, 107, 30, 30, null);
+        custom_Label ownedoskolaLabel = new custom_Label(303, 107, 30, 30, null);
+        custom_Label owneddomLabel = new custom_Label(385, 107, 30, 30, null);
+        custom_Label owneddeliLabel = new custom_Label(460, 107, 30, 30, null);
+        custom_Label owneddoboLabel = new custom_Label(543, 107, 30, 30, null);
+        custom_Label ownedalmagyarLabel = new custom_Label(627, 107, 30, 30, null);
+        custom_Label ownedvizmuLabel = new custom_Label(703, 107, 30, 30, null);
+        custom_Label ownedgardonyiLabel = new custom_Label(787,107 , 30, 30, null);
+        custom_Label ownedkofaragoLabel = new custom_Label(865, 136, 30, 30, null);
+        custom_Label ownedovarosLabel = new custom_Label(865, 217, 30, 30, null);
+        custom_Label ownedotvosLabel = new custom_Label(865, 380, 30, 30, null);
+        custom_Label ownednyugatiLabel = new custom_Label(865, 460, 30, 30, null);
+        custom_Label ownedvorosmartyLabel = new custom_Label(865, 620, 30, 30, null);
+        custom_Label owneddunakorzoLabel = new custom_Label(865, 782, 30, 30, null);
+        custom_Panel ownedPanel = new custom_Panel(0, 0, 1000, 1000);
+
+        ownedpropertyIndicator.add(null);
+        ownedpropertyIndicator.add(ownedpiacLabel);
+        ownedpropertyIndicator.add(null);
+        ownedpropertyIndicator.add(ownedtorokLabel);
+        ownedpropertyIndicator.add(null);
+        ownedpropertyIndicator.add(ownedeszakLabel);
+        ownedpropertyIndicator.add(ownednagykorosLabel);
+        ownedpropertyIndicator.add(null);
+        ownedpropertyIndicator.add(ownedlestarLabel);
+        ownedpropertyIndicator.add(ownedkisfaludyLabel);
+        ownedpropertyIndicator.add(null);
+        ownedpropertyIndicator.add(ownedegyetemLabel);
+        ownedpropertyIndicator.add(ownedeketromosLabel);
+        ownedpropertyIndicator.add(ownedszinhazLabel);
+        ownedpropertyIndicator.add(ownedjanusLabel);
+        ownedpropertyIndicator.add(ownedkeletiLabel);
+        ownedpropertyIndicator.add(ownedpetofiLabel);
+        ownedpropertyIndicator.add(null);
+        ownedpropertyIndicator.add(ownednagyerdoLabel);
+        ownedpropertyIndicator.add(ownedbethlenLabel);
+        ownedpropertyIndicator.add(null);
+        ownedpropertyIndicator.add(ownedmoraLabel);
+        ownedpropertyIndicator.add(null);
+        ownedpropertyIndicator.add(ownedoskolaLabel);
+        ownedpropertyIndicator.add(owneddomLabel);
+        ownedpropertyIndicator.add(owneddeliLabel);
+        ownedpropertyIndicator.add(owneddoboLabel);
+        ownedpropertyIndicator.add(ownedalmagyarLabel);
+        ownedpropertyIndicator.add(ownedvizmuLabel);
+        ownedpropertyIndicator.add(ownedgardonyiLabel);
+        ownedpropertyIndicator.add(null);
+        ownedpropertyIndicator.add(ownedkofaragoLabel);
+        ownedpropertyIndicator.add(ownedovarosLabel);
+        ownedpropertyIndicator.add(null);
+        ownedpropertyIndicator.add(ownedotvosLabel);
+        ownedpropertyIndicator.add(ownednyugatiLabel);
+        ownedpropertyIndicator.add(null);
+        ownedpropertyIndicator.add(ownedvorosmartyLabel);
+        ownedpropertyIndicator.add(null);
+        ownedpropertyIndicator.add(owneddunakorzoLabel);
+
+
+        for(int i=0; i < 28; i++){
+            if(ownedpropertyIndicator.get(i) != null){
+                ownedPanel.add(ownedpropertyIndicator.get(i));
+            }
+        }
+
+        /*
+        ownedPanel.add(ownedpiacLabel);
+        ownedPanel.add(ownedtorokLabel);
+        ownedPanel.add(ownedeszakLabel);
+        ownedPanel.add(ownednagykorosLabel);
+        ownedPanel.add(ownedlestarLabel);
+        ownedPanel.add(ownedkisfaludyLabel);
+        ownedPanel.add(ownedegyetemLabel);
+        ownedPanel.add(ownedeketromosLabel);
+        ownedPanel.add(ownedszinhazLabel);
+        ownedPanel.add(ownedjanusLabel);
+        ownedPanel.add(ownedkeletiLabel);
+        ownedPanel.add(ownedpetofiLabel);
+        ownedPanel.add(ownednagyerdoLabel);
+        ownedPanel.add(ownedbethlenLabel);
+        ownedPanel.add(ownedmoraLabel);
+        ownedPanel.add(ownedoskolaLabel);
+        ownedPanel.add(owneddomLabel);
+        ownedPanel.add(owneddeliLabel);
+        ownedPanel.add(owneddoboLabel);
+        ownedPanel.add(ownedalmagyarLabel);
+        ownedPanel.add(ownedvizmuLabel);
+        ownedPanel.add(ownedgardonyiLabel);
+        ownedPanel.add(ownedkofaragoLabel);
+        ownedPanel.add(ownedovarosLabel);
+        ownedPanel.add(ownedotvosLabel);
+        ownedPanel.add(ownednyugatiLabel);
+        ownedPanel.add(ownedvorosmartyLabel);
+        ownedPanel.add(owneddunakorzoLabel);
+
+*/
+
+
+
 
         //players title
-        custom_Label playerTitleLabel = new custom_Label(playerTitle, 60, 260, 10, 400, 90);
+        playerTitleLabel = new custom_Label(playerTitle, 60, 260, 10, 400, 90);
         custom_Panel playerTitlePanel = new custom_Panel(1000, 0, 800, 100, pinkBackground);
 
         playerTitlePanel.add(playerTitleLabel);
@@ -268,13 +387,11 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 
         //cards
         custom_Label cardTitleLabel = new custom_Label(cardTitle, 40, 10, 10, 200, 50);
-        custom_Label card1Label = new custom_Label(110, 60, 600, 350, meglepetes1Icon);
-        custom_Label card2Label = new custom_Label(110, 60, 600, 350, almagyarIcon);
+        card1Label = new custom_Label(110, 60, 600, 350, null);
         custom_Panel cardsPanel = new custom_Panel(1000, 400, 600, 400, whiteBackground);
 
         cardsPanel.add(cardTitleLabel);
         cardsPanel.add(card1Label);
-        //cardsPanel.add(card2Label);
 
 
         //dice
@@ -298,12 +415,15 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         actionPanel.add(button1);
 
 
+
+
         //LAYERED PANE
         //layers: default - 0 (JLayeredPane.DEFAULT_LAYER), palette - 1, modal - 2, popup - 3, drag - 4
         JLayeredPane layeredPaneBoard = new JLayeredPane();
         layeredPaneBoard.setBounds(0, 0, 1000, 1000);
         layeredPaneBoard.add(boardPanel, Integer.valueOf(1));
         layeredPaneBoard.add(pawnPanel, Integer.valueOf(0));
+        layeredPaneBoard.add(ownedPanel, Integer.valueOf(0));
 
 
         this.setTitle("Monopoly");
@@ -330,16 +450,49 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         pawns.add(pawnboatLabel);
         pawns.add(pawncarLabel);
 
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(PiacIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(TorokIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(EszakiVasutvonalIcon);
+        propertycardsIcon.add(NagykorosiIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(LestarIcon);
+        propertycardsIcon.add(KisfaludyIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(EgyetemIcon);
+        propertycardsIcon.add(ElektromosTarsasagIcon);
+        propertycardsIcon.add(SzinhazIcon);
+        propertycardsIcon.add(JanuspannoniusIcon);
+        propertycardsIcon.add(KeletiVasutvonalIcon);
+        propertycardsIcon.add(PetofiIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(NagyerdoIcon);
+        propertycardsIcon.add(BethlenIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(MoraIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(OskolaIcon);
+        propertycardsIcon.add(DomIcon);
+        propertycardsIcon.add(DeliVasutvonalIcon);
+        propertycardsIcon.add(DoboIcon);
+        propertycardsIcon.add(AlmagyarIcon);
+        propertycardsIcon.add(VizmuTarsasagIcon);
+        propertycardsIcon.add(GardonyiIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(KofaragoIcon);
+        propertycardsIcon.add(OvarosIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(OtvosIcon);
+        propertycardsIcon.add(NyugatiVasutvonalIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(VorosmartyIcon);
+        propertycardsIcon.add(null);
+        propertycardsIcon.add(DunakorzoIcon);
 
-        //switch
-        Integer tablefieldsID = 0;
-        Integer playerCount = 0;
-        Integer playerID = 0;
 
-        System.out.println(arrayXY[0][0]);
-        System.out.println(arrayXY[0][1]);
-        System.out.println(arrayXY[1][0]);
-        System.out.println(arrayXY[1][1]);
+
     }
 /*
         pawns.get(playerID).setLocation(arrayXY[1][0], arrayXY[1][1]);
@@ -373,9 +526,59 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         }
     }
 
+    public static void fieldImage(Integer tablefieldsID){
+        card1Label.setIcon(propertycardsIcon.get(tablefieldsID));
+
+    }
+
+    public static void getTablefieldsID_local(Integer tablefieldsID){
+        tablefieldsID_local = tablefieldsID;
+    }
+
+    public static void getPlayerID_local(Integer playerID){
+        playerID_local = playerID;
+    }
+
+
+
+
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == button1) {
+
+
+            Color colour = null;
+            switch(playerID_local){
+                case 0:
+                    colour = Color.GREEN;
+                    break;
+                case 1:
+                    colour = Color.RED;
+                    break;
+                case 2:
+                    colour = Color.MAGENTA;
+                    break;
+                case 3:
+                    colour = Color.YELLOW;
+                    break;
+                default:
+                    System.out.println("Hiba a playerID switch szerkezetben!!");
+            }
+
+
+            if(colour != null){
+                System.out.println(colour);
+                System.out.println(tablefieldsID_local);
+
+                //playerTitleLabel.setBackground(Color.GREEN);
+                //playerTitleLabel.setOpaque(true);
+                ownedpropertyIndicator.get(tablefieldsID_local).setBackground(colour);
+                ownedpropertyIndicator.get(tablefieldsID_local).setOpaque(true);
+            }
+
+
             System.out.println("Fizettél nekem, köszi!");
             // legyen egy Ready button, ami megnyomás után eltűnik
             // button1.setVisible(false);

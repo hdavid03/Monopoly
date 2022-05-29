@@ -1,5 +1,3 @@
-import GUI.MonopolyGUI;
-
 import java.util.concurrent.TimeUnit;
 
 public class main {
@@ -9,14 +7,23 @@ public class main {
 
         TimeUnit.SECONDS.sleep(5);
 
-        for (int i = 1; i < 40; i++) {
-            int j = 0;
-            for (int k = 0; k < 4; k++) {
-                GUI.MonopolyGUI.goingonfields(i, j, k);
-                j++;
-                TimeUnit.SECONDS.sleep(3);
+
+        while(true){
+            for (int fieldID = 1; fieldID < 40; fieldID++) {
+                int playerCount = 0;
+                for (int playerID = 0; playerID < 4; playerID++) {
+                    GUI.MonopolyGUI.goingonfields(fieldID, playerCount, playerID);
+                    GUI.MonopolyGUI.fieldImage(fieldID);
+                    GUI.MonopolyGUI.getTablefieldsID_local(fieldID);
+                    GUI.MonopolyGUI.getPlayerID_local(playerID);
+
+
+                    playerCount++;
+                    TimeUnit.SECONDS.sleep(3);
+                }
             }
         }
+
 
 
 
