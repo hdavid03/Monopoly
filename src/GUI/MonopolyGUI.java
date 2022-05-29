@@ -118,8 +118,14 @@ public class MonopolyGUI extends JFrame {
         CustomLabel playerNameLabel = new CustomLabel("Offline", 20, 10, 0, 400, 30);
         CustomLabel playerMoneyLabel = new CustomLabel("", 20, 10, 30, 400, 30);
         CustomPanel playerPanel = new CustomPanel(x, y, 400, 150, color);
+        CustomLabel player1RrUtlabel = new custom_Label(playerRr + player1Rr + playerDb + playerUt + player1Ut + playerDb, 20, 10, 60, 400, 30);
+        CustomLabel player1Jaillabel = new custom_Label(playerJail + player1BoolJail + " - " + player1JailTime + playerJailTimeplus, 20, 10, 90, 400, 30);
+        CustomLabel player1Extralabel = new custom_Label(playerExtra + player1freejail + player1passgo, 20, 10, 120, 400, 30);
         playerPanel.add(playerNameLabel);
         playerPanel.add(playerMoneyLabel);
+        playerPanel.add(playerRrUtlabel);
+        playerPanel.add(playerJaillabel);
+        playerPanel.add(playerExtralabel);
         playerNameLabels.add(playerNameLabel);
         playerMoneyLabels.add(playerMoneyLabel);
         this.add(playerPanel);
