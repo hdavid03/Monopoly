@@ -1,0 +1,6 @@
+src//Images//dices//dice1.png
+src//Images//dices//dice2.png
+src//Images//dices//dice3.png
+src//Images//dices//dice4.png
+src//Images//dices//dice5.png
+src//Images//dices//dice6.png

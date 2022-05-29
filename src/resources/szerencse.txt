@@ -1,0 +1,16 @@
+src//Images//cards//szerencse//szerencse1.jpg
+src//Images//cards//szerencse//szerencse2.jpg
+src//Images//cards//szerencse//szerencse3.jpg
+src//Images//cards//szerencse//szerencse4.jpg
+src//Images//cards//szerencse//szerencse5.jpg
+src//Images//cards//szerencse//szerencse6.jpg
+src//Images//cards//szerencse//szerencse7.jpg
+src//Images//cards//szerencse//szerencse8.jpg
+src//Images//cards//szerencse//szerencse9.jpg
+src//Images//cards//szerencse//szerencse10.jpg
+src//Images//cards//szerencse//szerencse11.jpg
+src//Images//cards//szerencse//szerencse12.jpg
+src//Images//cards//szerencse//szerencse13.jpg
+src//Images//cards//szerencse//szerencse14.jpg
+src//Images//cards//szerencse//szerencse15.jpg
+src//Images//cards//szerencse//szerencse16.jpg

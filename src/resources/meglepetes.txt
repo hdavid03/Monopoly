@@ -1,0 +1,16 @@
+src//Images//cards//meglepetes//meglepetes1.jpg
+src//Images//cards//meglepetes//meglepetes2.jpg
+src//Images//cards//meglepetes//meglepetes3.jpg
+src//Images//cards//meglepetes//meglepetes4.jpg
+src//Images//cards//meglepetes//meglepetes5.jpg
+src//Images//cards//meglepetes//meglepetes6.jpg
+src//Images//cards//meglepetes//meglepetes7.jpg
+src//Images//cards//meglepetes//meglepetes8.jpg
+src//Images//cards//meglepetes//meglepetes9.jpg
+src//Images//cards//meglepetes//meglepetes10.jpg
+src//Images//cards//meglepetes//meglepetes11.jpg
+src//Images//cards//meglepetes//meglepetes12.jpg
+src//Images//cards//meglepetes//meglepetes13.jpg
+src//Images//cards//meglepetes//meglepetes14.jpg
+src//Images//cards//meglepetes//meglepetes15.jpg
+src//Images//cards//meglepetes//meglepetes16.jpg

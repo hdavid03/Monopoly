@@ -15,6 +15,7 @@ public class ClientApplication {
         while (!launchPage.clientWantToConnect()) {
             waitInMilliseconds(500);
         }
+
         MonopolyGUI gui = new MonopolyGUI(launchPage.getUsernameTextField().getText());
         ClientThread clientThread = new ClientThread(gui);
         Thread thread = new Thread(clientThread);
