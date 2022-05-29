@@ -27,7 +27,6 @@ public class ClientSocketHandler implements Runnable {
 
     public void updatePlayerQueue(Queue<Player> players) {
         this.playerQueue = players;
-        //this.playerQueue.remove(player);
     }
 
     public boolean isLostConnection() {
@@ -58,6 +57,7 @@ public class ClientSocketHandler implements Runnable {
             if(!lostConnection) {
                 StatusMessage message = (StatusMessage)ois.readObject();
                 player = message.getPlayer();
+                clientReady = message.isReady();
             }
         } catch(IOException | ClassNotFoundException e) {
             clientSocketHandlerLogger.log(Level.SEVERE, e.getMessage());

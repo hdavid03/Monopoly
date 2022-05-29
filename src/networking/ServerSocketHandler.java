@@ -32,11 +32,14 @@ public class ServerSocketHandler extends Thread {
         int numOfClients = clientSocketHandlers.size();
         if(numOfClients == 0) return false;
         boolean playersAreReady = true;
-        boolean noMorePlayersThanAllowed = clientSocketHandlers.size() < MAX_NUM_OF_CLIENTS;
         for(ClientSocketHandler ch : clientSocketHandlers) {
             playersAreReady &= ch.isClientReady();
         }
-        return noMorePlayersThanAllowed && playersAreReady;
+        return noMorePlayersThanAllowed() && playersAreReady;
+    }
+
+    private boolean noMorePlayersThanAllowed() {
+        return (clientSocketHandlers.size() < MAX_NUM_OF_CLIENTS) && (clientSocketHandlers.size() > 1);
     }
 
     private Socket tryToAcceptAClientRequest() throws IOException{
@@ -85,7 +88,7 @@ public class ServerSocketHandler extends Thread {
                     startClientHandler(socket);
                 }
                 for(ClientSocketHandler ch : clientSocketHandlers) {
-                    serverSocketHandlerLogger.log(Level.INFO, () -> ch.getPlayer().toString() + " player is on");
+                    serverSocketHandlerLogger.log(Level.INFO, () -> ch.getPlayer().toString() + " player is online");
                 }
                 updateStatusOfPlayers();
                 updateClientHandlers();
