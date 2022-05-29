@@ -21,6 +21,7 @@ public class MonopolyGUI extends JFrame {
     private final String userName;
     private boolean ready = false;
     private LinkedList<Player> players = new LinkedList<>();
+    private ArrayList<CustomLabel> ownedPropertyIndicator = new ArrayList<>();
     private ArrayList<ImageIcon> propertyCardIcons = new ArrayList<>();
     private ArrayList<ImageIcon> surpriseCardIcons = new ArrayList<>();
     private ArrayList<ImageIcon> chanceCardIcons = new ArrayList<>();
@@ -32,6 +33,18 @@ public class MonopolyGUI extends JFrame {
     private CustomLabel die2Label;
     private CustomPanel dicePanel;
     private CustomPanel pawnPanel;
+
+    JComboBox comboBox;
+    //arrayxy
+    public static int[][] arrayXY = {{875,925},  {800,925},  {725,925},  {635,925},  {550,920},          //0
+                                     {475,925},  {390,925},  {310,925},  {225,925},  {150,925},          //5
+                                     {25,925},   {25,800},   {25,720},   {25,640},   {25,550},           //10
+                                     {25,475},   {25,390},   {25,310},   {25,235},   {25,150},           //15
+                                     {25,25},    {150,25},   {230,25},   {310,25},   {390,25},           //20
+                                     {475,25},   {550,25},   {635,25},   {715,25},   {795,25},           //25
+                                     {890,25},   {925,150},  {925,230},  {925,315},  {925,395},          //30
+                                     {925,480},  {925,550},  {925,635},  {925,715},  {925,800}           //35
+                                    };
 
     public MonopolyGUI(String userName){
         setPawns();
@@ -198,4 +211,78 @@ public class MonopolyGUI extends JFrame {
         this.add(boardPanel);
         this.add(layeredPaneBoard);
     }
+
+    private void setOwnedPropertyIndicator() {
+        CustomLabel ownedpiacLabel       = new CustomLabel(786, 860, 30, 30, null);
+        CustomLabel ownedtorokLabel      = new CustomLabel(625, 860, 30, 30, null);
+        CustomLabel ownedeszakLabel      = new CustomLabel(463, 860, 30, 30, null);
+        CustomLabel ownednagykorosLabel  = new CustomLabel(384, 860, 30, 30, null);
+        CustomLabel ownedlestarLabel     = new CustomLabel(220, 860, 30, 30, null);
+        CustomLabel ownedkisfaludyLabel  = new CustomLabel(144, 860, 30, 30, null);
+        CustomLabel ownedegyetemLabel    = new CustomLabel(110, 785, 30, 30, null);
+        CustomLabel ownedeketromosLabel  = new CustomLabel(110, 700, 30, 30, null);
+        CustomLabel ownedszinhazLabel    = new CustomLabel(110, 620, 30, 30, null);
+        CustomLabel ownedjanusLabel      = new CustomLabel(110, 544, 30, 30, null);
+        CustomLabel ownedkeletiLabel     = new CustomLabel(110, 457, 30, 30, null);
+        CustomLabel ownedpetofiLabel     = new CustomLabel(110, 379, 30, 30, null);
+        CustomLabel ownednagyerdoLabel   = new CustomLabel(110, 217, 30, 30, null);
+        CustomLabel ownedbethlenLabel    = new CustomLabel(110, 137, 30, 30, null);
+        CustomLabel ownedmoraLabel       = new CustomLabel(143, 107, 30, 30, null);
+        CustomLabel ownedoskolaLabel     = new CustomLabel(303, 107, 30, 30, null);
+        CustomLabel owneddomLabel        = new CustomLabel(385, 107, 30, 30, null);
+        CustomLabel owneddeliLabel       = new CustomLabel(460, 107, 30, 30, null);
+        CustomLabel owneddoboLabel       = new CustomLabel(543, 107, 30, 30, null);
+        CustomLabel ownedalmagyarLabel   = new CustomLabel(627, 107, 30, 30, null);
+        CustomLabel ownedvizmuLabel      = new CustomLabel(703, 107, 30, 30, null);
+        CustomLabel ownedgardonyiLabel   = new CustomLabel(787,107 , 30, 30, null);
+        CustomLabel ownedkofaragoLabel   = new CustomLabel(865, 136, 30, 30, null);
+        CustomLabel ownedovarosLabel     = new CustomLabel(865, 217, 30, 30, null);
+        CustomLabel ownedotvosLabel      = new CustomLabel(865, 380, 30, 30, null);
+        CustomLabel ownednyugatiLabel    = new CustomLabel(865, 460, 30, 30, null);
+        CustomLabel ownedvorosmartyLabel = new CustomLabel(865, 620, 30, 30, null);
+        CustomLabel owneddunakorzoLabel  = new CustomLabel(865, 782, 30, 30, null);
+        CustomPanel ownedPanel = new CustomPanel(0, 0, 1000, 1000);
+
+        ownedPropertyIndicator.add(null);
+        ownedPropertyIndicator.add(ownedpiacLabel);
+        ownedPropertyIndicator.add(null);
+        ownedPropertyIndicator.add(ownedtorokLabel);
+        ownedPropertyIndicator.add(null);
+        ownedPropertyIndicator.add(ownedeszakLabel);
+        ownedPropertyIndicator.add(ownednagykorosLabel);
+        ownedPropertyIndicator.add(null);
+        ownedPropertyIndicator.add(ownedlestarLabel);
+        ownedPropertyIndicator.add(ownedkisfaludyLabel);
+        ownedPropertyIndicator.add(null);
+        ownedPropertyIndicator.add(ownedegyetemLabel);
+        ownedPropertyIndicator.add(ownedeketromosLabel);
+        ownedPropertyIndicator.add(ownedszinhazLabel);
+        ownedPropertyIndicator.add(ownedjanusLabel);
+        ownedPropertyIndicator.add(ownedkeletiLabel);
+        ownedPropertyIndicator.add(ownedpetofiLabel);
+        ownedPropertyIndicator.add(null);
+        ownedPropertyIndicator.add(ownednagyerdoLabel);
+        ownedPropertyIndicator.add(ownedbethlenLabel);
+        ownedPropertyIndicator.add(null);
+        ownedPropertyIndicator.add(ownedmoraLabel);
+        ownedPropertyIndicator.add(null);
+        ownedPropertyIndicator.add(ownedoskolaLabel);
+        ownedPropertyIndicator.add(owneddomLabel);
+        ownedPropertyIndicator.add(owneddeliLabel);
+        ownedPropertyIndicator.add(owneddoboLabel);
+        ownedPropertyIndicator.add(ownedalmagyarLabel);
+        ownedPropertyIndicator.add(ownedvizmuLabel);
+        ownedPropertyIndicator.add(ownedgardonyiLabel);
+        ownedPropertyIndicator.add(null);
+        ownedPropertyIndicator.add(ownedkofaragoLabel);
+        ownedPropertyIndicator.add(ownedovarosLabel);
+        ownedPropertyIndicator.add(null);
+        ownedPropertyIndicator.add(ownedotvosLabel);
+        ownedPropertyIndicator.add(ownednyugatiLabel);
+        ownedPropertyIndicator.add(null);
+        ownedPropertyIndicator.add(ownedvorosmartyLabel);
+        ownedPropertyIndicator.add(null);
+        ownedPropertyIndicator.add(owneddunakorzoLabel);
+    }
 }
+
