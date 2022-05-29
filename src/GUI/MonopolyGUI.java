@@ -14,9 +14,10 @@ public class MonopolyGUI extends JFrame implements ActionListener {
     public static custom_Label card1Label;
     public static ArrayList<ImageIcon> propertycardsIcon = new ArrayList<>();
     public static ArrayList<custom_Label> ownedpropertyIndicator = new ArrayList<>();
-    public static Integer tablefieldsID_local;
-    public static Integer playerID_local;
+    public static Integer tablefieldsID_local = 0;
+    public static Integer playerID_local = 0;
     public static custom_Label playerTitleLabel;
+    JComboBox comboBox;
     //arrayxy
     public static int[][] arrayXY = {  {875,925},  {800,925},  {725,925},  {635,925},  {550,920},          //0
                                 {475,925},  {390,925},  {310,925},  {225,925},  {150,925},          //5
@@ -407,11 +408,22 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         //action
         custom_Label actionTitleLabel = new custom_Label(actionTitle, 40, 10, 10, 200, 50);
 
-        button1 = new custom_Button(50, 80, 250, 100, payButton, dollarLogoIcon);
+        String[] options = {"Házat", "Szállodát"};
+        comboBox = new JComboBox(options);
+        comboBox.addActionListener(this);
+        comboBox.setBounds(50, 70, 250, 30);
+        //comboBox.insertItemAt("pig", 0);
+        comboBox.setSelectedIndex(0);
+        //comboBox.removeItem("Ház");
+        //comboBox.removeItemAt(0);
+        //comboBox.removeAllItems();
+
+        button1 = new custom_Button(50, 120, 250, 100, payButton, dollarLogoIcon);
         custom_Panel actionPanel = new custom_Panel(1000, 800, 800, 300, cyanBackground);
         button1.addActionListener(this);
 
         actionPanel.add(actionTitleLabel);
+        actionPanel.add(comboBox);
         actionPanel.add(button1);
 
 
@@ -577,6 +589,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
                 ownedpropertyIndicator.get(tablefieldsID_local).setBackground(colour);
                 ownedpropertyIndicator.get(tablefieldsID_local).setOpaque(true);
                 System.out.println("Fizettél nekem, köszi!");
+                System.out.println(comboBox.getSelectedItem() + " szeretnél venni.");
 
             }
             else {
@@ -586,6 +599,10 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 
             // legyen egy Ready button, ami megnyomás után eltűnik
             // button1.setVisible(false);
+        }
+        if (e.getSource() == comboBox){
+            //System.out.println(comboBox.getSelectedItem());
+            System.out.println(comboBox.getSelectedIndex());
         }
     }
 }
