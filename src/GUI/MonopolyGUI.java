@@ -125,16 +125,19 @@ public class MonopolyGUI extends JFrame {
     }
 
     public void goingOnFields(int resultOfThrowing){
-        int newFieldID = (0 + resultOfThrowing) % 40;
+        int newFieldID = (this.player.getFieldID() + resultOfThrowing) % 40;
+        this.player.setFieldID(newFieldID);
         System.out.println(newFieldID);
-        pawns.get(0).setLocation(arrayXY[newFieldID][0], arrayXY[newFieldID][1]);
-        System.out.println("ok");
+        System.out.println(this.playerID);
+        pawns.get(this.playerID).setLocation(arrayXY[newFieldID][0], arrayXY[newFieldID][1]);
+        System.out.println(arrayXY[newFieldID]);
+        pawns.get(this.playerID).repaint();
 
         //playercount switch
 
         Integer playercountX = pawns.get(playerID).getX();
         Integer playercountY = pawns.get(playerID).getY();
-        switch (playerCount) {
+        switch (this.playerID) {
             case 0:
                 break;
             case 1:
@@ -199,7 +202,7 @@ public class MonopolyGUI extends JFrame {
             die1Label.setIcon(dieIcons.get(result1));
             die2Label.setIcon(dieIcons.get(result2));
             dicePanel.repaint();
-            goingOnFields(result1 + result2);
+            goingOnFields(result1 + result2 + 2);
         });
     }
 
@@ -217,14 +220,10 @@ public class MonopolyGUI extends JFrame {
         pawnPanel.add(pawnHatLabel);
         pawnPanel.add(pawnBoatLabel);
         pawnPanel.add(pawnCarLabel);
-        //pawnBoatLabel.setVisible(false);
-        //pawnCarLabel.setVisible(false);
-        //pawnShoeLabel.setVisible(false);
-        //pawnHatLabel.setVisible(false);
-        pawns.add(pawnShoeLabel);
-        pawns.add(pawnHatLabel);
-        pawns.add(pawnBoatLabel);
-        pawns.add(pawnCarLabel);
+        pawnBoatLabel.setVisible(false);
+        pawnCarLabel.setVisible(false);
+        pawnShoeLabel.setVisible(false);
+        pawnHatLabel.setVisible(false);
         return pawnPanel;
     }
 
@@ -309,6 +308,9 @@ public class MonopolyGUI extends JFrame {
         layeredPaneBoard.add(boardPanel, Integer.valueOf(1));
         layeredPaneBoard.add(pawnPanel, Integer.valueOf(0));
         layeredPaneBoard.add(ownedPanel, Integer.valueOf(0));
+        for(int i = 0; i < 4; i++) {
+            pawns.add((CustomLabel) pawnPanel.getComponent(i));
+        }
         this.add(layeredPaneBoard);
         this.add(boardPanel);
     }
