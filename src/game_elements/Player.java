@@ -1,6 +1,8 @@
 package game_elements;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player extends GameElement implements Serializable {
 
@@ -11,6 +13,7 @@ public class Player extends GameElement implements Serializable {
     private int money;
     private int railRoadCounter;
     private int utilityCounter;
+    private ArrayList<String> extras;
     private int fieldID;
     private boolean isInJail;
     private boolean playerOnline;
@@ -25,6 +28,7 @@ public class Player extends GameElement implements Serializable {
         this.fieldID = 0;
         this.isInJail = false;
         this.playerOnline = true;
+        this.extras = new ArrayList<>();
     }
 
     public Player(Player player) {
@@ -37,6 +41,14 @@ public class Player extends GameElement implements Serializable {
         this.utilityCounter = player.getUtilityCounter();
         this.fieldID = player.getFieldID();
         this.isInJail = player.isInJail();
+    }
+
+    public List<String> getExtras() {
+        return extras;
+    }
+
+    public void setExtras(ArrayList<String> extras) {
+        this.extras = extras;
     }
 
     public boolean isOffline() {

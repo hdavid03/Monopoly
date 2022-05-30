@@ -17,22 +17,27 @@ public class MonopolyGUI extends JFrame {
     private CustomButton payButton;
     private CustomButton readyButton;
     private CustomButton throwButton;
+    private int playerID;
     private Player player;
     private final String userName;
     private boolean ready = false;
-    private LinkedList<Player> players = new LinkedList<>();
-    private ArrayList<CustomLabel> ownedPropertyIndicator = new ArrayList<>();
-    private ArrayList<ImageIcon> surpriseCardIcons = new ArrayList<>();
-    private ArrayList<ImageIcon> chanceCardIcons = new ArrayList<>();
-    private ArrayList<ImageIcon> propertyCardIcons = new ArrayList<>();
-    private ArrayList<CustomLabel> playerNameLabels = new ArrayList<>();
-    private ArrayList<CustomLabel> playerMoneyLabels = new ArrayList<>();
-    private ArrayList<ImageIcon> dieIcons = new ArrayList<>();
+    private ArrayList<Player> players = new ArrayList<>();
+    private final ArrayList<CustomLabel> ownedPropertyIndicator = new ArrayList<>();
+    private final ArrayList<ImageIcon> surpriseCardIcons = new ArrayList<>();
+    private final ArrayList<ImageIcon> chanceCardIcons = new ArrayList<>();
+    private final ArrayList<ImageIcon> propertyCardIcons = new ArrayList<>();
+    private final ArrayList<CustomLabel> playerNameLabels = new ArrayList<>();
+    private final ArrayList<CustomLabel> playerMoneyLabels = new ArrayList<>();
+    private final ArrayList<CustomLabel> playerPropertyLabels = new ArrayList<>();
+    private final ArrayList<CustomLabel> playerJailLabels = new ArrayList<>();
+    private final ArrayList<CustomLabel> playerExtraLabels = new ArrayList<>();
+    private final ArrayList<CustomLabel> pawns = new ArrayList<>();
+    private final ArrayList<ImageIcon> dieIcons = new ArrayList<>();
 
+    private CustomLabel card1Label;
     private CustomLabel die1Label;
     private CustomLabel die2Label;
     private CustomPanel dicePanel;
-    private CustomPanel pawnPanel;
 
     JComboBox comboBox;
     //arrayxy
@@ -47,7 +52,7 @@ public class MonopolyGUI extends JFrame {
                                     };
 
     public MonopolyGUI(String userName){
-        setPawns();
+        initPawns();
         initGameBoard();
         initPlayers();
         CustomPanel cardsPanel = getCustomCardsPanel();
@@ -57,6 +62,7 @@ public class MonopolyGUI extends JFrame {
         setImageIcons(chanceCardIcons, "src//resources//szerencse.txt");
         setImageIcons(surpriseCardIcons, "src//resources//meglepetes.txt");
         setImageIcons(dieIcons, "src//resources//dice.txt");
+        setPropertyFieldIcons();
         this.userName = userName;
         this.setTitle("Monopoly");
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
@@ -64,7 +70,6 @@ public class MonopolyGUI extends JFrame {
         this.setLayout(null);
         this.setVisible(true);
         this.add(cardsPanel);
-        this.add(dicePanel);
         this.add(actionPanel);
     }
 
@@ -78,7 +83,9 @@ public class MonopolyGUI extends JFrame {
     private CustomPanel getCustomCardsPanel() {
         CustomLabel cardTitleLabel = new CustomLabel("Kártyák", 40, 10, 10, 200, 50);
         CustomPanel cardsPanel = new CustomPanel(1000, 400, 600, 400, Color.WHITE);
+        card1Label = new CustomLabel(110, 60, 600, 350, null);
         cardsPanel.add(cardTitleLabel);
+        cardsPanel.add(card1Label);
         return cardsPanel;
     }
 
@@ -95,12 +102,48 @@ public class MonopolyGUI extends JFrame {
         actionPanel.add(this.throwButton);
     }
 
+    public int getPlayerID() {
+        return playerID;
+    }
+
+    public void setPlayerID(int playerID) {
+        this.playerID = playerID;
+    }
+
     public boolean isReady() {
         return ready;
     }
 
     public String getUserName() {
         return userName;
+    }
+
+    public void fieldImage(Integer tablefieldsID){
+        card1Label.setIcon(propertyCardIcons.get(tablefieldsID));
+    }
+
+    public void goingOnFields(int resultOfThrowing){
+        int newFieldID = (this.player.getFieldID() + resultOfThrowing) % 40;
+        pawns.get(this.player.getPlayerID()).setLocation(arrayXY[newFieldID][0], arrayXY[newFieldID][1]);
+
+        //playercount switch
+        Integer playercountX = pawns.get(playerID).getX();
+        Integer playercountY = pawns.get(playerID).getY();
+        switch (playerCount) {
+            case 0:
+                break;
+            case 1:
+                pawns.get(playerID).setLocation(playercountX, playercountY + 25);
+                break;
+            case 2:
+                pawns.get(playerID).setLocation(playercountX + 25, playercountY);
+                break;
+            case 3:
+                pawns.get(playerID).setLocation(playercountX + 25, playercountY + 25);
+                break;
+            default:
+                System.out.println("Hiba a playerCount switch szerkezetben!!");
+        }
     }
 
     private void initPlayers() {
@@ -116,18 +159,21 @@ public class MonopolyGUI extends JFrame {
 
     private void initDefaultPlayer(int x, int y, Color color) {
         CustomLabel playerNameLabel = new CustomLabel("Offline", 20, 10, 0, 400, 30);
-        CustomLabel playerMoneyLabel = new CustomLabel("", 20, 10, 30, 400, 30);
+        CustomLabel playerMoneyLabel = new CustomLabel("Pénz: 0", 20, 10, 30, 400, 30);
         CustomPanel playerPanel = new CustomPanel(x, y, 400, 150, color);
-        CustomLabel player1RrUtlabel = new custom_Label(playerRr + player1Rr + playerDb + playerUt + player1Ut + playerDb, 20, 10, 60, 400, 30);
-        CustomLabel player1Jaillabel = new custom_Label(playerJail + player1BoolJail + " - " + player1JailTime + playerJailTimeplus, 20, 10, 90, 400, 30);
-        CustomLabel player1Extralabel = new custom_Label(playerExtra + player1freejail + player1passgo, 20, 10, 120, 400, 30);
+        CustomLabel playerPropertyLabel = new CustomLabel("Vasút: 0 db || Közmű: 0 db", 20, 10, 60, 400, 30);
+        CustomLabel playerJailLabel = new CustomLabel("Börtön: Nincs - 0 kör", 20, 10, 90, 400, 30);
+        CustomLabel playerExtraLabel = new CustomLabel("Extra: ", 20, 10, 120, 400, 30);
         playerPanel.add(playerNameLabel);
         playerPanel.add(playerMoneyLabel);
-        playerPanel.add(playerRrUtlabel);
-        playerPanel.add(playerJaillabel);
-        playerPanel.add(playerExtralabel);
+        playerPanel.add(playerPropertyLabel);
+        playerPanel.add(playerJailLabel);
+        playerPanel.add(playerExtraLabel);
         playerNameLabels.add(playerNameLabel);
         playerMoneyLabels.add(playerMoneyLabel);
+        playerPropertyLabels.add(playerPropertyLabel);
+        playerJailLabels.add(playerJailLabel);
+        playerExtraLabels.add(playerExtraLabel);
         this.add(playerPanel);
     }
 
@@ -143,26 +189,38 @@ public class MonopolyGUI extends JFrame {
 
         this.throwButton.addActionListener(e -> {
             SecureRandom random = new SecureRandom();
-            die1Label.setIcon(dieIcons.get(random.nextInt(6)));
-            die2Label.setIcon(dieIcons.get(random.nextInt(6)));
+            int result1 = random.nextInt(6);
+            int result2 = random.nextInt(6);
+            die1Label.setIcon(dieIcons.get(result1));
+            die2Label.setIcon(dieIcons.get(result2));
             dicePanel.repaint();
+            goingOnFields(result1 + result2);
         });
     }
 
-    private void setPawns() {
+    private CustomPanel initPawns() {
         ImageIcon shoeIcon = new ImageIcon("src//Images//pawns//shoe.jpg");
         ImageIcon hatIcon = new ImageIcon("src//Images//pawns//hat.png");
         ImageIcon boatIcon = new ImageIcon("src//Images//pawns//boat.png");
         ImageIcon carIcon = new ImageIcon("src//Images//pawns//car.jpg");
-        CustomLabel pawnshoeLabel = new CustomLabel(25, 25, 25, 25, shoeIcon);
-        CustomLabel pawnhatLabel = new CustomLabel(25, 50, 25, 25, hatIcon);
-        CustomLabel pawnboatLabel = new CustomLabel(50, 25, 25, 25, boatIcon);
-        CustomLabel pawncarLabel = new CustomLabel(50, 50, 25, 25, carIcon);
-        pawnPanel = new CustomPanel(0, 0, 1000, 1000);
-        pawnPanel.add(pawnshoeLabel);
-        pawnPanel.add(pawnhatLabel);
-        pawnPanel.add(pawnboatLabel);
-        pawnPanel.add(pawncarLabel);
+        CustomLabel pawnShoeLabel = new CustomLabel(875, 900, 25, 25, shoeIcon);
+        CustomLabel pawnHatLabel = new CustomLabel(875, 925, 25, 25, hatIcon);
+        CustomLabel pawnBoatLabel = new CustomLabel(900, 900, 25, 25, boatIcon);
+        CustomLabel pawnCarLabel = new CustomLabel(900, 925, 25, 25, carIcon);
+        CustomPanel pawnPanel = new CustomPanel(0, 0, 1000, 1000);
+        pawnPanel.add(pawnShoeLabel);
+        pawnPanel.add(pawnHatLabel);
+        pawnPanel.add(pawnBoatLabel);
+        pawnPanel.add(pawnCarLabel);
+        pawnBoatLabel.setVisible(false);
+        pawnCarLabel.setVisible(false);
+        pawnShoeLabel.setVisible(false);
+        pawnHatLabel.setVisible(false);
+        pawns.add(pawnShoeLabel);
+        pawns.add(pawnHatLabel);
+        pawns.add(pawnBoatLabel);
+        pawns.add(pawnCarLabel);
+        return pawnPanel;
     }
 
     private void setImageIcons(ArrayList<ImageIcon> cardIcons, String source) {
@@ -177,17 +235,6 @@ public class MonopolyGUI extends JFrame {
         }
     }
 
-    private void setPlayers() {
-        int i = 0;
-        for (Player player : this.players) {
-            CustomLabel label = playerNameLabels.get(i);
-            label.setText(player.getPlayerName());
-            label = playerMoneyLabels.get(i);
-            label.setText(String.valueOf(player.getMoney()));
-            i++;
-        }
-    }
-
     private void setDicePanels() {
         CustomLabel diceTitleLabel = new CustomLabel("Kockák", 40, 10, 10, 200, 50);
         die1Label = new CustomLabel(25, 70, 200, 150, null);
@@ -196,28 +243,46 @@ public class MonopolyGUI extends JFrame {
         dicePanel.add(diceTitleLabel);
         dicePanel.add(die1Label);
         dicePanel.add(die2Label);
+        this.add(dicePanel);
     }
 
     public void updateGameBoard(Queue<Player> players) {
         this.players.clear();
         this.players.addAll(players);
-        setPlayers();
+        this.player = this.players.get(playerID);
+        int i = 0;
+        for (Player player : this.players) {
+            CustomLabel label = playerNameLabels.get(i);
+            label.setText("Név: " + player.getPlayerName());
+            label = playerMoneyLabels.get(i);
+            label.setText("Pénz: " + player.getMoney());
+            label = playerPropertyLabels.get(i);
+            label.setText(String.format("Vasút: %d db || Közmű: %d db", player.getRailRoadCounter(), player.getUtilityCounter()));
+            label = playerJailLabels.get(i);
+            label.setText(String.format("Börtön: %d kör", player.getInJailTimer()));
+            label = playerExtraLabels.get(i);
+            label.setText("Extrák: " + player.getExtras());
+            i++;
+        }
     }
 
     private void initGameBoard() {
         ImageIcon boardIcon = new ImageIcon("src//Images//board.png");
         CustomLabel boardLabel = new CustomLabel(0, 0, 1000, 1000, boardIcon);
         CustomPanel boardPanel = new CustomPanel(0, 0, 1000, 1100, Color.WHITE);
+        CustomPanel pawnPanel = initPawns();
+        CustomPanel ownedPanel = setOwnedPropertyIndicator();
         boardPanel.add(boardLabel);
         JLayeredPane layeredPaneBoard = new JLayeredPane();
         layeredPaneBoard.setBounds(0, 0, 1000, 1000);
         layeredPaneBoard.add(boardPanel, Integer.valueOf(1));
         layeredPaneBoard.add(pawnPanel, Integer.valueOf(0));
-        this.add(boardPanel);
+        layeredPaneBoard.add(ownedPanel, Integer.valueOf(0));
         this.add(layeredPaneBoard);
+        this.add(boardPanel);
     }
 
-    private void setOwnedPropertyIndicator() {
+    private CustomPanel setOwnedPropertyIndicator() {
         CustomLabel ownedPiacLabel       = new CustomLabel(786, 860, 30, 30, null);
         CustomLabel ownedTorokLabel      = new CustomLabel(625, 860, 30, 30, null);
         CustomLabel ownedEszakLabel      = new CustomLabel(463, 860, 30, 30, null);
@@ -287,9 +352,15 @@ public class MonopolyGUI extends JFrame {
         ownedPropertyIndicator.add(ownedVorosmartyLabel);
         ownedPropertyIndicator.add(null);
         ownedPropertyIndicator.add(ownedDunakorzoLabel);
+        for(int i=0; i < 40; i++){
+            if(ownedPropertyIndicator.get(i) != null){
+                ownedPanel.add(ownedPropertyIndicator.get(i));
+            }
+        }
+        return ownedPanel;
     }
 
-    private void setPropertyFieldIcons {
+    private void setPropertyFieldIcons() {
         ImageIcon AlmagyarIcon = new ImageIcon("src//Images//cards//ar//Almagyar_utca_ar.jpg");
         ImageIcon BethlenIcon = new ImageIcon("src//Images//cards//ar//Bethlen_utca_ar.jpg");
         ImageIcon DeliVasutvonalIcon = new ImageIcon("src//Images//cards//ar//Deli_vasutvonal_ar.jpg");
@@ -360,4 +431,3 @@ public class MonopolyGUI extends JFrame {
         propertyCardIcons.add(DunakorzoIcon);
     }
 }
-

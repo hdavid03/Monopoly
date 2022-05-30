@@ -63,6 +63,7 @@ public class ClientThread implements Runnable {
             ois = new ObjectInputStream(socket.getInputStream());
             this.player = (Player) ois.readObject();
             this.player.setPlayerName(gameBoard.getUserName());
+            gameBoard.setPlayerID(this.player.getPlayerID());
             this.socket = socket;
             while(isRunning()) {
                 sendPlayerStatusToTheServer(oos);
