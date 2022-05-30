@@ -1,3 +1,4 @@
+import game_elements.Card;
 import game_elements.Field;
 import game_elements.Player;
 import game_elements.Table;
@@ -8,15 +9,183 @@ import game_elements.table_fields.property_fields.StreetField;
 import game_elements.table_fields.property_fields.UtilityField;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class main {
+
+    static void CardAction(Player P, int C, String T, ArrayList<Player> PA, ArrayList<Field> F) {
+        if(Objects.equals(T, "Surprise")) {
+            switch(C) {
+                case 1:
+                case 4:
+                case 13:
+                    P.changeBalance(100);
+                    break;
+                case 2:
+                    P.changeBalance(50);
+                    break;
+                case 3:
+                case 11:
+                    P.changeBalance(-50);
+                    break;
+                case 5:
+                    for(int i=0;i<PA.size();i++) {
+                        if(PA.get(i).getPlayerID()!=P.getPlayerID()) {
+                            PA.get(i).changeBalance(-10);
+                            P.changeBalance(10);
+                        }
+                    }
+                    break;
+                case 6:
+                    int Houses = 0; //40M
+                    int Hotels = 0; //115M
+                    for(int i=0;i<40;i++) {
+                        if(F.get(i) instanceof StreetField) {
+                            if(((StreetField) F.get(i)).getOwnerID()==P.getPlayerID()) {
+                                if(((StreetField) F.get(i)).isThereHotel()) {
+                                    Hotels++;
+                                } else {
+                                    Houses += ((StreetField) F.get(i)).getHouseCounter();
+                                }
+                            }
+                        }
+                    }
+                    P.changeBalance(-40*Houses-115*Hotels);
+                    break;
+                case 7:
+                    P.changeBalance(20);
+                    break;
+                case 8:
+                    P.setGOJFcount(P.getGOJFcount()+1);
+                    break;
+                case 9:
+                    P.setInJailTimer(3); P.setInJail(true); P.setOnFieldPosition(10);
+                    break;
+                case 10:
+                    P.changeBalance(10);
+                    break;
+                case 12:
+                    P.changeBalance(200);
+                    break;
+                case 14:
+                    P.changeBalance(-100);
+                    break;
+                case 15:
+                    P.setOnFieldPosition(0); P.changeBalance(200);
+                    break;
+                case 16:
+                    P.changeBalance(15);
+                    break;
+            }
+        }
+        else if (Objects.equals(T, "Fortune")) {
+            switch(C) {
+                case 1:
+                case 6:
+                    P.setFortune(P.getFortune()+1);
+                    break;
+                case 2:
+                    P.changeBalance(15);
+                    break;
+                case 3:
+                    P.setOnFieldPosition(0);
+                    break;
+                case 4:
+                    P.setInJailTimer(3); P.setInJail(true); P.setOnFieldPosition(10);
+                    break;
+                case 5:
+                    P.changeBalance(150);
+                    break;
+                case 7:
+                    P.setOnFieldPosition(P.getOnFieldPosition()-3);
+                    break;
+                case 8:
+                    P.setOnFieldPosition(39);
+                    break;
+                case 9:
+                    P.setGOJFcount(P.getGOJFcount()+1);
+                    break;
+                case 10:
+                    int c = (int)(P.getOnFieldPosition()/20);
+                    c = (c+1)*12;
+                    P.setOnFieldPosition(c);
+                    if(F.get(c) instanceof UtilityField) {
+                        if(!((UtilityField) F.get(c)).getOwnership()) {
+                            // Prompt Play to Buy
+                            ((UtilityField) F.get(c)).setOwnership(true);
+                            ((UtilityField) F.get(c)).setOwnerID(P.getPlayerID());
+                            P.changeBalance(((UtilityField) F.get(c)).getValue());
+                        }
+                        else {
+                            int Die1 = P.throwDice();
+                            int Die2 = P.throwDice();
+                            P.changeBalance(-10*(Die1+Die2));
+                            PA.get(((UtilityField) F.get(c)).getOwnerID()).changeBalance(10*(Die1+Die2));
+                        }
+                    }
+                    break;
+                case 11:
+                    int Houses = 0; //25M
+                    int Hotels = 0; //100M
+                    for(int i=0;i<40;i++) {
+                        if(F.get(i) instanceof StreetField) {
+                            if(((StreetField) F.get(i)).getOwnerID()==P.getPlayerID()) {
+                                if(((StreetField) F.get(i)).isThereHotel()) {
+                                    Hotels++;
+                                } else {
+                                    Houses += ((StreetField) F.get(i)).getHouseCounter();
+                                }
+                            }
+                        }
+                    }
+                    P.changeBalance(-25*Houses-100*Hotels);
+                    break;
+                case 12:
+                    for(int i=0;i<PA.size();i++) {
+                        if(PA.get(i).getPlayerID()!=P.getPlayerID()) {
+                            P.changeBalance(-50);
+                            PA.get(i).changeBalance(50);
+                        }
+                    }
+                    break;
+                case 13:
+                    P.setOnFieldPosition(11);
+                    if(P.getOnFieldPosition()>11) { P.changeBalance(200); }
+                    break;
+                case 14:
+                case 15:
+                    // min(d(Player,Vasút)), megvásárolható vagy 2*rent() tulajnak
+                    int c = (int)(P.getOnFieldPosition()/10);
+                    c = (c+1)*5;
+                    P.setOnFieldPosition(c);
+                    if(F.get(c) instanceof RailRoadField) {
+                        if(!((RailRoadField) F.get(c)).getOwnership()) {
+                            // Prompt Player to Buy
+                            ((RailRoadField) F.get(c)).setOwnership(true);
+                            ((RailRoadField) F.get(c)).setOwnerID(P.getPlayerID());
+                            P.changeBalance(-((RailRoadField) F.get(c)).getValue());
+                        }
+                        else {
+                            int Die1 = P.throwDice();
+                            int Die2 = P.throwDice();
+                            P.changeBalance(-2*(Die1+Die2));
+                            PA.get(((RailRoadField) F.get(c)).getOwnerID()).changeBalance(2*(Die1+Die2));
+                        }
+                    }
+                    break;
+                case 16:
+                    P.changeBalance(50);
+                    break;
+            }
+        }
+    }
 
     public static void main(String[] args) {
 
         GUI.LaunchPage launchPage = new GUI.LaunchPage();
 
-
-        Table table = new Table;
+        //Placeholder PlayerArray
+        ArrayList<Player> PlayerArray = new ArrayList<>(3);
 
         Field[] Fields = new Field[40];
         for(int i=0;i<40;i++) {
@@ -71,7 +240,7 @@ public class main {
         // Turn iteration all Players
         for(int i=0;i<PlayerArray.size();i++) {
 
-            Player p;   // p = PlayerArray.get(i)
+            Player p = PlayerArray.get(i);
 
             if( p.getIsInJail() ) {
                 p.setInJailTimer(p.getInJailTimer()-1);
@@ -93,6 +262,10 @@ public class main {
                         if(p.startPassCheck(Die1+Die2)) {
                             p.setOnFieldPosition(p.getOnFieldPosition()+Die1+Die2-40);
                             p.changeBalance(200);
+                            if(p.getFortune()>0) {
+                                p.setFortune(p.getFortune()-1);
+                                p.changeBalance(200);
+                            }
                         }
                         else { p.setOnFieldPosition(p.getOnFieldPosition()+Die1+Die2); }
                     }
@@ -112,7 +285,7 @@ public class main {
                     // Nothing haha
                 // GoToJail Field
                 if(Fields[pos] instanceof GoToJailField) {
-                    if(/*Player has GOOJF Card*/) {
+                    if(p.getGOJFcount()>0) {
                         //Prompt to play card OR NOT
                         if(/*Player doesn't play card*/) {
                             p.setInJail(true);
@@ -133,11 +306,15 @@ public class main {
                 if(Fields[pos] instanceof ChanceField) {
                     /*Prompt Player to Draw Chance*/
                     //Draw Card, effect Card
+                    int CID = (int)(Math.random()*16+1);
+                    CardAction(p,CID,"Chance",PlayerArray,Fields);
                 }
                 // Community Chest Field
                 if(Fields[pos] instanceof CommunityChestField) {
-                    /*Prompt Player to Draw Chance*/
+                    /*Prompt Player to Draw Surprise*/
                     //Draw Card, Effect Card
+                    int CID = (int)(Math.random()*16+1);
+                    CardAction(p,CID,"Surprise",PlayerArray,Fields);
                 }
 
                 // Utilities
@@ -184,7 +361,7 @@ public class main {
                         }
                     } else if (((RailRoadField) Fields[pos]).getOwnerID()!=p.getPlayerID()) {
                         int owned=0;
-                        for() {
+                        for(int i=0;i<40;i++) {
                             if(Fields[i] instanceof RailRoadField && ((RailRoadField) Fields[i]).getOwnership()) {
                                 owned++;
                             }
@@ -252,25 +429,4 @@ public class main {
 
         }
     }
-
-    /*
-    *
-    * SETUP ALL DATABASE
-    *   Cards
-    *   Board
-    *   Players
-    *
-    * Turn order pseudocode
-    *
-    * FOR p=1:Num(Players)      // MATLAB style array indexing
-    *
-    *       CheckField
-    *           IF DrawCard -> Draw
-    *               EFFECT Card
-    *                   CHANGE Player STATE
-    *           IF CHANGE Player STATE THEN CHANGE Player STATE
-    *
-    * END
-    *
-    * */
 }

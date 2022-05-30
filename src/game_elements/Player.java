@@ -15,6 +15,8 @@ public class Player extends GameElement implements Serializable {
     private int utilityCounter;
     private int fieldID;
     private boolean isInJail;
+    private int GOJFcount = 0;
+    private int Fortune = 0;
 
     public Player(int playerID, int onFieldPosition, int money) {
         this.playerID = playerID;
@@ -35,7 +37,23 @@ public class Player extends GameElement implements Serializable {
         this.railRoadCounter = player.getRailRoadCounter();
         this.utilityCounter = player.getUtilityCounter();
         this.fieldID = player.getFieldID();
-        //this.isInJail = player.isInJail();
+        this.GOJFcount = player.getGOJFcount();
+        this.Fortune = player.getFortune();
+    }
+
+    public int getFortune() {
+        return Fortune;
+    }
+    public void setFortune(int fortune) {
+        Fortune = fortune;
+    }
+
+    public int getGOJFcount() {
+        return GOJFcount;
+    }
+
+    public void setGOJFcount(int GOJFcount) {
+        this.GOJFcount = GOJFcount;
     }
 
     public String getPlayerName() {
@@ -128,6 +146,8 @@ public class Player extends GameElement implements Serializable {
 
     public int throwDice() { return (int)(Math.random()*6 + 1); }
 
-    public boolean startPassCheck(int Move) { return this.getOnFieldPosition() + Move >= 40; }
+    public boolean startPassCheck(int Move) {
+        return this.getOnFieldPosition() + Move >= 40;
+    }
 
 }
