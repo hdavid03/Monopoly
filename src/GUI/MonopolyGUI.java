@@ -324,6 +324,7 @@ public class MonopolyGUI extends JFrame {
 
     public void updateGameBoard(ServerMessage message) {
         ArrayList<Player> oldPlayerList = new ArrayList<>(this.players);
+        System.out.println(message.getPlayers().toString());
         this.players.clear();
         this.players.addAll(message.getPlayers());
         this.player = this.players.get(playerID);

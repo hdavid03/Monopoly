@@ -15,6 +15,7 @@ public class ClientSocketHandler implements Runnable {
     private Player player;
     private Queue<Player> playerQueue;
     private ServerMessage serverMessage;
+    private boolean serverIsUpdated;
     private boolean clientReady;
     private boolean lostConnection;
     private static final Logger clientSocketHandlerLogger = Logger.getLogger(ClientSocketHandler.class.getName());
@@ -30,7 +31,10 @@ public class ClientSocketHandler implements Runnable {
         this.playerQueue = players;
     }
 
-    public void updateServerMessage(ServerMessage message) { this.serverMessage = message; }
+    public void updateServerMessage(ServerMessage message) {
+        this.serverMessage = message;
+        this.serverIsUpdated = true;
+    }
 
     public boolean isLostConnection() {
         return lostConnection;
@@ -62,8 +66,12 @@ public class ClientSocketHandler implements Runnable {
                 player = message.getPlayer();
                 clientReady = message.isReady();
             }
-        } catch(IOException | ClassNotFoundException e) {
-            clientSocketHandlerLogger.log(Level.SEVERE, e.getMessage());
+        } catch(IOException e ) {
+            clientSocketHandlerLogger.log(Level.SEVERE, "Megszakadt kapcsolat");
+            player.setPlayerOnline(false);
+            setLostConnection(true);
+        }catch (ClassNotFoundException e) {
+            clientSocketHandlerLogger.log(Level.SEVERE, "Nem található osztály");
             player.setPlayerOnline(false);
             setLostConnection(true);
         }
@@ -81,6 +89,18 @@ public class ClientSocketHandler implements Runnable {
         }
     }
 
+    private void waitingForServerUpdate() {
+        try {
+            while (!serverIsUpdated) {
+                Thread.sleep(100);
+            }
+            serverIsUpdated = false;
+        }catch(InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
+    }
+
     @Override
     public void run() {
         try {
@@ -91,6 +111,7 @@ public class ClientSocketHandler implements Runnable {
             this.player = (Player)ois.readObject();
             while(!lostConnection) {
                 updatePlayerStatus(ois);
+                waitingForServerUpdate();
                 sendUpdatedStatusToTheClient(oos);
             }
         } catch(IOException e) {
