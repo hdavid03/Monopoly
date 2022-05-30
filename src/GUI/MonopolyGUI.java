@@ -5,30 +5,35 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class MonopolyGUI extends JFrame implements ActionListener {
 
-    custom_Button button1;
+    static custom_Button button1;
     custom_Button button2;
     public static ArrayList<custom_Label> pawns = new ArrayList<>();
     public static custom_Label card1Label;
+    public static custom_Label HouseHotelMonitor;
     public static ArrayList<ImageIcon> propertycardsIcon = new ArrayList<>();
     public static ArrayList<custom_Label> ownedpropertyIndicator = new ArrayList<>();
     public static Integer tablefieldsID_local = 0;
     public static Integer playerID_local = 0;
+    public static Integer getHouseCounter = 0;
+    public static String isHotel = "Nincs";
+    public static String HouseHotelString = "Ház: " + getHouseCounter + " || Szálloda: " + isHotel;
     public static custom_Label playerTitleLabel;
-    JComboBox comboBox;
+    public static JComboBox comboBox;
+
+    public static String[] options = {"Reset", "Veszek 1 Házat", "Veszek 2 Házat", "Veszek 3 Házat", "Veszek 4 Házat", "Veszek Szállodát"};
     //arrayxy
-    public static int[][] arrayXY = {  {875,925},  {800,925},  {725,925},  {635,925},  {550,920},          //0
-                                {475,925},  {390,925},  {310,925},  {225,925},  {150,925},          //5
-                                {25,925},   {25,800},   {25,720},   {25,640},   {25,550},           //10
-                                {25,475},   {25,390},   {25,310},   {25,235},   {25,150},           //15
-                                {25,25},    {150,25},   {230,25},   {310,25},   {390,25},           //20
-                                {475,25},   {550,25},   {635,25},   {715,25},   {795,25},           //25
-                                {890,25},   {925,150},  {925,230},  {925,315},  {925,395},          //30
-                                {925,480},  {925,550},  {925,635},  {925,715},  {925,800}           //35
-                            };
+    public static int[][] arrayXY = {{875, 925}, {800, 925}, {725, 925}, {635, 925}, {550, 920},          //0
+            {475, 925}, {390, 925}, {310, 925}, {225, 925}, {150, 925},          //5
+            {25, 925}, {25, 800}, {25, 720}, {25, 640}, {25, 550},           //10
+            {25, 475}, {25, 390}, {25, 310}, {25, 235}, {25, 150},           //15
+            {25, 25}, {150, 25}, {230, 25}, {310, 25}, {390, 25},           //20
+            {475, 25}, {550, 25}, {635, 25}, {715, 25}, {795, 25},           //25
+            {890, 25}, {925, 150}, {925, 230}, {925, 315}, {925, 395},          //30
+            {925, 480}, {925, 550}, {925, 635}, {925, 715}, {925, 800}           //35
+    };
 
     MonopolyGUI() throws InterruptedException {
 
@@ -231,7 +236,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         custom_Label owneddoboLabel = new custom_Label(543, 107, 30, 30, null);
         custom_Label ownedalmagyarLabel = new custom_Label(627, 107, 30, 30, null);
         custom_Label ownedvizmuLabel = new custom_Label(703, 107, 30, 30, null);
-        custom_Label ownedgardonyiLabel = new custom_Label(787,107 , 30, 30, null);
+        custom_Label ownedgardonyiLabel = new custom_Label(787, 107, 30, 30, null);
         custom_Label ownedkofaragoLabel = new custom_Label(865, 136, 30, 30, null);
         custom_Label ownedovarosLabel = new custom_Label(865, 217, 30, 30, null);
         custom_Label ownedotvosLabel = new custom_Label(865, 380, 30, 30, null);
@@ -282,8 +287,8 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         ownedpropertyIndicator.add(owneddunakorzoLabel);
 
 
-        for(int i=0; i < 40; i++){
-            if(ownedpropertyIndicator.get(i) != null){
+        for (int i = 0; i < 40; i++) {
+            if (ownedpropertyIndicator.get(i) != null) {
                 ownedPanel.add(ownedpropertyIndicator.get(i));
             }
         }
@@ -319,8 +324,6 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         ownedPanel.add(owneddunakorzoLabel);
 
 */
-
-
 
 
         //players title
@@ -390,12 +393,19 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         player4Panel.add(player4Extralabel);
 
         //cards
-        custom_Label cardTitleLabel = new custom_Label(cardTitle, 40, 10, 10, 200, 50);
+
+
+        custom_Label cardTitleLabel = new custom_Label(cardTitle, 40, 10, 10, 190, 50);
+        HouseHotelMonitor = new custom_Label(HouseHotelString, 30, 200, 10, 400, 50);
+        HouseHotelMonitor.setVisible(false);
         card1Label = new custom_Label(110, 60, 600, 350, null);
+
+
         custom_Panel cardsPanel = new custom_Panel(1000, 400, 600, 400, whiteBackground);
 
         cardsPanel.add(cardTitleLabel);
         cardsPanel.add(card1Label);
+        cardsPanel.add(HouseHotelMonitor);
 
 
         //dice
@@ -411,7 +421,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         //action
         custom_Label actionTitleLabel = new custom_Label(actionTitle, 40, 10, 10, 200, 50);
 
-        String[] options = {"Házat", "Szállodát"};
+
         comboBox = new JComboBox(options);
         comboBox.addActionListener(this);
         comboBox.setBounds(50, 70, 250, 30);
@@ -420,9 +430,12 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         //comboBox.removeItem("Ház");
         //comboBox.removeItemAt(0);
         //comboBox.removeAllItems();
+        comboBox.setVisible(false);
 
         button1 = new custom_Button(50, 120, 250, 100, payButton, dollarLogoIcon);
         button1.addActionListener(this);
+
+        button1.setEnabled(false);
 
         button2 = new custom_Button(350, 120, 250, 100, readyButton, readyLogoIcon);
         button2.addActionListener(this);
@@ -433,8 +446,6 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         actionPanel.add(comboBox);
         actionPanel.add(button1);
         actionPanel.add(button2);
-
-
 
 
         //LAYERED PANE
@@ -512,7 +523,6 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         propertycardsIcon.add(DunakorzoIcon);
 
 
-
     }
 /*
         pawns.get(playerID).setLocation(arrayXY[1][0], arrayXY[1][1]);
@@ -522,8 +532,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
    */
 
 
-
-    public static void goingonfields(Integer tablefieldsID, Integer playerCount, Integer playerID){
+    public static void goingonfields(Integer tablefieldsID, Integer playerCount, Integer playerID) {
         pawns.get(playerID).setLocation(arrayXY[tablefieldsID][0], arrayXY[tablefieldsID][1]);
 
         //playercount switch
@@ -546,22 +555,65 @@ public class MonopolyGUI extends JFrame implements ActionListener {
         }
     }
 
-    public static void fieldImage(Integer tablefieldsID){
+    public static void fieldImage(Integer tablefieldsID) {
         card1Label.setIcon(propertycardsIcon.get(tablefieldsID));
+
 
     }
 
-    public static void getTablefieldsID_local(Integer tablefieldsID){
+    public static void setisHotel(Boolean whetherHotel) {
+        if (whetherHotel) {
+            isHotel = "Van";
+        } else {
+            isHotel = "Nincs";
+        }
+    }
+
+    public static void HouseHotelMonitoring(Integer tablefieldsID) {
+        if (propertycardsIcon.get(tablefieldsID) == null) {
+            HouseHotelMonitor.setVisible(false);
+            button1.setEnabled(false);          //kiszürkíti
+            comboBox.setVisible(false);
+        } else {
+            //setisHotel
+            HouseHotelString = "Ház: " + getHouseCounter + " || Szálloda: " + isHotel;
+            HouseHotelMonitor.setText(HouseHotelString);
+            HouseHotelMonitor.setVisible(true);
+            button1.setEnabled(true);
+            comboBox.setVisible(true);
+
+
+
+/*
+            comboBox.removeAllItems();
+
+            if(ownedpropertyIndicator.get(tablefieldsID).getBackground() != null){
+                button1.setEnabled(true);
+                comboBox.setVisible(true);
+                if()
+                if(isHotel == "Van"){           //Bool = true
+                    if(playerID == )
+                }
+            }
+            else{
+                button1.setEnabled(false);
+                comboBox.setVisible(false);
+            }
+*/
+
+
+        }
+
+
+    }
+
+    public static void getTablefieldsID_local(Integer tablefieldsID) {
         tablefieldsID_local = tablefieldsID;
     }
 
-    public static void getPlayerID_local(Integer playerID){
+    public static void getPlayerID_local(Integer playerID) {
         playerID_local = playerID;
     }
-
-
-
-
 
 
     @Override
@@ -570,7 +622,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 
 
             Color colour = null;
-            switch(playerID_local){
+            switch (playerID_local) {
                 case 0:
                     colour = Color.GREEN;
                     break;
@@ -588,7 +640,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
             }
 
 
-            if(ownedpropertyIndicator.get(tablefieldsID_local) != null){
+            if (ownedpropertyIndicator.get(tablefieldsID_local) != null) {
                 System.out.println(colour);
                 System.out.println(tablefieldsID_local);
 
@@ -597,26 +649,111 @@ public class MonopolyGUI extends JFrame implements ActionListener {
                 ownedpropertyIndicator.get(tablefieldsID_local).setBackground(colour);
                 ownedpropertyIndicator.get(tablefieldsID_local).setOpaque(true);
                 System.out.println("Fizettél nekem, köszi!");
-                System.out.println(comboBox.getSelectedItem() + " szeretnél venni.");
+
+                //String[] options = {"Reset","Veszek 1 Házat","Veszek 2 Házat","Veszek 3 Házat","Veszek 4 Házat", "Veszek Szállodát"};
+
+                Integer removeCounter = 1;
+
+                switch(comboBox.getSelectedItem().toString()){
+                    case "Reset":
+                        System.out.println("Reset");
+
+                        if(getHouseCounter < 4){
+                            for(int i = 1; i < (4 - getHouseCounter + 1); i++){
+                                String removingItem = "Veszek " + i + " Házat";
+                                System.out.println("Removing: \"" + removingItem + "\"");
+                                comboBox.removeItem(removingItem);
+                            }
+                        }
+
+                        for (int i = 1; i < 5; i++) {
+                            comboBox.insertItemAt(options[i], i); //0.-ra (i - 1)
+                        }
+
+                        if(isHotel == "Van" | getHouseCounter != 0){
+                            comboBox.insertItemAt("Veszek Szállodát", 5);
+                        }
+
+                        //Boolean false
+                        isHotel = "Nincs";
+                        getHouseCounter = 0;
+                        break;
+                    case "Veszek 1 Házat":
+                        System.out.println("Veszek egy házat");
+                        comboBox.removeItem("Veszek Szállodát");
+                        getHouseCounter++;
+                        removeCounter++;
+                        break;
+                    case "Veszek 2 Házat":
+                        System.out.println("Veszek két házat");
+                        comboBox.removeItem("Veszek Szállodát");
+                        getHouseCounter = getHouseCounter + 2;
+                        removeCounter = removeCounter + 2;
+                        break;
+                    case "Veszek 3 Házat":
+                        System.out.println("Veszek három házat");
+                        comboBox.removeItem("Veszek Szállodát");
+                        getHouseCounter = getHouseCounter + 3;
+                        removeCounter = removeCounter + 3;
+                        break;
+                    case "Veszek 4 Házat":
+                        System.out.println("Veszek négy házat");
+                        comboBox.removeItem("Veszek Szállodát");
+                        getHouseCounter = getHouseCounter + 4;
+                        removeCounter = removeCounter + 4;
+                        break;
+                    case "Veszek Szállodát":
+                        System.out.println("Veszek Szállodát");
+                        comboBox.removeItem("Veszek Szállodát");
+                        for(int i = 1; i < 5; i++){
+                            String removingItem = "Veszek " + i + " Házat";
+                            System.out.println("Removing: \"" + removingItem + "\"");
+                            comboBox.removeItem(removingItem);
+                        }
+                        isHotel = "Van";
+                        break;
+                    default:
+                        System.out.println("Hiba történt ház/szálloda jelzésnél");
+                        System.out.println(comboBox.getSelectedItem().toString());
+
+                }
+
+                System.out.println(removeCounter);
+                if(removeCounter != 1){
+                    for(int i = 1; i < removeCounter; i++){
+                        String removingItem = "Veszek " + (4 - getHouseCounter + i) + " Házat";
+                        System.out.println("Removing: \"" + removingItem + "\"");
+                        comboBox.removeItem(removingItem);
+                    }
+                }
+
+                //isHotel
+                HouseHotelString = "Ház: " + getHouseCounter + " || Szálloda: " + isHotel;
+                HouseHotelMonitor.setText(HouseHotelString);
 
             }
             else {
+
                 System.out.println("Ezt te nem veheted meg!");
+
             }
 
-
-            // legyen egy Ready button, ami megnyomás után eltűnik
-            // button1.setVisible(false);
-        }
-        if (e.getSource() == comboBox){
-            //System.out.println(comboBox.getSelectedItem());
-            System.out.println(comboBox.getSelectedIndex());
-        }
-        if (e.getSource() == button2){
-            button2.setEnabled(false);          //kiszürkíti
-            //button2.setVisible(false);        //ha mindenki készen áll
-            System.out.println("ready");
+                // legyen egy Ready button, ami megnyomás után eltűnik
+                // button1.setVisible(false);
+            }
+            if (e.getSource() == comboBox) {
+                //System.out.println(comboBox.getSelectedItem());
+                System.out.println(comboBox.getSelectedIndex());
+            }
+            if (e.getSource() == button2) {
+                button2.setEnabled(false);          //kiszürkíti
+                //button2.setVisible(false);        //ha mindenki készen áll
+                System.out.println("ready");
+            }
         }
     }
-}
 
+
+/*
+
+ */

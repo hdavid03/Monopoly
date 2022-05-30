@@ -14,6 +14,7 @@ public class main {
                 for (int playerID = 0; playerID < 4; playerID++) {
                     GUI.MonopolyGUI.goingonfields(fieldID, playerCount, playerID);
                     GUI.MonopolyGUI.fieldImage(fieldID);
+                    GUI.MonopolyGUI.HouseHotelMonitoring(fieldID);
                     GUI.MonopolyGUI.getTablefieldsID_local(fieldID);
                     GUI.MonopolyGUI.getPlayerID_local(playerID);
 
