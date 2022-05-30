@@ -55,14 +55,13 @@ public class ServerSocketHandler extends Thread {
     }
 
     private void startClientHandler(Socket socket) {
-        if(socket != null) {
             Player player = new Player(players.size(), players.size(), 200);
             players.add(player);
-            serverSocketHandlerLogger.log(Level.INFO, () -> player.toString() + " player has connected!");
+            serverSocketHandlerLogger.log(Level.INFO, () -> String.valueOf(players.size()));
+            //serverSocketHandlerLogger.log(Level.INFO, () -> player.toString() + " player has connected!");
             ClientSocketHandler clientSocketHandler = new ClientSocketHandler(socket, player);
             clientSocketHandlers.add(clientSocketHandler);
             executorService.execute(clientSocketHandler);
-        }
     }
 
     private void updateStatusOfPlayers() {
@@ -94,14 +93,16 @@ public class ServerSocketHandler extends Thread {
             serverSocket.setSoTimeout(SOCKET_TIMEOUT);
             while(!gameIsReady()) {
                 Socket socket = tryToAcceptAClientRequest();
-                startClientHandler(socket);
+                if(socket != null) {
+                    startClientHandler(socket);
+                    updateStatusOfPlayers();
+                    updateClientHandlers();
+                    clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
+                    players.removeIf(Player::isOffline);
+                }
                 for(ClientSocketHandler ch : clientSocketHandlers) {
                     serverSocketHandlerLogger.log(Level.INFO, () -> ch.getPlayer().toString() + " player is online");
                 }
-                updateStatusOfPlayers();
-                updateClientHandlers();
-                clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
-                players.removeIf(Player::isOffline);
             }
             while(true) {
                 for(ClientSocketHandler ch : clientSocketHandlers) {
