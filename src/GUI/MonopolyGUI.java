@@ -125,10 +125,13 @@ public class MonopolyGUI extends JFrame {
     }
 
     public void goingOnFields(int resultOfThrowing){
-        int newFieldID = (this.player.getFieldID() + resultOfThrowing) % 40;
-        pawns.get(this.player.getPlayerID()).setLocation(arrayXY[newFieldID][0], arrayXY[newFieldID][1]);
+        int newFieldID = (0 + resultOfThrowing) % 40;
+        System.out.println(newFieldID);
+        pawns.get(0).setLocation(arrayXY[newFieldID][0], arrayXY[newFieldID][1]);
+        System.out.println("ok");
 
         //playercount switch
+
         Integer playercountX = pawns.get(playerID).getX();
         Integer playercountY = pawns.get(playerID).getY();
         switch (playerCount) {
@@ -185,6 +188,7 @@ public class MonopolyGUI extends JFrame {
             this.ready = true;
             this.readyButton.setVisible(false);
             this.throwButton.setVisible(true);
+            pawns.get(0).setVisible(true);
             //this.throwButton.setEnabled(false);
         });
 
@@ -213,10 +217,10 @@ public class MonopolyGUI extends JFrame {
         pawnPanel.add(pawnHatLabel);
         pawnPanel.add(pawnBoatLabel);
         pawnPanel.add(pawnCarLabel);
-        pawnBoatLabel.setVisible(false);
-        pawnCarLabel.setVisible(false);
-        pawnShoeLabel.setVisible(false);
-        pawnHatLabel.setVisible(false);
+        //pawnBoatLabel.setVisible(false);
+        //pawnCarLabel.setVisible(false);
+        //pawnShoeLabel.setVisible(false);
+        //pawnHatLabel.setVisible(false);
         pawns.add(pawnShoeLabel);
         pawns.add(pawnHatLabel);
         pawns.add(pawnBoatLabel);

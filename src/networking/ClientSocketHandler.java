@@ -75,7 +75,9 @@ public class ClientSocketHandler implements Runnable {
                 oos.writeObject(serverMessage);
             }
         }catch (IOException e) {
-            e.printStackTrace();
+            clientSocketHandlerLogger.log(Level.SEVERE, e.getMessage());
+            player.setPlayerOnline(false);
+            setLostConnection(true);
         }
     }
 
