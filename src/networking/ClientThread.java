@@ -44,6 +44,9 @@ public class ClientThread implements Runnable {
 
     private void sendPlayerStatusToTheServer(ObjectOutputStream oos) {
         try {
+            while(!gameBoard.isReady() && isRunning()) {
+                Thread.sleep(500);
+            }
             player.setMoney(player.getMoney() + 1);
             StatusMessage message = new StatusMessage(new Player(player), gameBoard.isReady());
             ClientApplication.clientApplicationLogger.log(Level.INFO, player::toString);
@@ -51,6 +54,10 @@ public class ClientThread implements Runnable {
             oos.flush();
         }catch (IOException e) {
             e.printStackTrace();
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+            setRunning(false);
         }
     }
 
@@ -63,21 +70,16 @@ public class ClientThread implements Runnable {
             ois = new ObjectInputStream(socket.getInputStream());
             this.player = (Player) ois.readObject();
             this.player.setPlayerName(gameBoard.getUserName());
-            gameBoard.setPlayerID(this.player.getPlayerID());
+            this.gameBoard.setPlayerID(this.player.getPlayerID());
             this.socket = socket;
             while(isRunning()) {
                 sendPlayerStatusToTheServer(oos);
                 ServerMessage serverMessage = (ServerMessage) ois.readObject();
                 gameBoard.updateGameBoard(serverMessage);
-                Thread.sleep(600);
             }
         } catch(IOException | ClassNotFoundException e) {
             e.printStackTrace();
             setRunning(false);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-            setRunning(false);
-            Thread.currentThread().interrupt();
         }
     }
 }

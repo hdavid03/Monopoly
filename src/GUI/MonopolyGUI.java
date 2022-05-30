@@ -23,15 +23,15 @@ public class MonopolyGUI extends JFrame {
     private boolean ready = false;
     private ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<CustomLabel> ownedPropertyIndicator = new ArrayList<>();
-    private final ArrayList<ImageIcon> surpriseCardIcons = new ArrayList<>();
-    private final ArrayList<ImageIcon> chanceCardIcons = new ArrayList<>();
-    private final ArrayList<ImageIcon> propertyCardIcons = new ArrayList<>();
     private final ArrayList<CustomLabel> playerNameLabels = new ArrayList<>();
     private final ArrayList<CustomLabel> playerMoneyLabels = new ArrayList<>();
     private final ArrayList<CustomLabel> playerPropertyLabels = new ArrayList<>();
     private final ArrayList<CustomLabel> playerJailLabels = new ArrayList<>();
     private final ArrayList<CustomLabel> playerExtraLabels = new ArrayList<>();
     private final ArrayList<CustomLabel> pawns = new ArrayList<>();
+    private final ArrayList<ImageIcon> propertyCardIcons = new ArrayList<>();
+    private final ArrayList<ImageIcon> surpriseCardIcons = new ArrayList<>();
+    private final ArrayList<ImageIcon> chanceCardIcons = new ArrayList<>();
     private final ArrayList<ImageIcon> dieIcons = new ArrayList<>();
 
     private CustomLabel card1Label;
@@ -65,6 +65,8 @@ public class MonopolyGUI extends JFrame {
         setImageIcons(surpriseCardIcons, "src//resources//meglepetes.txt");
         setImageIcons(dieIcons, "src//resources//dice.txt");
         setPropertyFieldIcons();
+        setComboBox();
+        actionPanel.add(comboBox);
         this.userName = userName;
         this.setTitle("Monopoly");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -73,6 +75,13 @@ public class MonopolyGUI extends JFrame {
         this.setVisible(true);
         this.add(cardsPanel);
         this.add(actionPanel);
+    }
+
+    private void setComboBox() {
+        String[] options = {"Házat", "Szállodát"};
+        comboBox = new JComboBox(options);
+        comboBox.setBounds(50, 70, 250, 30);
+        comboBox.setSelectedIndex(0);
     }
 
     private CustomPanel getCustomActionPanel() {
@@ -94,9 +103,9 @@ public class MonopolyGUI extends JFrame {
     private void setButtons(CustomLabel actionTitleLabel, CustomPanel actionPanel) {
         ImageIcon dollarLogoIcon = new ImageIcon("src//Images//logos//dollar.png");
         ImageIcon readyLogoIcon = new ImageIcon("src//Images//logos//ready.png");
-        this.payButton = new CustomButton(50, 80, 250, 100, "Fizetés", dollarLogoIcon);
-        this.readyButton = new CustomButton(320, 80, 250, 100, "Kész", readyLogoIcon);
-        this.throwButton = new CustomButton(590, 80, 200, 100, "Dobás", dollarLogoIcon);
+        this.payButton = new CustomButton(50, 80, 250, 80, "Fizetés", dollarLogoIcon);
+        this.readyButton = new CustomButton(320, 80, 250, 80, "Kész", readyLogoIcon);
+        this.throwButton = new CustomButton(590, 80, 200, 80, "Dobás", dollarLogoIcon);
         this.throwButton.setVisible(false);
         actionPanel.add(actionTitleLabel);
         actionPanel.add(this.payButton);
