@@ -67,8 +67,8 @@ public class ClientThread implements Runnable {
             this.socket = socket;
             while(isRunning()) {
                 sendPlayerStatusToTheServer(oos);
-                ConcurrentLinkedQueue<Player> players = (ConcurrentLinkedQueue<Player>) ois.readObject();
-                gameBoard.updateGameBoard(players);
+                ServerMessage serverMessage = (ServerMessage) ois.readObject();
+                gameBoard.updateGameBoard(serverMessage);
                 Thread.sleep(600);
             }
         } catch(IOException | ClassNotFoundException e) {

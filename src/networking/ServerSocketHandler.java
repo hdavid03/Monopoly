@@ -19,6 +19,8 @@ public class ServerSocketHandler extends Thread {
     private final LinkedList<ClientSocketHandler> clientSocketHandlers;
     private final ConcurrentLinkedQueue<Player> players;
     private final ExecutorService executorService;
+    private int nextPlayerID = 0;
+    private int lap = 0;
     private static final Logger serverSocketHandlerLogger = Logger.getLogger(ServerSocketHandler.class.getName());
 
     public ServerSocketHandler(ServerSocket serverSocket) {
@@ -74,7 +76,15 @@ public class ServerSocketHandler extends Thread {
 
     void updateClientHandlers() {
         for(ClientSocketHandler ch : clientSocketHandlers) {
-            ch.updatePlayerQueue(players);
+            ServerMessage message = null;
+            if(gameIsReady()) {
+                message = new ServerMessage(players, true, nextPlayerID, lap);
+            } else {
+                message = new ServerMessage(players, false, nextPlayerID, lap);
+                nextPlayerID += lap % players.size();
+                lap++;
+            }
+            ch.updateServerMessage(message);
         }
     }
 
@@ -82,11 +92,18 @@ public class ServerSocketHandler extends Thread {
     public void run() {
         try {
             serverSocket.setSoTimeout(SOCKET_TIMEOUT);
-            while(true) {
-                if(!gameIsReady()) {
-                    Socket socket = tryToAcceptAClientRequest();
-                    startClientHandler(socket);
+            while(!gameIsReady()) {
+                Socket socket = tryToAcceptAClientRequest();
+                startClientHandler(socket);
+                for(ClientSocketHandler ch : clientSocketHandlers) {
+                    serverSocketHandlerLogger.log(Level.INFO, () -> ch.getPlayer().toString() + " player is online");
                 }
+                updateStatusOfPlayers();
+                updateClientHandlers();
+                clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
+                players.removeIf(Player::isOffline);
+            }
+            while(true) {
                 for(ClientSocketHandler ch : clientSocketHandlers) {
                     serverSocketHandlerLogger.log(Level.INFO, () -> ch.getPlayer().toString() + " player is online");
                 }

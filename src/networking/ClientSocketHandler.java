@@ -14,6 +14,7 @@ public class ClientSocketHandler implements Runnable {
     private Socket socket;
     private Player player;
     private Queue<Player> playerQueue;
+    private ServerMessage serverMessage;
     private boolean clientReady;
     private boolean lostConnection;
     private static final Logger clientSocketHandlerLogger = Logger.getLogger(ClientSocketHandler.class.getName());
@@ -28,6 +29,8 @@ public class ClientSocketHandler implements Runnable {
     public void updatePlayerQueue(Queue<Player> players) {
         this.playerQueue = players;
     }
+
+    public void updateServerMessage(ServerMessage message) { this.serverMessage = message; }
 
     public boolean isLostConnection() {
         return lostConnection;
@@ -68,8 +71,8 @@ public class ClientSocketHandler implements Runnable {
 
     private void sendUpdatedStatusToTheClient(ObjectOutputStream oos) {
         try {
-            if (playerQueue != null) {
-                oos.writeObject(playerQueue);
+            if (serverMessage != null) {
+                oos.writeObject(serverMessage);
             }
         }catch (IOException e) {
             e.printStackTrace();

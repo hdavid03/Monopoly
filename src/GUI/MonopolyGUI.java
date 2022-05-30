@@ -1,6 +1,7 @@
 package GUI;
 
 import game_elements.Player;
+import networking.ServerMessage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,8 +9,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 
 public class MonopolyGUI extends JFrame {
@@ -18,6 +17,7 @@ public class MonopolyGUI extends JFrame {
     private CustomButton readyButton;
     private CustomButton throwButton;
     private int playerID;
+    private int playerCount = 0;
     private Player player;
     private final String userName;
     private boolean ready = false;
@@ -50,6 +50,8 @@ public class MonopolyGUI extends JFrame {
                                      {890,25},   {925,150},  {925,230},  {925,315},  {925,395},          //30
                                      {925,480},  {925,550},  {925,635},  {925,715},  {925,800}           //35
                                     };
+    private final int[][] defaultPlayerPanelPostions = {{1000, 100}, {1400, 100}, {1000, 250}, {1400, 250}};
+    private final Color[] playerColors = {Color.GREEN, Color.RED, Color.MAGENTA, Color.YELLOW};
 
     public MonopolyGUI(String userName){
         initPawns();
@@ -65,8 +67,8 @@ public class MonopolyGUI extends JFrame {
         setPropertyFieldIcons();
         this.userName = userName;
         this.setTitle("Monopoly");
-        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
-        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);   //full screen with window
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setExtendedState(this.getExtendedState() | Frame.MAXIMIZED_BOTH);   //full screen with window
         this.setLayout(null);
         this.setVisible(true);
         this.add(cardsPanel);
@@ -151,10 +153,9 @@ public class MonopolyGUI extends JFrame {
         CustomPanel playerTitlePanel = new CustomPanel(1000, 0, 800, 100, Color.PINK);
         playerTitlePanel.add(playerTitleLabel);
         this.add(playerTitlePanel);
-        initDefaultPlayer(1000, 100, Color.GREEN);
-        initDefaultPlayer(1400, 100, Color.RED);
-        initDefaultPlayer(1000, 250, Color.MAGENTA);
-        initDefaultPlayer(1400, 250, Color.YELLOW);
+        for(int i = 0; i < 4; i++) {
+            initDefaultPlayer(defaultPlayerPanelPostions[i][0], defaultPlayerPanelPostions[i][1], playerColors[i]);
+        }
     }
 
     private void initDefaultPlayer(int x, int y, Color color) {
@@ -246,23 +247,49 @@ public class MonopolyGUI extends JFrame {
         this.add(dicePanel);
     }
 
-    public void updateGameBoard(Queue<Player> players) {
+    public void updateGameBoard(ServerMessage message) {
+        ArrayList<Player> oldPlayerList = new ArrayList<>(this.players);
         this.players.clear();
-        this.players.addAll(players);
+        this.players.addAll(message.getPlayers());
         this.player = this.players.get(playerID);
-        int i = 0;
-        for (Player player : this.players) {
-            CustomLabel label = playerNameLabels.get(i);
-            label.setText("Név: " + player.getPlayerName());
-            label = playerMoneyLabels.get(i);
-            label.setText("Pénz: " + player.getMoney());
-            label = playerPropertyLabels.get(i);
-            label.setText(String.format("Vasút: %d db || Közmű: %d db", player.getRailRoadCounter(), player.getUtilityCounter()));
-            label = playerJailLabels.get(i);
-            label.setText(String.format("Börtön: %d kör", player.getInJailTimer()));
-            label = playerExtraLabels.get(i);
-            label.setText("Extrák: " + player.getExtras());
-            i++;
+        int updatedPlayerCount = this.players.size();
+        boolean anyPlayerDisconnected = playerCount > updatedPlayerCount;
+        playerCount = updatedPlayerCount;
+        for (Player p : this.players) {
+            int pID = p.getPlayerID();
+            if(message.getLap() == 0 && message.isGameIsReady()) pawns.get(pID).setVisible(true);
+            CustomLabel label = playerNameLabels.get(pID);
+            label.setText("Név: " + p.getPlayerName());
+            label = playerMoneyLabels.get(pID);
+            label.setText("Pénz: " + p.getMoney());
+            label = playerPropertyLabels.get(pID);
+            label.setText(String.format("Vasút: %d db || Közmű: %d db", p.getRailRoadCounter(), p.getUtilityCounter()));
+            label = playerJailLabels.get(pID);
+            label.setText(String.format("Börtön: %d kör", p.getInJailTimer()));
+            label = playerExtraLabels.get(pID);
+            label.setText("Extrák: " + p.getExtras());
+        }
+        if(anyPlayerDisconnected) {
+            deleteDisconnectedPlayer(oldPlayerList);
+        }
+    }
+
+    private void deleteDisconnectedPlayer(ArrayList<Player> oldPlayerList) {
+        boolean IDfound = false;
+        for(int i = 0; i < oldPlayerList.size(); i++) {
+            int ID = oldPlayerList.get(i).getPlayerID();
+            for(int j = 0; i < playerCount; j++) {
+                if (ID == this.players.get(j).getPlayerID()) {
+                    IDfound = true;
+                    break;
+                }
+            }
+            if(IDfound) {
+                IDfound = false;
+            } else {
+                initDefaultPlayer(defaultPlayerPanelPostions[ID][0], defaultPlayerPanelPostions[ID][1], playerColors[ID]);
+                pawns.get(ID).setVisible(false);
+            }
         }
     }
 
