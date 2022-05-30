@@ -116,7 +116,6 @@ public class ServerSocketHandler extends Thread {
                     serverSocketHandlerLogger.log(Level.INFO, () -> ch.getPlayer().toString() + " player is online");
                 }
                 clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
-                players.removeIf(Player::isOffline);
             }
             while(true) {
                 for(ClientSocketHandler ch : clientSocketHandlers) {
