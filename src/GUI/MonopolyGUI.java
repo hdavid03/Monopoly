@@ -124,6 +124,16 @@ public class MonopolyGUI extends JFrame {
         card1Label.setIcon(propertyCardIcons.get(tablefieldsID));
     }
 
+    private void updatePlayerPosition(Player player) {
+        int pID = player.getPlayerID();
+        int fieldID = player.getFieldID();
+        if(pID != this.playerID) {
+            pawns.get(pID).setLocation(arrayXY[fieldID][0], arrayXY[fieldID][1]);
+            pawns.get(pID).repaint();
+            setOnFieldPlayerPosition(pID);
+        }
+    }
+
     public void goingOnFields(int resultOfThrowing){
         int newFieldID = (this.player.getFieldID() + resultOfThrowing) % 40;
         this.player.setFieldID(newFieldID);
@@ -132,22 +142,23 @@ public class MonopolyGUI extends JFrame {
         pawns.get(this.playerID).setLocation(arrayXY[newFieldID][0], arrayXY[newFieldID][1]);
         System.out.println(arrayXY[newFieldID]);
         pawns.get(this.playerID).repaint();
+        setOnFieldPlayerPosition(this.playerID);
+    }
 
-        //playercount switch
-
-        Integer playercountX = pawns.get(playerID).getX();
-        Integer playercountY = pawns.get(playerID).getY();
+    private void setOnFieldPlayerPosition(int pID) {
+        Integer playercountX = pawns.get(pID).getX();
+        Integer playercountY = pawns.get(pID).getY();
         switch (this.playerID) {
             case 0:
                 break;
             case 1:
-                pawns.get(playerID).setLocation(playercountX, playercountY + 25);
+                pawns.get(pID).setLocation(playercountX, playercountY + 25);
                 break;
             case 2:
-                pawns.get(playerID).setLocation(playercountX + 25, playercountY);
+                pawns.get(pID).setLocation(playercountX + 25, playercountY);
                 break;
             case 3:
-                pawns.get(playerID).setLocation(playercountX + 25, playercountY + 25);
+                pawns.get(pID).setLocation(playercountX + 25, playercountY + 25);
                 break;
             default:
                 System.out.println("Hiba a playerCount switch szerkezetben!!");
@@ -271,6 +282,7 @@ public class MonopolyGUI extends JFrame {
             label.setText(String.format("Börtön: %d kör", p.getInJailTimer()));
             label = playerExtraLabels.get(pID);
             label.setText("Extrák: " + p.getExtras());
+            updatePlayerPosition(p);
         }
         if(anyPlayerDisconnected) {
             deleteDisconnectedPlayer(oldPlayerList);
