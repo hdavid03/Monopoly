@@ -79,10 +79,11 @@ public class ServerSocketHandler extends Thread {
             ServerMessage message = null;
             if(gameIsReady()) {
                 message = new ServerMessage(players, true, nextPlayerID, lap);
-            } else {
-                message = new ServerMessage(players, false, nextPlayerID, lap);
+                clientSocketHandlers.get(nextPlayerID).setClientReady(false);
                 nextPlayerID += lap % players.size();
                 lap++;
+            } else {
+                message = new ServerMessage(players, false, nextPlayerID, lap);
             }
             ch.updateServerMessage(message);
         }

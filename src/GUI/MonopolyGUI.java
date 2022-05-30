@@ -65,8 +65,6 @@ public class MonopolyGUI extends JFrame {
         setImageIcons(surpriseCardIcons, "src//resources//meglepetes.txt");
         setImageIcons(dieIcons, "src//resources//dice.txt");
         setPropertyFieldIcons();
-        setComboBox();
-        actionPanel.add(comboBox);
         this.userName = userName;
         this.setTitle("Monopoly");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -78,7 +76,7 @@ public class MonopolyGUI extends JFrame {
     }
 
     private void setComboBox() {
-        String[] options = {"Házat", "Szállodát"};
+        String[] options = {"Telket", "Házat", "Szállodát"};
         comboBox = new JComboBox(options);
         comboBox.setBounds(50, 70, 250, 30);
         comboBox.setSelectedIndex(0);
@@ -87,6 +85,8 @@ public class MonopolyGUI extends JFrame {
     private CustomPanel getCustomActionPanel() {
         CustomLabel actionTitleLabel = new CustomLabel("Akciók", 40, 10, 10, 200, 50);
         CustomPanel actionPanel = new CustomPanel(1000, 800, 800, 300, Color.CYAN);
+        setComboBox();
+        actionPanel.add(comboBox);
         setButtons(actionTitleLabel, actionPanel);
         return actionPanel;
     }
@@ -103,9 +103,9 @@ public class MonopolyGUI extends JFrame {
     private void setButtons(CustomLabel actionTitleLabel, CustomPanel actionPanel) {
         ImageIcon dollarLogoIcon = new ImageIcon("src//Images//logos//dollar.png");
         ImageIcon readyLogoIcon = new ImageIcon("src//Images//logos//ready.png");
-        this.payButton = new CustomButton(50, 80, 250, 80, "Fizetés", dollarLogoIcon);
-        this.readyButton = new CustomButton(320, 80, 250, 80, "Kész", readyLogoIcon);
-        this.throwButton = new CustomButton(590, 80, 200, 80, "Dobás", dollarLogoIcon);
+        this.payButton = new CustomButton(50, 110, 250, 80, "Fizetés", dollarLogoIcon);
+        this.readyButton = new CustomButton(320, 110, 250, 80, "Kész", readyLogoIcon);
+        this.throwButton = new CustomButton(590, 110, 200, 80, "Dobás", dollarLogoIcon);
         this.throwButton.setVisible(false);
         actionPanel.add(actionTitleLabel);
         actionPanel.add(this.payButton);
@@ -152,6 +152,7 @@ public class MonopolyGUI extends JFrame {
         System.out.println(arrayXY[newFieldID]);
         pawns.get(this.playerID).repaint();
         setOnFieldPlayerPosition(this.playerID);
+        fieldImage(newFieldID);
     }
 
     private void setOnFieldPlayerPosition(int pID) {
@@ -209,20 +210,20 @@ public class MonopolyGUI extends JFrame {
 
         this.readyButton.addActionListener(e -> {
             this.ready = true;
-            this.readyButton.setVisible(false);
+            this.readyButton.setEnabled(false);
             this.throwButton.setVisible(true);
-            pawns.get(0).setVisible(true);
-            //this.throwButton.setEnabled(false);
+            this.throwButton.setEnabled(false);
         });
 
         this.throwButton.addActionListener(e -> {
             SecureRandom random = new SecureRandom();
             int result1 = random.nextInt(6);
             int result2 = random.nextInt(6);
-            die1Label.setIcon(dieIcons.get(result1));
-            die2Label.setIcon(dieIcons.get(result2));
-            dicePanel.repaint();
+            this.die1Label.setIcon(dieIcons.get(result1));
+            this.die2Label.setIcon(dieIcons.get(result2));
+            this.dicePanel.repaint();
             goingOnFields(result1 + result2 + 2);
+            this.readyButton.setEnabled(true);
         });
     }
 
@@ -276,11 +277,18 @@ public class MonopolyGUI extends JFrame {
         this.players.addAll(message.getPlayers());
         this.player = this.players.get(playerID);
         int updatedPlayerCount = this.players.size();
+        int nextPlayerID = message.getNextPlayerID();
+        boolean gameIsReady = message.isGameIsReady();
         boolean anyPlayerDisconnected = playerCount > updatedPlayerCount;
         playerCount = updatedPlayerCount;
         for (Player p : this.players) {
             int pID = p.getPlayerID();
-            if(message.getLap() == 0 && message.isGameIsReady()) pawns.get(pID).setVisible(true);
+            if(message.getLap() == 0) {
+                pawns.get(pID).setVisible(true);
+            }
+            if(nextPlayerID == this.playerID && gameIsReady) {
+                this.throwButton.setEnabled(true);
+            }
             CustomLabel label = playerNameLabels.get(pID);
             label.setText("Név: " + p.getPlayerName());
             label = playerMoneyLabels.get(pID);

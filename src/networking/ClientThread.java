@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 
 public class ClientThread implements Runnable {
@@ -76,10 +75,15 @@ public class ClientThread implements Runnable {
                 sendPlayerStatusToTheServer(oos);
                 ServerMessage serverMessage = (ServerMessage) ois.readObject();
                 gameBoard.updateGameBoard(serverMessage);
+                Thread.sleep(500);
             }
         } catch(IOException | ClassNotFoundException e) {
             e.printStackTrace();
             setRunning(false);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            setRunning(false);
+            Thread.currentThread().interrupt();
         }
     }
 }
