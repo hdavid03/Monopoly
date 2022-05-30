@@ -12,7 +12,7 @@ public class CustomLabel extends JLabel {
         //this.setHorizontalAlignment(horizontal);
 /*
         if(isborder){
-            Border border = BorderFactory.createLineBorder(Color.BLUE, 3);
+            Border border = BorderFactory.createLineBorder(PropertyFieldColor.BLUE, 3);
             this.setBorder(border);
         }
 */

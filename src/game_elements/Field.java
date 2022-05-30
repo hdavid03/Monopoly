@@ -3,13 +3,11 @@ package game_elements;
 public abstract class Field extends GameElement {
 
     int fieldID;
-    int playerCounter;
+    int playerCounter = 0;
 
-    /**
-     * TaxField --> fizess adót
-     * GoField --> semmi
-     * GoToJailField --> menj a börtönbe
-     */
+    public Field(int fieldID) {
+        this.fieldID = fieldID;
+    }
     protected abstract void action();
 
     void playerArrives() {
@@ -17,7 +15,7 @@ public abstract class Field extends GameElement {
         action();
     }
 
-    void playerGoes() {
+    public void playerGoes() {
         playerCounter--;
     }
 

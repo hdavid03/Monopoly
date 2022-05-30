@@ -1,6 +1,12 @@
 package GUI;
 
+import game_elements.Field;
 import game_elements.Player;
+import game_elements.table_fields.*;
+import game_elements.table_fields.property_fields.PropertyFieldColor;
+import game_elements.table_fields.property_fields.RailRoadField;
+import game_elements.table_fields.property_fields.StreetField;
+import game_elements.table_fields.property_fields.UtilityField;
 import networking.ServerMessage;
 
 import javax.swing.*;
@@ -21,6 +27,7 @@ public class MonopolyGUI extends JFrame {
     private Player player;
     private final String userName;
     private boolean ready = false;
+    private Field[] fields;
     private ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<CustomLabel> ownedPropertyIndicator = new ArrayList<>();
     private final ArrayList<CustomLabel> playerNameLabels = new ArrayList<>();
@@ -491,5 +498,56 @@ public class MonopolyGUI extends JFrame {
         propertyCardIcons.add(VorosmartyIcon);
         propertyCardIcons.add(null);
         propertyCardIcons.add(DunakorzoIcon);
+    }
+
+    private void initFields() {
+        this.fields = new Field[40];
+        for(int i=0;i<40;i++) {
+            // Go Field
+            if(i==0) { this.fields[0] = new GoField(i); }
+            // Jail Field
+            if(i==10) { this.fields[i] = new JailField(i); }
+            // Free Parking Field
+            if(i==20) { this.fields[i] = new FreeParkingField(i); }
+            // GoToJail Field
+            if(i==30) { this.fields[i] = new GoToJailField(i); }
+            // CC Field
+            if(i==2 || i==17 || i==33) { this.fields[i] = new CommunityChestField(i); }
+            // Chance Field
+            if(i==7 || i==22 || i==36) { this.fields[i] = new ChanceField(i); }
+            // Tax Field
+            if(i==4 || i==38) { this.fields[i] = new TaxField(i,100); }
+
+            // Utilities Field
+            if(i==12 || i==28) { this.fields[i] = new UtilityField(i,150); }
+            // Railroad Field
+            if(i==5 || i==15 || i== 25 || i==35) { this.fields[i] = new RailRoadField(i,200,25); }
+
+            //Streets
+            if(i==1 || i==3) {
+                this.fields[i] = new StreetField(i, PropertyFieldColor.BROWN,50,250);
+            }
+            if(i==6 || i==8 || i==9) {
+                this.fields[i] = new StreetField(i, PropertyFieldColor.WHITE,50,250);
+            }
+            if(i==11 || i==13 || i==14) {
+                this.fields[i] = new StreetField(i, PropertyFieldColor.PURPLE,100,500);
+            }
+            if(i==16 || i==18 || i==19) {
+                this.fields[i] = new StreetField(i, PropertyFieldColor.ORANGE,100,500);
+            }
+            if(i==21 || i==23 || i==24) {
+                this.fields[i] = new StreetField(i, PropertyFieldColor.ORANGE,150,750);
+            }
+            if(i==26 || i==27 || i==29) {
+                this.fields[i] = new StreetField(i, PropertyFieldColor.YELLOW,150,750);
+            }
+            if(i==31 || i==32 || i==34) {
+                this.fields[i] = new StreetField(i, PropertyFieldColor.GREEN,200,1000);
+            }
+            if(i==37 || i==39) {
+                this.fields[i] = new StreetField(i, PropertyFieldColor.BLUE,200,1000);
+            }
+        }
     }
 }

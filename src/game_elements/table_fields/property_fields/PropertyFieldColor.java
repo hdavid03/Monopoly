@@ -1,6 +1,6 @@
 package game_elements.table_fields.property_fields;
 
-public enum Color {
+public enum PropertyFieldColor {
 
     BLUE(20, 30, 200, 300, 700, 780, 900),
     BROWN(10, 20, 50, 150, 450, 625, 750),
@@ -19,7 +19,7 @@ public enum Color {
     public final int rentWith4House;
     public final int rentWithHotel;
 
-    Color(int rent, int rentWithFullColor, int rentWith1House, int rentWith2House, int rentWith3House, int rentWith4House, int rentWithHotel) {
+    PropertyFieldColor(int rent, int rentWithFullColor, int rentWith1House, int rentWith2House, int rentWith3House, int rentWith4House, int rentWithHotel) {
         this.rent = rent;
         this.rentWithFullColor = rentWithFullColor;
         this.rentWith1House = rentWith1House;
