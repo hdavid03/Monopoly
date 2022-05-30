@@ -27,7 +27,7 @@ public class MonopolyGUI extends JFrame {
     private Player player;
     private final String userName;
     private boolean ready = false;
-    private Field[] fields;
+    private transient Field[] fields;
     private ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<CustomLabel> ownedPropertyIndicator = new ArrayList<>();
     private final ArrayList<CustomLabel> playerNameLabels = new ArrayList<>();
@@ -72,6 +72,7 @@ public class MonopolyGUI extends JFrame {
         setImageIcons(surpriseCardIcons, "src//resources//meglepetes.txt");
         setImageIcons(dieIcons, "src//resources//dice.txt");
         setPropertyFieldIcons();
+        initFields();
         this.userName = userName;
         this.setTitle("Monopoly");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -136,8 +137,8 @@ public class MonopolyGUI extends JFrame {
         return userName;
     }
 
-    public void fieldImage(Integer tablefieldsID){
-        card1Label.setIcon(propertyCardIcons.get(tablefieldsID));
+    public void fieldImage(Integer tableFieldsID){
+        card1Label.setIcon(propertyCardIcons.get(tableFieldsID));
     }
 
     private void updatePlayerPosition(Player player) {
@@ -213,7 +214,29 @@ public class MonopolyGUI extends JFrame {
     }
 
     private void setActionListeners() {
-        this.payButton.addActionListener(e -> System.out.println("Fizettél nekem"));
+        this.payButton.addActionListener(e -> {
+           String comboBoxValue = (String)this.comboBox.getSelectedItem();
+           Field field = this.fields[this.player.getFieldID()];
+           if (field instanceof PropertyField castedField) {
+                switch (comboBoxValue) {
+                    case "Telket": {
+                        if(castedField.isThereOwner()) {
+                            String ownerUserName = this.players.get(castedField.getOwnerID()).getPlayerName();
+                            popUpMessage(String.format("Nem veheted meg, mert %s birtokolja", ownerUserName), JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
+                    break;
+                    case "Házat": {
+
+                    }
+                    break;
+                    case "Szállodát": {
+
+                    }break;
+                    default:
+                }
+            }
+        });
 
         this.readyButton.addActionListener(e -> {
             this.ready = true;
@@ -232,6 +255,27 @@ public class MonopolyGUI extends JFrame {
             goingOnFields(result1 + result2 + 2);
             this.readyButton.setEnabled(true);
         });
+    }
+
+    private void popUpMessage(String message, int messageType) {
+        switch (messageType) {
+            case JOptionPane.WARNING_MESSAGE : {
+                JOptionPane.showMessageDialog(this, message, "Figyelmeztetés",
+                        JOptionPane.WARNING_MESSAGE);
+            }break;
+            case JOptionPane.ERROR_MESSAGE : {
+                JOptionPane.showMessageDialog(this, message, "Hiba",
+                        JOptionPane.ERROR_MESSAGE);
+            }break;
+            case JOptionPane.INFORMATION_MESSAGE : {
+                JOptionPane.showMessageDialog(this, message, "Hiba",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }break;
+            default: {
+                JOptionPane.showMessageDialog(this, "Valami nincs rendben", "Hiba",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     private CustomPanel initPawns() {
@@ -504,7 +548,7 @@ public class MonopolyGUI extends JFrame {
         this.fields = new Field[40];
         for(int i=0;i<40;i++) {
             // Go Field
-            if(i==0) { this.fields[0] = new GoField(i); }
+            if(i==0) { this.fields[i] = new GoField(i); }
             // Jail Field
             if(i==10) { this.fields[i] = new JailField(i); }
             // Free Parking Field

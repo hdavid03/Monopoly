@@ -75,17 +75,16 @@ public class ServerSocketHandler extends Thread {
     }
 
     void updateClientHandlers() {
-        for(ClientSocketHandler ch : clientSocketHandlers) {
+        boolean ready = gameIsReady();
+        for (ClientSocketHandler ch : clientSocketHandlers) {
             ServerMessage message = null;
-            if(gameIsReady()) {
-                message = new ServerMessage(players, true, nextPlayerID, lap);
-                clientSocketHandlers.get(nextPlayerID).setClientReady(false);
-                nextPlayerID += lap % players.size();
-                lap++;
-            } else {
-                message = new ServerMessage(players, false, nextPlayerID, lap);
-            }
+            message = new ServerMessage(players, ready, nextPlayerID, lap);
             ch.updateServerMessage(message);
+        }
+        if (ready) {
+            clientSocketHandlers.get(nextPlayerID).setClientReady(false);
+            nextPlayerID += lap % players.size();
+            lap++;
         }
     }
 

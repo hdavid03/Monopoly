@@ -88,12 +88,14 @@ public class ClientSocketHandler implements Runnable {
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeObject(player);
             oos.flush();
-
+            this.player = (Player)ois.readObject();
             while(!lostConnection) {
                 updatePlayerStatus(ois);
                 sendUpdatedStatusToTheClient(oos);
             }
         } catch(IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

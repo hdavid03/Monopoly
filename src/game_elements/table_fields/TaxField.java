@@ -7,8 +7,8 @@ public class TaxField extends Field {
 
     int value;
 
-    public TaxField(int Pos, int V) {
-        super(Pos);
+    public TaxField(int fieldID, int V) {
+        super(fieldID);
         this.value = V;
     }
 

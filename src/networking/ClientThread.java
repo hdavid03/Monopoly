@@ -71,6 +71,8 @@ public class ClientThread implements Runnable {
             this.player.setPlayerName(gameBoard.getUserName());
             this.gameBoard.setPlayerID(this.player.getPlayerID());
             this.socket = socket;
+            oos.writeObject(new Player(this.player));
+            oos.flush();
             while(isRunning()) {
                 sendPlayerStatusToTheServer(oos);
                 ServerMessage serverMessage = (ServerMessage) ois.readObject();

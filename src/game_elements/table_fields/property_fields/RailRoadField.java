@@ -5,10 +5,10 @@ import game_elements.table_fields.PropertyField;
 public class RailRoadField extends PropertyField {
     private int value;
     private int rent;
-    public RailRoadField(int Pos, int V, int R) {
-        super(Pos);
-        this.value = V;
-        this.rent = R;
+    public RailRoadField(int fieldID, int value, int rent) {
+        super(fieldID);
+        this.value = value;
+        this.rent = rent;
     }
 
     public int getValue() {

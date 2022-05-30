@@ -11,11 +11,11 @@ public class StreetField extends PropertyField {
     private PropertyFieldColor EEnumerator;
     //private int[] rentPrices;
 
-    public StreetField(int Pos, PropertyFieldColor C, int House, int Hotel) {
-        super(Pos);
-        this.EEnumerator = C;
-        this.houseBuildCost = House;
-        this.hotelBuildCost = Hotel;
+    public StreetField(int fieldID, PropertyFieldColor color, int house, int hotel) {
+        super(fieldID);
+        this.EEnumerator = color;
+        this.houseBuildCost = house;
+        this.hotelBuildCost = hotel;
     }
 
     @Override
