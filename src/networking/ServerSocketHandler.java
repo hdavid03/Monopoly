@@ -92,13 +92,14 @@ public class ServerSocketHandler extends Thread {
         boolean ready = gameIsReady();
         for (ClientSocketHandler ch : clientSocketHandlers) {
             ServerMessage message = null;
-            message = new ServerMessage(players, ready, nextPlayerID, lap);
+            message = new ServerMessage(new ConcurrentLinkedQueue<>(players), ready, nextPlayerID, lap);
             ch.updateServerMessage(message);
+            ch.setClientReady(false);
         }
         if (ready) {
             clientSocketHandlers.get(nextPlayerID).setClientReady(false);
-            nextPlayerID += lap % players.size();
             lap++;
+            nextPlayerID = lap % players.size();
         }
     }
 
@@ -114,6 +115,8 @@ public class ServerSocketHandler extends Thread {
                 for(ClientSocketHandler ch : clientSocketHandlers) {
                     serverSocketHandlerLogger.log(Level.INFO, () -> ch.getPlayer().toString() + " player is online");
                 }
+                clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
+                players.removeIf(Player::isOffline);
             }
             while(true) {
                 for(ClientSocketHandler ch : clientSocketHandlers) {
@@ -121,8 +124,6 @@ public class ServerSocketHandler extends Thread {
                 }
                 updateStatusOfPlayers();
                 updateClientHandlers();
-                clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
-                players.removeIf(Player::isOffline);
             }
         } catch(IOException e) {
             serverSocketHandlerLogger.log(Level.SEVERE, e::getMessage);
