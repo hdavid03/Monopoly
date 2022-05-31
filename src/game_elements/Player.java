@@ -41,9 +41,10 @@ public class Player extends GameElement implements Serializable {
         this.utilityCounter = player.getUtilityCounter();
         this.fieldID = player.getFieldID();
         this.isInJail = player.isInJail();
+        this.extras = player.getExtras();
     }
 
-    public List<String> getExtras() {
+    public ArrayList<String> getExtras() {
         return extras;
     }
 

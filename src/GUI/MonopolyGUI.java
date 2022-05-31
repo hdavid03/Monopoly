@@ -28,6 +28,7 @@ public class MonopolyGUI extends JFrame {
     private final String userName;
     private boolean ready = false;
     private boolean gameBoardIsUpdated = false;
+    private boolean gameStarted = false;
     private transient Field[] fields;
     private ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<CustomLabel> ownedPropertyIndicator = new ArrayList<>();
@@ -124,6 +125,14 @@ public class MonopolyGUI extends JFrame {
 
     public boolean isGameBoardUpdated() {
         return gameBoardIsUpdated;
+    }
+
+    public boolean isGameStarted() {
+        return gameStarted;
+    }
+
+    public void setGameStarted(boolean gameStarted) {
+        this.gameStarted = gameStarted;
     }
 
     public void setGameBoardIsUpdated(boolean gameBoardIsUpdated) {
@@ -353,13 +362,17 @@ public class MonopolyGUI extends JFrame {
         boolean anyPlayerDisconnected = playerCount > updatedPlayerCount;
         playerCount = updatedPlayerCount;
         System.out.println("Lap: " + message.getLap());
+        System.out.println(gameIsReady);
+        System.out.println(nextPlayerID);
         for (Player p : this.players) {
             int pID = p.getPlayerID();
             if(message.getLap() == 0) {
                 pawns.get(pID).setVisible(true);
+                if (gameIsReady) this.gameStarted = true;
             }
-            if(nextPlayerID == this.playerID && gameIsReady) {
+            if(nextPlayerID == this.playerID && gameIsReady && this.ready) {
                 this.throwButton.setEnabled(true);
+                System.out.println("ITT VAGYOK!!");
                 this.ready = false;
             }
             updatePlayerLabels(p, pID);

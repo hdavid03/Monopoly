@@ -50,6 +50,7 @@ public class ClientThread implements Runnable {
             //ClientApplication.clientApplicationLogger.log(Level.INFO, player::toString);
             oos.writeObject(message);
             oos.flush();
+            if(ready && gameBoard.isGameStarted()) gameBoard.setReady(false);
         }catch (IOException e) {
             e.printStackTrace();
             setRunning(false);
