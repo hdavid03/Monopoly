@@ -362,21 +362,25 @@ public class MonopolyGUI extends JFrame {
                 this.throwButton.setEnabled(true);
                 this.ready = false;
             }
-            CustomLabel label = playerNameLabels.get(pID);
-            label.setText("Név: " + p.getPlayerName());
-            label = playerMoneyLabels.get(pID);
-            label.setText("Pénz: " + p.getMoney());
-            label = playerPropertyLabels.get(pID);
-            label.setText(String.format("Vasút: %d db || Közmű: %d db", p.getRailRoadCounter(), p.getUtilityCounter()));
-            label = playerJailLabels.get(pID);
-            label.setText(String.format("Börtön: %d kör", p.getInJailTimer()));
-            label = playerExtraLabels.get(pID);
-            label.setText("Extrák: " + p.getExtras());
+            updatePlayerLabels(p, pID);
             updatePlayerPosition(p);
         }
         if(anyPlayerDisconnected) {
             deleteDisconnectedPlayer(oldPlayerList);
         }
+    }
+
+    private void updatePlayerLabels(Player p, int pID) {
+        CustomLabel label = playerNameLabels.get(pID);
+        label.setText("Név: " + p.getPlayerName());
+        label = playerMoneyLabels.get(pID);
+        label.setText("Pénz: " + p.getMoney());
+        label = playerPropertyLabels.get(pID);
+        label.setText(String.format("Vasút: %d db || Közmű: %d db", p.getRailRoadCounter(), p.getUtilityCounter()));
+        label = playerJailLabels.get(pID);
+        label.setText(String.format("Börtön: %d kör", p.getInJailTimer()));
+        label = playerExtraLabels.get(pID);
+        label.setText("Extrák: " + p.getExtras());
     }
 
     private void deleteDisconnectedPlayer(ArrayList<Player> oldPlayerList) {

@@ -43,7 +43,9 @@ public class ServerSocketHandler extends Thread {
     }
 
     private boolean isNextTurnReady() {
-        return clientSocketHandlers.get(nextPlayerID).isClientReady();
+        boolean ready = clientSocketHandlers.get(nextPlayerID).isClientReady();
+        if(ready) clientSocketHandlers.get(nextPlayerID).setClientReady(false);
+        return ready;
     }
 
     private void waitForNextPlayer() {
@@ -94,9 +96,10 @@ public class ServerSocketHandler extends Thread {
 
     private void waitForUpdateClients() {
         try {
-            while(!clientsAreUpdated()) {
+            /*while(!clientsAreUpdated()) {
                 Thread.sleep(40);
-            }
+            }*/
+            Thread.sleep(1000);
         } catch(InterruptedException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
@@ -149,6 +152,7 @@ public class ServerSocketHandler extends Thread {
                 updateStatusOfPlayers();
                 nextTurnReady = isNextTurnReady();
                 updateClientHandlers(this.nextTurnReady);
+                System.out.println(nextPlayerID);
                 if (nextTurnReady) setNextTurn();
                 clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
             }
