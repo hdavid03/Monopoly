@@ -121,6 +121,14 @@ public class MonopolyGUI extends JFrame {
         actionPanel.add(this.throwButton);
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     public int getPlayerID() {
         return playerID;
     }
@@ -144,6 +152,7 @@ public class MonopolyGUI extends JFrame {
     private void updatePlayerPosition(Player player) {
         int pID = player.getPlayerID();
         int fieldID = player.getFieldID();
+        System.out.println("Játékos: " + pID + "mező: " + fieldID);
         if(pID != this.playerID) {
             pawns.get(pID).setLocation(arrayXY[fieldID][0], arrayXY[fieldID][1]);
             pawns.get(pID).repaint();

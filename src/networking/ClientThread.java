@@ -43,19 +43,13 @@ public class ClientThread implements Runnable {
 
     private void sendPlayerStatusToTheServer(ObjectOutputStream oos) {
         try {
-            if(!gameBoard.isReady() && isRunning()) {
-                Thread.sleep(500);
-            }
-            player.setMoney(player.getMoney() + 1);
-            StatusMessage message = new StatusMessage(new Player(player), gameBoard.isReady());
+            this.player = new Player(gameBoard.getPlayer());
+            StatusMessage message = new StatusMessage(player, gameBoard.isReady());
             //ClientApplication.clientApplicationLogger.log(Level.INFO, player::toString);
             oos.writeObject(message);
             oos.flush();
         }catch (IOException e) {
             e.printStackTrace();
-        }catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
             setRunning(false);
         }
     }
@@ -70,6 +64,7 @@ public class ClientThread implements Runnable {
             this.player = (Player) ois.readObject();
             this.player.setPlayerName(gameBoard.getUserName());
             this.gameBoard.setPlayerID(this.player.getPlayerID());
+            this.gameBoard.setPlayer(new Player(this.player));
             this.socket = socket;
             oos.writeObject(new Player(this.player));
             oos.flush();
