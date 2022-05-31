@@ -15,7 +15,8 @@ public class ClientSocketHandler implements Runnable {
     private Player player;
     private Queue<Player> playerQueue;
     private ServerMessage serverMessage;
-    private boolean serverIsUpdated;
+    private boolean serverIsUpdated = false;
+    private boolean clientIsUpdated = false;
     private boolean clientReady;
     private boolean lostConnection;
     private static final Logger clientSocketHandlerLogger = Logger.getLogger(ClientSocketHandler.class.getName());
@@ -25,6 +26,14 @@ public class ClientSocketHandler implements Runnable {
         this.clientReady = false;
         this.lostConnection = false;
         this.player = player;
+    }
+
+    public boolean isClientUpdated() {
+        return clientIsUpdated;
+    }
+
+    public void setClientIsUpdated(boolean clientIsUpdated) {
+        this.clientIsUpdated = clientIsUpdated;
     }
 
     public void updatePlayerQueue(Queue<Player> players) {
@@ -47,6 +56,7 @@ public class ClientSocketHandler implements Runnable {
     public Player getPlayer() {
         return player;
     }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
@@ -59,12 +69,13 @@ public class ClientSocketHandler implements Runnable {
         this.clientReady = clientReady;
     }
 
-    private void updatePlayerStatus(ObjectInputStream ois) {
+    private void updatePlayerStatusFromClient(ObjectInputStream ois) {
         try {
             if(!lostConnection) {
                 StatusMessage message = (StatusMessage)ois.readObject();
                 player = message.getPlayer();
                 clientReady = message.isReady();
+                clientIsUpdated = true;
             }
         } catch(IOException e ) {
             clientSocketHandlerLogger.log(Level.SEVERE, "Megszakadt kapcsolat");
@@ -110,7 +121,7 @@ public class ClientSocketHandler implements Runnable {
             oos.flush();
             this.player = (Player)ois.readObject();
             while(!lostConnection) {
-                updatePlayerStatus(ois);
+                updatePlayerStatusFromClient(ois);
                 waitingForServerUpdate();
                 sendUpdatedStatusToTheClient(oos);
             }

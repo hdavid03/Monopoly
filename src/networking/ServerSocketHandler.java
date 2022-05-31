@@ -21,7 +21,8 @@ public class ServerSocketHandler extends Thread {
     private final ExecutorService executorService;
     private ServerMessage serverMessage;
     private int nextPlayerID = 0;
-    private int lap = 0;
+    private int turn = 0;
+    private boolean nextTurnReady = false;
     private static final Logger serverSocketHandlerLogger = Logger.getLogger(ServerSocketHandler.class.getName());
 
     public ServerSocketHandler(ServerSocket serverSocket) {
@@ -31,7 +32,7 @@ public class ServerSocketHandler extends Thread {
         this.executorService = Executors.newFixedThreadPool(MAX_NUM_OF_CLIENTS);
     }
 
-    private boolean gameIsReady() {
+    private boolean gameCanBeStarted() {
         int numOfClients = clientSocketHandlers.size();
         if(numOfClients == 0) return false;
         boolean playersAreReady = true;
@@ -39,6 +40,22 @@ public class ServerSocketHandler extends Thread {
             playersAreReady &= ch.isClientReady();
         }
         return noMorePlayersThanAllowed() && playersAreReady;
+    }
+
+    private boolean isNextTurnReady() {
+        return clientSocketHandlers.get(nextPlayerID).isClientReady();
+    }
+
+    private void waitForNextPlayer() {
+        try {
+            while(!clientSocketHandlers.get(nextPlayerID).isClientReady()) {
+                Thread.sleep(50);
+                System.out.println(nextPlayerID);
+            }
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
     }
 
     private boolean noMorePlayersThanAllowed() {
@@ -67,6 +84,25 @@ public class ServerSocketHandler extends Thread {
         }
     }
 
+    private boolean clientsAreUpdated() {
+        boolean clientsAreUpdated = true;
+        for (ClientSocketHandler ch : clientSocketHandlers) {
+            clientsAreUpdated &= ch.isClientUpdated();
+        }
+        return  clientsAreUpdated;
+    }
+
+    private void waitForUpdateClients() {
+        try {
+            while(!clientsAreUpdated()) {
+                Thread.sleep(40);
+            }
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
+    }
+
     private void updateStatusOfPlayers() {
         if(!clientSocketHandlers.isEmpty()) {
             LinkedList<Player> updatedPlayers = new LinkedList<>();
@@ -78,30 +114,13 @@ public class ServerSocketHandler extends Thread {
         }
     }
 
-    private void updateClientHandlers() {
-        boolean ready = gameIsReady();
+    private void updateClientHandlers(boolean ready) {
         for (ClientSocketHandler ch : clientSocketHandlers) {
-            serverMessage = new ServerMessage(new ConcurrentLinkedQueue<>(players), ready, nextPlayerID, lap);
+            serverMessage = new ServerMessage(new ConcurrentLinkedQueue<>(players), ready, nextPlayerID, turn);
             ch.updateServerMessage(serverMessage);
-            //ch.setClientReady(false);
-        }
-        if (ready) {
-            lap++;
-            nextPlayerID = lap % players.size();
-        }
-    }
-
-    private void waitForClientsReady() {
-        for(ClientSocketHandler ch : clientSocketHandlers) {
-            ch.setClientReady(false);
-        }
-        try {
-            while(!gameIsReady()) {
-                Thread.sleep(40);
+            if(ready) {
+                ch.setClientReady(false);
             }
-            } catch(InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
         }
     }
 
@@ -109,28 +128,38 @@ public class ServerSocketHandler extends Thread {
     public void run() {
         try {
             serverSocket.setSoTimeout(SOCKET_TIMEOUT);
-            while(!gameIsReady()) {
+            boolean start = false;
+            while(!start) {
                 Socket socket = tryToAcceptAClientRequest();
                 startClientHandler(socket);
+                waitForUpdateClients();
                 updateStatusOfPlayers();
-                updateClientHandlers();
+                start = gameCanBeStarted();
+                updateClientHandlers(start);
                 for(ClientSocketHandler ch : clientSocketHandlers) {
                     serverSocketHandlerLogger.log(Level.INFO, () -> ch.getPlayer().toString() + " player is online");
                 }
                 clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
             }
             while(true) {
-
                 for(ClientSocketHandler ch : clientSocketHandlers) {
-                    serverSocketHandlerLogger.log(Level.INFO, () -> "kész");
+                    serverSocketHandlerLogger.log(Level.INFO, () -> String.valueOf(ch.isClientReady()));
                 }
-                waitForClientsReady();
+                waitForUpdateClients();
                 updateStatusOfPlayers();
-                updateClientHandlers();
+                nextTurnReady = isNextTurnReady();
+                updateClientHandlers(this.nextTurnReady);
+                if (nextTurnReady) setNextTurn();
                 clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
             }
         } catch(IOException e) {
             serverSocketHandlerLogger.log(Level.SEVERE, e::getMessage);
         }
+    }
+
+    private void setNextTurn() {
+        this.nextTurnReady = false;
+        turn++;
+        nextPlayerID = turn % clientSocketHandlers.size();
     }
 }

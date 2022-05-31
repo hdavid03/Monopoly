@@ -7,10 +7,12 @@ import java.io.Serializable;
 public class StatusMessage implements Serializable {
     private Player player;
     private boolean ready;
+    private boolean gameBoardIsUpdated;
 
-    public StatusMessage(Player player, boolean ready) {
+    public StatusMessage(Player player, boolean ready, boolean gameBoardIsUpdated) {
         this.player = player;
         this.ready = ready;
+        this.gameBoardIsUpdated = gameBoardIsUpdated;
     }
 
     public Player getPlayer() {
