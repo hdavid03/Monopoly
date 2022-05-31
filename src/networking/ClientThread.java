@@ -43,8 +43,8 @@ public class ClientThread implements Runnable {
 
     private void sendPlayerStatusToTheServer(ObjectOutputStream oos) {
         try {
-            this.player = new Player(gameBoard.getPlayer());
-            StatusMessage message = new StatusMessage(player, gameBoard.isReady());
+            this.player = gameBoard.getPlayer();
+            StatusMessage message = new StatusMessage(new Player(player), gameBoard.isReady());
             //ClientApplication.clientApplicationLogger.log(Level.INFO, player::toString);
             oos.writeObject(message);
             oos.flush();

@@ -92,7 +92,7 @@ public class ClientSocketHandler implements Runnable {
     private void waitingForServerUpdate() {
         try {
             while (!serverIsUpdated) {
-                Thread.sleep(100);
+                Thread.sleep(50);
             }
             serverIsUpdated = false;
         }catch(InterruptedException e) {

@@ -64,16 +64,6 @@ public class ServerSocketHandler extends Thread {
             ClientSocketHandler clientSocketHandler = new ClientSocketHandler(socket, player);
             clientSocketHandlers.add(clientSocketHandler);
             executorService.execute(clientSocketHandler);
-            waitForInitClientSocketHandler();
-        }
-    }
-
-    private void waitForInitClientSocketHandler() {
-        try {
-            Thread.sleep(20);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
         }
     }
 
@@ -88,18 +78,30 @@ public class ServerSocketHandler extends Thread {
         }
     }
 
-    void updateClientHandlers() {
+    private void updateClientHandlers() {
         boolean ready = gameIsReady();
         for (ClientSocketHandler ch : clientSocketHandlers) {
-            ServerMessage message = null;
-            message = new ServerMessage(new ConcurrentLinkedQueue<>(players), ready, nextPlayerID, lap);
-            ch.updateServerMessage(message);
-            ch.setClientReady(false);
+            serverMessage = new ServerMessage(new ConcurrentLinkedQueue<>(players), ready, nextPlayerID, lap);
+            ch.updateServerMessage(serverMessage);
+            //ch.setClientReady(false);
         }
         if (ready) {
-            clientSocketHandlers.get(nextPlayerID).setClientReady(false);
             lap++;
             nextPlayerID = lap % players.size();
+        }
+    }
+
+    private void waitForClientsReady() {
+        for(ClientSocketHandler ch : clientSocketHandlers) {
+            ch.setClientReady(false);
+        }
+        try {
+            while(!gameIsReady()) {
+                Thread.sleep(40);
+            }
+            } catch(InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -118,11 +120,14 @@ public class ServerSocketHandler extends Thread {
                 clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
             }
             while(true) {
+
                 for(ClientSocketHandler ch : clientSocketHandlers) {
-                    serverSocketHandlerLogger.log(Level.INFO, () -> ch.getPlayer().toString() + " player is online");
+                    serverSocketHandlerLogger.log(Level.INFO, () -> "kész");
                 }
+                waitForClientsReady();
                 updateStatusOfPlayers();
                 updateClientHandlers();
+                clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
             }
         } catch(IOException e) {
             serverSocketHandlerLogger.log(Level.SEVERE, e::getMessage);

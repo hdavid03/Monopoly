@@ -349,6 +349,7 @@ public class MonopolyGUI extends JFrame {
             }
             if(nextPlayerID == this.playerID && gameIsReady) {
                 this.throwButton.setEnabled(true);
+                this.ready = false;
             }
             CustomLabel label = playerNameLabels.get(pID);
             label.setText("Név: " + p.getPlayerName());
