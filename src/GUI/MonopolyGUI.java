@@ -43,7 +43,7 @@ public class MonopolyGUI extends JFrame {
     private final ArrayList<ImageIcon> chanceCardIcons = new ArrayList<>();
     private final ArrayList<ImageIcon> dieIcons = new ArrayList<>();
 
-    private CustomLabel card1Label;
+    private CustomLabel cardLabel;
     private CustomLabel die1Label;
     private CustomLabel die2Label;
     private CustomPanel dicePanel;
@@ -104,9 +104,9 @@ public class MonopolyGUI extends JFrame {
     private CustomPanel getCustomCardsPanel() {
         CustomLabel cardTitleLabel = new CustomLabel("Kártyák", 40, 10, 10, 200, 50);
         CustomPanel cardsPanel = new CustomPanel(1000, 400, 600, 400, Color.WHITE);
-        card1Label = new CustomLabel(110, 60, 600, 350, null);
+        cardLabel = new CustomLabel(110, 60, 600, 350, null);
         cardsPanel.add(cardTitleLabel);
-        cardsPanel.add(card1Label);
+        cardsPanel.add(cardLabel);
         return cardsPanel;
     }
 
@@ -165,8 +165,21 @@ public class MonopolyGUI extends JFrame {
         return userName;
     }
 
-    public void fieldImage(Integer tableFieldsID){
-        card1Label.setIcon(propertyCardIcons.get(tableFieldsID));
+    public void fieldImage(Integer tableFieldsID) {
+        Field field = this.fields[tableFieldsID];
+        if (field instanceof PropertyField) {
+            cardLabel.setIcon(propertyCardIcons.get(tableFieldsID));
+        }
+        else if (field instanceof CommunityChestField) {
+            SecureRandom random = new SecureRandom();
+            int cardID = random.nextInt(16);
+            cardLabel.setIcon(surpriseCardIcons.get(cardID));
+
+        } else if (field instanceof ChanceField) {
+
+        } else {
+            // itt ne történjen semmi
+        }
     }
 
     private void updatePlayerPosition(Player player) {
@@ -329,12 +342,12 @@ public class MonopolyGUI extends JFrame {
         return pawnPanel;
     }
 
-    private void setImageIcons(ArrayList<ImageIcon> cardIcons, String source) {
+    private void setImageIcons(ArrayList<ImageIcon> icons, String source) {
         try(FileInputStream fis = new FileInputStream(source)) {
             Scanner scanner = new Scanner(fis);
             while(scanner.hasNextLine()){
                 String path = scanner.nextLine();
-                cardIcons.add(new ImageIcon(path));
+                icons.add(new ImageIcon(path));
             }
         } catch (IOException e) {
             e.printStackTrace();
