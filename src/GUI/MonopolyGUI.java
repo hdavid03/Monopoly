@@ -195,7 +195,7 @@ public class MonopolyGUI extends JFrame {
     private void setOnFieldPlayerPosition(int pID) {
         Integer playercountX = pawns.get(pID).getX();
         Integer playercountY = pawns.get(pID).getY();
-        switch (this.playerID) {
+        switch (pID) {
             case 0:
                 break;
             case 1:
@@ -376,8 +376,10 @@ public class MonopolyGUI extends JFrame {
         }
         for (Player p : this.players) {
             int pID = p.getPlayerID();
-            updatePlayerLabels(p, pID);
-            updatePlayerPosition(p);
+            updatePlayerLabels(p);
+            if(pID != playerID) {
+                updatePlayerPosition(p);
+            }
         }
         if(anyPlayerDisconnected) {
             deleteDisconnectedPlayer(oldPlayerList);
@@ -390,7 +392,8 @@ public class MonopolyGUI extends JFrame {
         }
     }
 
-    private void updatePlayerLabels(Player p, int pID) {
+    private void updatePlayerLabels(Player p) {
+        int pID = p.getPlayerID();
         CustomLabel label = playerNameLabels.get(pID);
         label.setText("Név: " + p.getPlayerName());
         label = playerMoneyLabels.get(pID);
