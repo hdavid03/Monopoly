@@ -1,43 +1,80 @@
 package game_elements;
 
+import GUI.MonopolyGUI;
+import game_elements.table_fields.property_fields.StreetField;
+
+import java.util.ArrayList;
+
 public class SurpriseCard extends Card {
 
     @Override
-    public void action(Player P, int cardNumber) {
-        switch (cardNumber) {
-            case 1:
-                P.changeBalance(100);
-            case 2:
-                P.changeBalance(50);
+    public void action(Player player, int cardID, ArrayList<Player> players, Field[] fields, MonopolyGUI monopolyGUI) {
+        switch(cardID) {
+            case 0:
             case 3:
-                P.changeBalance(-50);
-            case 4:
-                P.changeBalance(100);
-            case 5:
-                // Gyűjt be mindenkitől 10M-t, DE LEHETETLEN ÍGY IMPLEMENTÁLNI
-            case 6:
-                // Házért 40M-t, szállodáért 115M-t, DE LEHETETLEN ÍGY IMPLEMENTÁLNI
-            case 7:
-                P.changeBalance(20);
-            case 8:
-                // Get Out Of Jail, aktívan kell Player prompt-ra bejátszani, szóval nemtom
-            case 9:
-                //   P.setInJailTimer(3); P.setInJail(true); P.setOnFieldPosition(/*JailPos*/);
-            case 10:
-                P.changeBalance(10);
-            case 11:
-                P.changeBalance(-50);
             case 12:
-                P.changeBalance(200);
+                player.changeBalance(100);
+                break;
+            case 1:
+                player.changeBalance(50);
+                break;
+            case 2:
+            case 10:
+                player.changeBalance(-50);
+                break;
+            case 4:
+                for(int i=0;i<players.size();i++) {
+                    if(players.get(i).getPlayerID()!=player.getPlayerID()) {
+                        players.get(i).changeBalance(-10);
+                        player.changeBalance(10);
+                    }
+                }
+                break;
+            case 5:
+                int Houses = 0; //40M
+                int Hotels = 0; //115M
+                for(int i=0;i<40;i++) {
+                    if(fields[i] instanceof StreetField) {
+                        if(((StreetField) fields[i]).getOwnerID()==player.getPlayerID()) {
+                            if(((StreetField) fields[i]).isThereHotel()) {
+                                Hotels++;
+                            } else {
+                                Houses += ((StreetField) fields[i]).getHouseCounter();
+                            }
+                        }
+                    }
+                }
+                player.changeBalance(-40*Houses-115*Hotels);
+                break;
+            case 6:
+                player.changeBalance(20);
+                break;
+            case 7:
+                player.setfreeJail(true);
+                break;
+            case 8:
+                player.setInJailTimer(3);
+                player.setInJail(true);
+                player.setOnFieldPosition(10);
+                monopolyGUI.goingOnFields(10);
+                break;
+            case 9:
+                player.changeBalance(10);
+                break;
+            case 11:
+                player.changeBalance(200);
+                break;
             case 13:
-                P.changeBalance(100);
+                player.changeBalance(-100);
+                break;
             case 14:
-                P.changeBalance(-100);
+                player.setOnFieldPosition(0);
+                monopolyGUI.goingOnFields(0);
+                player.changeBalance(200);
+                break;
             case 15:
-                P.setFieldID(0);
-                P.changeBalance(200);
-            case 16:
-                P.changeBalance(15);
+                player.changeBalance(15);
+                break;
             default:
                 System.out.println("HIBA");
         }
