@@ -283,6 +283,7 @@ public class MonopolyGUI extends JFrame {
             this.dicePanel.repaint();
             goingOnFields(result1 + result2 + 2);
             this.readyButton.setEnabled(true);
+            this.throwButton.setEnabled(false);
         });
     }
 
@@ -384,8 +385,8 @@ public class MonopolyGUI extends JFrame {
     }
 
     private void setPawnsVisible() {
-        for(CustomLabel pawn : pawns) {
-            pawn.setVisible(true);
+        for(Player p : players) {
+            pawns.get(p.getPlayerID()).setVisible(true);
         }
     }
 
