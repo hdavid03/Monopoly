@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class MonopolyGUI extends JFrame {
@@ -30,7 +31,7 @@ public class MonopolyGUI extends JFrame {
     private boolean gameBoardIsUpdated = false;
     private boolean gameStarted = false;
     private transient Field[] fields;
-    private ArrayList<Player> players = new ArrayList<>();
+    private final ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<CustomLabel> ownedPropertyIndicator = new ArrayList<>();
     private final ArrayList<CustomLabel> playerNameLabels = new ArrayList<>();
     private final ArrayList<CustomLabel> playerMoneyLabels = new ArrayList<>();
@@ -48,9 +49,9 @@ public class MonopolyGUI extends JFrame {
     private CustomLabel die2Label;
     private CustomPanel dicePanel;
 
-    JComboBox comboBox;
+    private JComboBox<String> comboBox;
     //arrayxy
-    public static int[][] arrayXY = {{875,925},  {800,925},  {725,925},  {635,925},  {550,920},          //0
+    private final int[][] arrayXY = {{875,925},  {800,925},  {725,925},  {635,925},  {550,920},          //0
                                      {475,925},  {390,925},  {310,925},  {225,925},  {150,925},          //5
                                      {25,925},   {25,800},   {25,720},   {25,640},   {25,550},           //10
                                      {25,475},   {25,390},   {25,310},   {25,235},   {25,150},           //15
@@ -87,7 +88,7 @@ public class MonopolyGUI extends JFrame {
 
     private void setComboBox() {
         String[] options = {"Telket", "Házat", "Szállodát"};
-        comboBox = new JComboBox(options);
+        comboBox = new JComboBox<>(options);
         comboBox.setBounds(50, 70, 250, 30);
         comboBox.setSelectedIndex(0);
     }
@@ -113,10 +114,12 @@ public class MonopolyGUI extends JFrame {
     private void setButtons(CustomLabel actionTitleLabel, CustomPanel actionPanel) {
         ImageIcon dollarLogoIcon = new ImageIcon("src//Images//logos//dollar.png");
         ImageIcon readyLogoIcon = new ImageIcon("src//Images//logos//ready.png");
+        ImageIcon diceLogoIcon = new ImageIcon("src//Images//logos//dice.png");
         this.payButton = new CustomButton(50, 110, 250, 80, "Fizetés", dollarLogoIcon);
         this.readyButton = new CustomButton(320, 110, 250, 80, "Kész", readyLogoIcon);
-        this.throwButton = new CustomButton(590, 110, 200, 80, "Dobás", dollarLogoIcon);
+        this.throwButton = new CustomButton(590, 110, 200, 80, "Dobás", diceLogoIcon);
         this.throwButton.setVisible(false);
+        this.payButton.setEnabled(false);
         actionPanel.add(actionTitleLabel);
         actionPanel.add(this.payButton);
         actionPanel.add(this.readyButton);
@@ -195,30 +198,31 @@ public class MonopolyGUI extends JFrame {
 
     public void goingOnFields(int resultOfThrowing){
         int newFieldID = (this.player.getFieldID() + resultOfThrowing) % 40;
+        this.player.startPassCheck(newFieldID);
         this.player.setFieldID(newFieldID);
         System.out.println(newFieldID);
         System.out.println(this.playerID);
         pawns.get(this.playerID).setLocation(arrayXY[newFieldID][0], arrayXY[newFieldID][1]);
-        System.out.println(arrayXY[newFieldID]);
+        System.out.println(Arrays.toString(arrayXY[newFieldID]));
         pawns.get(this.playerID).repaint();
         setOnFieldPlayerPosition(this.playerID);
         fieldImage(newFieldID);
     }
 
     private void setOnFieldPlayerPosition(int pID) {
-        Integer playercountX = pawns.get(pID).getX();
-        Integer playercountY = pawns.get(pID).getY();
+        int x = pawns.get(pID).getX();
+        int y = pawns.get(pID).getY();
         switch (pID) {
             case 0:
                 break;
             case 1:
-                pawns.get(pID).setLocation(playercountX, playercountY + 25);
+                pawns.get(pID).setLocation(x, y + 25);
                 break;
             case 2:
-                pawns.get(pID).setLocation(playercountX + 25, playercountY);
+                pawns.get(pID).setLocation(x + 25, y);
                 break;
             case 3:
-                pawns.get(pID).setLocation(playercountX + 25, playercountY + 25);
+                pawns.get(pID).setLocation(x + 25, y + 25);
                 break;
             default:
                 System.out.println("Hiba a playerCount switch szerkezetben!!");
@@ -285,6 +289,7 @@ public class MonopolyGUI extends JFrame {
             this.readyButton.setEnabled(false);
             this.throwButton.setVisible(true);
             this.throwButton.setEnabled(false);
+            this.payButton.setEnabled(false);
         });
 
         this.throwButton.addActionListener(e -> {
@@ -297,6 +302,7 @@ public class MonopolyGUI extends JFrame {
             goingOnFields(result1 + result2 + 2);
             this.readyButton.setEnabled(true);
             this.throwButton.setEnabled(false);
+            this.payButton.setEnabled(true);
         });
     }
 

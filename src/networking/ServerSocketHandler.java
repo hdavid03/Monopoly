@@ -19,7 +19,6 @@ public class ServerSocketHandler extends Thread {
     private final LinkedList<ClientSocketHandler> clientSocketHandlers;
     private final ConcurrentLinkedQueue<Player> players;
     private final ExecutorService executorService;
-    private ServerMessage serverMessage;
     private int nextPlayerID = 0;
     private int turn = 0;
     private boolean nextTurnReady = false;
@@ -52,18 +51,6 @@ public class ServerSocketHandler extends Thread {
         return ready;
     }
 
-    private void waitForNextPlayer() {
-        try {
-            while(!clientSocketHandlers.get(nextPlayerID).isClientReady()) {
-                Thread.sleep(50);
-                System.out.println(nextPlayerID);
-            }
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }
-    }
-
     private boolean noMorePlayersThanAllowed() {
         return (clientSocketHandlers.size() < MAX_NUM_OF_CLIENTS) && (clientSocketHandlers.size() > 1);
     }
@@ -80,29 +67,17 @@ public class ServerSocketHandler extends Thread {
 
     private void startClientHandler(Socket socket) {
         if(socket != null) {
-            Player player = new Player(players.size(), players.size(), 200);
+            Player player = new Player(players.size(), players.size(), 1500);
             players.add(player);
-            serverSocketHandlerLogger.log(Level.INFO, () -> String.valueOf(players.size()));
-            //serverSocketHandlerLogger.log(Level.INFO, () -> player.toString() + " player has connected!");
+            serverSocketHandlerLogger.log(Level.INFO, () -> player.toString() + " player has connected!");
             ClientSocketHandler clientSocketHandler = new ClientSocketHandler(socket, player);
             clientSocketHandlers.add(clientSocketHandler);
             executorService.execute(clientSocketHandler);
         }
     }
 
-    private boolean clientsAreUpdated() {
-        boolean clientsAreUpdated = true;
-        for (ClientSocketHandler ch : clientSocketHandlers) {
-            clientsAreUpdated &= ch.isClientUpdated();
-        }
-        return  clientsAreUpdated;
-    }
-
     private void waitForUpdateClients() {
         try {
-            /*while(!clientsAreUpdated()) {
-                Thread.sleep(40);
-            }*/
             Thread.sleep(1000);
         } catch(InterruptedException e) {
             e.printStackTrace();
@@ -123,7 +98,7 @@ public class ServerSocketHandler extends Thread {
 
     private void updateClientHandlers(boolean ready) {
         for (ClientSocketHandler ch : clientSocketHandlers) {
-            serverMessage = new ServerMessage(new ConcurrentLinkedQueue<>(players), ready, nextPlayerID, turn);
+            ServerMessage serverMessage = new ServerMessage(new ConcurrentLinkedQueue<>(players), ready, nextPlayerID, turn);
             ch.updateServerMessage(serverMessage);
             if(ready) {
                 ch.setClientReady(false);
@@ -156,7 +131,6 @@ public class ServerSocketHandler extends Thread {
                 updateStatusOfPlayers();
                 nextTurnReady = isNextTurnReady();
                 updateClientHandlers(this.nextTurnReady);
-                System.out.println(nextPlayerID);
                 if (nextTurnReady) setNextTurn();
                 clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
             }
