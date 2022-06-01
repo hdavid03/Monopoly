@@ -364,22 +364,28 @@ public class MonopolyGUI extends JFrame {
         System.out.println("Lap: " + message.getLap());
         System.out.println(gameIsReady);
         System.out.println(nextPlayerID);
+        if(message.getLap() == 0) {
+            setPawnsVisible();
+            if (gameIsReady) this.gameStarted = true;
+        }
+        if(nextPlayerID == this.playerID && gameIsReady) {
+            this.throwButton.setEnabled(true);
+            System.out.println("ITT VAGYOK!!");
+            this.ready = false;
+        }
         for (Player p : this.players) {
             int pID = p.getPlayerID();
-            if(message.getLap() == 0) {
-                pawns.get(pID).setVisible(true);
-                if (gameIsReady) this.gameStarted = true;
-            }
-            if(nextPlayerID == this.playerID && gameIsReady) {
-                this.throwButton.setEnabled(true);
-                System.out.println("ITT VAGYOK!!");
-                this.ready = false;
-            }
             updatePlayerLabels(p, pID);
             updatePlayerPosition(p);
         }
         if(anyPlayerDisconnected) {
             deleteDisconnectedPlayer(oldPlayerList);
+        }
+    }
+
+    private void setPawnsVisible() {
+        for(CustomLabel pawn : pawns) {
+            pawn.setVisible(true);
         }
     }
 
