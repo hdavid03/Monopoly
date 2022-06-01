@@ -182,6 +182,7 @@ public class MonopolyGUI extends JFrame {
         else if (field instanceof CommunityChestField) {
             SecureRandom random = new SecureRandom();
             //int cardID = random.nextInt(16);
+            //int cardID = 0;
             int cardID = 12;
             cardLabel.setIcon(surpriseCardIcons.get(cardID));
             community.action(players.get(playerID), cardID, players, fields, this);
