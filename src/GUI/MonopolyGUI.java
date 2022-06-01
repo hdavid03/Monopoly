@@ -370,7 +370,7 @@ public class MonopolyGUI extends JFrame {
                 pawns.get(pID).setVisible(true);
                 if (gameIsReady) this.gameStarted = true;
             }
-            if(nextPlayerID == this.playerID && gameIsReady && this.ready) {
+            if(nextPlayerID == this.playerID && gameIsReady) {
                 this.throwButton.setEnabled(true);
                 System.out.println("ITT VAGYOK!!");
                 this.ready = false;

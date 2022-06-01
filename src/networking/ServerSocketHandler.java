@@ -43,8 +43,12 @@ public class ServerSocketHandler extends Thread {
     }
 
     private boolean isNextTurnReady() {
-        boolean ready = clientSocketHandlers.get(nextPlayerID).isClientReady();
-        if(ready) clientSocketHandlers.get(nextPlayerID).setClientReady(false);
+        boolean ready = clientSocketHandlers.get(nextPlayerID).isReadyDetect();
+        if(ready) {
+            clientSocketHandlers.get(nextPlayerID).setClientReady(false);
+            turn++;
+            nextPlayerID = turn % clientSocketHandlers.size();
+        }
         return ready;
     }
 
@@ -163,7 +167,5 @@ public class ServerSocketHandler extends Thread {
 
     private void setNextTurn() {
         this.nextTurnReady = false;
-        turn++;
-        nextPlayerID = turn % clientSocketHandlers.size();
     }
 }

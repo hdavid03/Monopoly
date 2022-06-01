@@ -18,6 +18,7 @@ public class ClientSocketHandler implements Runnable {
     private boolean serverIsUpdated = false;
     private boolean clientIsUpdated = false;
     private boolean clientReady;
+    private boolean readyDetect = false;
     private boolean lostConnection;
     private static final Logger clientSocketHandlerLogger = Logger.getLogger(ClientSocketHandler.class.getName());
 
@@ -45,6 +46,14 @@ public class ClientSocketHandler implements Runnable {
         this.serverIsUpdated = true;
     }
 
+    public boolean isReadyDetect() {
+        return readyDetect;
+    }
+
+    public void setReadyDetect(boolean readyDetect) {
+        this.readyDetect = readyDetect;
+    }
+
     public boolean isLostConnection() {
         return lostConnection;
     }
@@ -67,6 +76,7 @@ public class ClientSocketHandler implements Runnable {
 
     public void setClientReady(boolean clientReady) {
         this.clientReady = clientReady;
+        this.readyDetect = false;
     }
 
     private void updatePlayerStatusFromClient(ObjectInputStream ois) {
@@ -76,6 +86,9 @@ public class ClientSocketHandler implements Runnable {
                 player = message.getPlayer();
                 clientReady = message.isReady();
                 clientIsUpdated = true;
+                if(!readyDetect && clientReady) {
+                    readyDetect = true;
+                }
             }
         } catch(IOException e ) {
             clientSocketHandlerLogger.log(Level.SEVERE, "Megszakadt kapcsolat");
