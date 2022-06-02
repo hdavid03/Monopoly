@@ -23,39 +23,51 @@ public class SurpriseCard extends Card {
                 player.changeBalance(-50);
                 break;
             case 4:
+                ///meglepetes5
+                //minden játékostól begyűjteni 50 milkát
+
+
+
+                //Bence stuff kommentbe
+                /*
                 for(int i=0;i<players.size();i++) {
                     if(players.get(i).getPlayerID()!=player.getPlayerID()) {
                         players.get(i).changeBalance(-10);
                         player.changeBalance(10);
                     }
                 }
+                */
                 break;
             case 5:
                 int Houses = 0; //40M
                 int Hotels = 0; //115M
-                for(int i=0;i<40;i++) {
-                    if(fields[i] instanceof StreetField) {
-                        if(((StreetField) fields[i]).getOwnerID()==player.getPlayerID()) {
-                            if(((StreetField) fields[i]).isThereHotel()) {
-                                Hotels++;
-                            } else {
-                                Houses += ((StreetField) fields[i]).getHouseCounter();
+                    for (int i = 0; i < 40; i++) {
+                        if (fields[i] instanceof StreetField streetField) {
+                            if (streetField.getOwnerID() == player.getPlayerID()) {
+                                if (streetField.isThereHotel()) {
+                                    Hotels++;
+                                } else {
+                                    Houses += streetField.getHouseCounter();
+                                }
                             }
                         }
                     }
-                }
                 player.changeBalance(-40*Houses-115*Hotels);
                 break;
             case 6:
                 player.changeBalance(20);
                 break;
             case 7:
-                player.setFreeJail(true);
+                if(player.isInJail()) {
+                    player.setInJail(false);
+                    player.setInJailTimer(0);
+                } else {
+                    player.setFreeJail(true);
+                }
                 break;
             case 8:
                 player.setInJailTimer(3);
                 player.setInJail(true);
-                player.setOnFieldPosition(10);
                 monopolyGUI.goingOnFields(10);
                 break;
             case 9:
@@ -68,12 +80,10 @@ public class SurpriseCard extends Card {
                 player.changeBalance(-100);
                 break;
             case 14:
-                player.setOnFieldPosition(0);
                 monopolyGUI.goingOnFields(0);
-                player.changeBalance(200);
                 break;
             case 15:
-                player.changeBalance(15);
+                player.changeBalance(25);
                 break;
             default:
                 System.out.println("HIBA");

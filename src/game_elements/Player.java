@@ -168,6 +168,7 @@ public class Player extends GameElement implements Serializable {
     }
 
     public boolean getfreeJail() {
+
         return hasfreeJail;
     }
 

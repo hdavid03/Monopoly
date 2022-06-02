@@ -71,4 +71,5 @@ public class StreetField extends PropertyField {
     public void setEEnumerator(PropertyFieldColor EEnumerator) {
         this.EEnumerator = EEnumerator;
     }
+
 }
