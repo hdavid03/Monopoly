@@ -94,7 +94,7 @@ public class ChanceCard extends Card {
             case 12:
                 player.setOnFieldPosition(11);
                 monopolyGUI.goingOnFields(11);
-                if(player.getOnFieldPosition()>11) { player.changeBalance(200); }
+                player.setplayerpassgo(true);
                 break;
             case 13:
             case 14:
@@ -124,5 +124,6 @@ public class ChanceCard extends Card {
             default:
                 System.out.println("HIBA");
         }
+
     }
 }

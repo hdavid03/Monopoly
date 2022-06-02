@@ -185,18 +185,22 @@ public class MonopolyGUI extends JFrame {
             //int cardID = 0;
             int cardID = 12;
             cardLabel.setIcon(surpriseCardIcons.get(cardID));
-            community.action(players.get(playerID), cardID, players, fields, this);
-            System.out.println("setting player " + players.get(playerID) + " playerpassgo: " + players.get(playerID).getplayerpassgo());
-
-
-        } else if (field instanceof ChanceField) {
+            community.action(this.player, cardID, this.players, this.fields, this);
+            player.setplayerpassgo(true);
+            System.out.println("setting player " + this.player.getPlayerID() + " playerpassgo: " + this.player.getplayerpassgo()); //players.get(playerID).getplayerpassgo());
+            player.setplayerpassgo(true);
+        }
+        else if (field instanceof ChanceField) {
             SecureRandom random = new SecureRandom();
             //int cardID = random.nextInt(16);
-            int cardID = 0;
+            //int cardID = 0;
+            int cardID = 12;
             cardLabel.setIcon(chanceCardIcons.get(cardID));
-            chance.action(players.get(playerID), cardID, players, this.fields, this);
 
-        } else {
+            popUpMessage("Húztál szerencsekártyát", JOptionPane.INFORMATION_MESSAGE);
+            chance.action(this.player, cardID, players, this.fields, this);
+            }
+        else {
             // itt ne történjen semmi
         }
     }
@@ -213,8 +217,19 @@ public class MonopolyGUI extends JFrame {
         }
     }
 
-    public void goingOnFields(int resultOfThrowing){
-        int newFieldID = (this.player.getFieldID() + resultOfThrowing) % 40;
+    public void goingOnFields(int setnewfieldID){
+        goingOnFields(setnewfieldID, false);
+    }
+
+    public void goingOnFields(int result, boolean resultsofThrowing){
+        int newFieldID;
+        if(resultsofThrowing){
+            newFieldID = (this.player.getFieldID() + result) % 40;
+        }
+        else{
+            newFieldID = result;
+        }
+        player.startPassCheck(newFieldID);
         this.player.setFieldID(newFieldID);
         System.out.println(newFieldID);
         System.out.println(this.playerID);
@@ -308,6 +323,7 @@ public class MonopolyGUI extends JFrame {
         });
 
         this.throwButton.addActionListener(e -> {
+
             SecureRandom random = new SecureRandom();
             int result1 = random.nextInt(6);
             int result2 = random.nextInt(6);
@@ -315,7 +331,7 @@ public class MonopolyGUI extends JFrame {
             this.die2Label.setIcon(dieIcons.get(result2));
             this.dicePanel.repaint();
             //goingOnFields(result1 + result2 + 2);
-            goingOnFields(7);
+            goingOnFields(7, true);
             this.readyButton.setEnabled(true);
             this.throwButton.setEnabled(false);
         });
@@ -332,7 +348,7 @@ public class MonopolyGUI extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             }break;
             case JOptionPane.INFORMATION_MESSAGE : {
-                JOptionPane.showMessageDialog(this, message, "Hiba",
+                JOptionPane.showMessageDialog(this, message, "Információ",
                         JOptionPane.INFORMATION_MESSAGE);
             }break;
             default: {
@@ -388,6 +404,8 @@ public class MonopolyGUI extends JFrame {
 
     public void updateGameBoard(ServerMessage message) {
         ArrayList<Player> oldPlayerList = new ArrayList<>(this.players);
+
+        //this.player.setplayerpassgo(true);
         System.out.println(message.getPlayers().toString());
         this.players.clear();
         this.players.addAll(message.getPlayers());
@@ -408,11 +426,16 @@ public class MonopolyGUI extends JFrame {
             System.out.println("ITT VAGYOK!!");
             this.ready = false;
         }
+        //players.get(playerID).setplayerpassgo(true);
         for (Player p : this.players) {
             int pID = p.getPlayerID();
-            updatePlayerLabels(p);
+            //updatePlayerLabels(p);
             if(pID != playerID) {
                 updatePlayerPosition(p);
+                updatePlayerLabels(p);
+            }
+            else{
+                updatePlayerLabels(this.player);
             }
         }
         if(anyPlayerDisconnected) {
