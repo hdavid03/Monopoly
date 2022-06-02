@@ -1,7 +1,6 @@
 package game_elements;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Player extends GameElement implements Serializable {
 
@@ -12,10 +11,12 @@ public class Player extends GameElement implements Serializable {
     private int money;
     private int railRoadCounter;
     private int utilityCounter;
-    private ArrayList<String> extras;
     private int fieldID;
     private boolean isInJail;
     private boolean playerOnline;
+    private boolean hasfreeJail;
+    private boolean hasplayerpassgo;
+    private String extras;
 
     public Player(int playerID, int onFieldPosition, int money) {
         this.playerID = playerID;
@@ -27,7 +28,9 @@ public class Player extends GameElement implements Serializable {
         this.fieldID = 0;
         this.isInJail = false;
         this.playerOnline = true;
-        this.extras = new ArrayList<>();
+        this.hasfreeJail = false;
+        this.hasplayerpassgo = false;
+        this.extras = "";
     }
 
     public Player(Player player) {
@@ -40,15 +43,28 @@ public class Player extends GameElement implements Serializable {
         this.utilityCounter = player.getUtilityCounter();
         this.fieldID = player.getFieldID();
         this.isInJail = player.isInJail();
+        this.hasfreeJail = player.getfreeJail();
+        this.hasplayerpassgo = player.getPlayerPassGo();
         this.extras = player.getExtras();
     }
 
-    public ArrayList<String> getExtras() {
+    public String getExtras() {
         return extras;
     }
 
-    public void setExtras(ArrayList<String> extras) {
-        this.extras = extras;
+    public void setExtras() {
+        if(this.getfreeJail() == true && this.getPlayerPassGo() == false){
+            this.extras = "Szabadulás";
+        }
+        else if(this.getfreeJail() == false && this.getPlayerPassGo() == true){
+            this.extras = "Pénzfelvétel";
+        }
+        else if(this.getfreeJail() == true && this.getPlayerPassGo() == true){
+            this.extras = "Szabadulás, Pénzfelvétel";
+        }
+        else{
+            this.extras = "";
+        }
     }
 
     public boolean isOffline() {
@@ -144,12 +160,32 @@ public class Player extends GameElement implements Serializable {
         isInJail = inJail;
     }
 
-    public void changeBalance(int change) { this.setMoney(this.getMoney()+change); }
+    public void changeBalance(int change) {
+        this.setMoney(this.getMoney()+change);
+    }
 
     public void startPassCheck(int newFieldID) {
-        if(newFieldID < fieldID) {
+        if (newFieldID < fieldID) {
             this.changeBalance(200);
         }
+    }
+
+    public void setFreeJail(boolean isFreeJail) {
+        this.setExtras();
+        hasfreeJail = isFreeJail;
+    }
+
+    public boolean getfreeJail() {
+        return hasfreeJail;
+    }
+
+    public void setPlayerPassGo(boolean isPlayerPassGo) {
+        hasplayerpassgo = isPlayerPassGo;
+        this.setExtras();
+    }
+
+    public boolean getPlayerPassGo() {
+        return hasplayerpassgo;
     }
 
 }

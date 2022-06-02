@@ -1,36 +1,129 @@
 package game_elements;
 
+import GUI.MonopolyGUI;
+import game_elements.table_fields.property_fields.RailRoadField;
+import game_elements.table_fields.property_fields.StreetField;
+import game_elements.table_fields.property_fields.UtilityField;
+
+import java.util.ArrayList;
+
 public class ChanceCard extends Card {
 
     @Override
-    public void action(Player P, int cardID) {
+    public void action(Player player, int cardID, ArrayList<Player> players, Field[] fields, MonopolyGUI monopolyGUI) {
+        int c;
+
         switch(cardID) {
+            case 0:
+            case 5:
+                player.setPlayerPassGo(true);
+                System.out.println("Setting player pass-go");
+                System.out.println(player.getPlayerID() + " ID player setting playerpassgo " + player.getPlayerPassGo());
+                break;
             case 1:
-                //Add to Player, give 200 when Pass Go
-            case 2: P.changeBalance(15);
-            case 3: P.setOnFieldPosition(0);
-            case 4: P.setInJailTimer(3); P.setInJail(true); //P.setOnFieldPosition(/*JailPos*/);
-            case 5: P.changeBalance(150);
+                player.changeBalance(15);
+                break;
+            case 2:
+                player.setOnFieldPosition(0);
+                monopolyGUI.goingOnFields(0);
+                break;
+            case 3:
+                player.setInJailTimer(3);
+                player.setInJail(true);
+                player.setOnFieldPosition(10);
+                monopolyGUI.goingOnFields(10);
+                break;
+            case 4:
+                player.changeBalance(150);
+                break;
             case 6:
-                //When Pass Go, pick up 200, de ez mindden Pass-nál történik szóval miafasz?
-            case 7: P.setOnFieldPosition(P.getOnFieldPosition()-3);
-            case 8: //P.setOnFieldPosition(/*Dunakorzó*/);
+                player.setOnFieldPosition(player.getOnFieldPosition()-3);
+                monopolyGUI.goingOnFields(player.getOnFieldPosition()-3);
+                break;
+            case 7:
+                player.setOnFieldPosition(39);
+                monopolyGUI.goingOnFields(39);
+                break;
+            case 8:
+                player.setFreeJail(true);
+                break;
             case 9:
-                // Get Out Of Jail
+                c = (int)(player.getOnFieldPosition()/20);
+                c = (c+1)*12;
+                player.setOnFieldPosition(c);
+                monopolyGUI.goingOnFields(c);
+                if(fields[c] instanceof UtilityField) {
+                    if(!((UtilityField) fields[c]).getOwnership()) {
+                        // Prompt Play to Buy
+                        ((UtilityField) fields[c]).setOwnership(true);
+                        ((UtilityField) fields[c]).setOwnerID(player.getPlayerID());
+                        player.changeBalance(((UtilityField) fields[c]).getValue());
+                    }
+                    else {
+                        int Die1 = player.throwDice();
+                        int Die2 = player.throwDice();
+                        player.changeBalance(-10*(Die1+Die2));
+                        players.get(((UtilityField) fields[c]).getOwnerID()).changeBalance(10*(Die1+Die2));
+                    }
+                }
+                break;
             case 10:
-                // min(d(Player,Közmű)), megvásárolható vagy 10*(Roll1+Roll2) tulajnak
+                int Houses = 0; //25M
+                int Hotels = 0; //100M
+                for(int i=0;i<40;i++) {
+                    if(fields[i] instanceof StreetField) {
+                        if(((StreetField) fields[i]).getOwnerID()==player.getPlayerID()) {
+                            if(((StreetField) fields[i]).isThereHotel()) {
+                                Hotels++;
+                            } else {
+                                Houses += ((StreetField) fields[i]).getHouseCounter();
+                            }
+                        }
+                    }
+                }
+                player.changeBalance(-25*Houses-100*Hotels);
+                break;
             case 11:
-                // Házért 25M-t, szállodáért 100M-t, DE LEHETETLEN ÍGY IMPLEMENTÁLNI
+                for(int i=0;i<players.size();i++) {
+                    if(players.get(i).getPlayerID()!=player.getPlayerID()) {
+                        player.changeBalance(-50);
+                        players.get(i).changeBalance(50);
+                    }
+                }
+                break;
             case 12:
-                // Mindenkinek 50M-t, DE ÍGY LEHETETLEN IMPLEMENTÁLNI
-            case 13: //P.setOnFieldPosition(); // If Pass Go, P.changeBalance(200);
+                player.startPassCheck(11);
+                player.setOnFieldPosition(11);
+                monopolyGUI.goingOnFields(11);
+                break;
+            case 13:
             case 14:
                 // min(d(Player,Vasút)), megvásárolható vagy 2*rent() tulajnak
+                c = (int)(player.getOnFieldPosition()/10);
+                c = (c+1)*5;
+                player.setOnFieldPosition(c);
+                monopolyGUI.goingOnFields(c);
+                if(fields[c] instanceof RailRoadField) {
+                    if(!((RailRoadField) fields[c]).getOwnership()) {
+                        // Prompt Player to Buy
+                        ((RailRoadField) fields[c]).setOwnership(true);
+                        ((RailRoadField) fields[c]).setOwnerID(player.getPlayerID());
+                        player.changeBalance(-((RailRoadField) fields[c]).getValue());
+                    }
+                    else {
+                        int Die1 = player.throwDice();
+                        int Die2 = player.throwDice();
+                        player.changeBalance(-2*(Die1+Die2));
+                        players.get(((RailRoadField) fields[c]).getOwnerID()).changeBalance(2*(Die1+Die2));
+                    }
+                }
+                break;
             case 15:
-                // min(d(Player,Vasút)), megvásárolható vagy 2*rent() tulajnak
-            case 16: P.changeBalance(50);
+                player.changeBalance(50);
+                break;
             default:
                 System.out.println("HIBA");
         }
+
     }
 }

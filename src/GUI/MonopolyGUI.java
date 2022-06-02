@@ -1,7 +1,9 @@
 package GUI;
 
+import game_elements.ChanceCard;
 import game_elements.Field;
 import game_elements.Player;
+import game_elements.SurpriseCard;
 import game_elements.table_fields.*;
 import game_elements.table_fields.property_fields.PropertyFieldColor;
 import game_elements.table_fields.property_fields.RailRoadField;
@@ -44,6 +46,8 @@ public class MonopolyGUI extends JFrame {
     private final ArrayList<ImageIcon> surpriseCardIcons = new ArrayList<>();
     private final ArrayList<ImageIcon> chanceCardIcons = new ArrayList<>();
     private final ArrayList<ImageIcon> dieIcons = new ArrayList<>();
+    private SurpriseCard community = new SurpriseCard();
+    private ChanceCard chance = new ChanceCard();
 
     private CustomLabel cardLabel;
     private CustomLabel die1Label;
@@ -85,6 +89,11 @@ public class MonopolyGUI extends JFrame {
         this.setVisible(true);
         this.add(cardsPanel);
         this.add(actionPanel);
+        //testing
+        ((StreetField) fields[1]).setOwnerID(0);
+        ((StreetField) fields[1]).setHouseCounter(2);
+        ((StreetField) fields[3]).setOwnerID(0);
+        ((StreetField) fields[3]).setHotel(true);
     }
 
     private void setComboBox() {
@@ -176,12 +185,23 @@ public class MonopolyGUI extends JFrame {
         }
         else if (field instanceof CommunityChestField) {
             SecureRandom random = new SecureRandom();
-            int cardID = random.nextInt(16);
+            //int cardID = random.nextInt(16);
+            //int cardID = 0;
+            int cardID = 12;
             cardLabel.setIcon(surpriseCardIcons.get(cardID));
+            community.action(this.player, cardID, this.players, this.fields, this);
+        }
+        else if (field instanceof ChanceField) {
+            SecureRandom random = new SecureRandom();
+            //int cardID = random.nextInt(16);
+            //int cardID = 0;
+            int cardID = 12;
+            cardLabel.setIcon(chanceCardIcons.get(cardID));
 
-        } else if (field instanceof ChanceField) {
-
-        } else {
+            popUpMessage("Húztál szerencsekártyát", JOptionPane.INFORMATION_MESSAGE);
+            chance.action(this.player, cardID, players, this.fields, this);
+            }
+        else {
             // itt ne történjen semmi
         }
     }
@@ -189,7 +209,6 @@ public class MonopolyGUI extends JFrame {
     private void updatePlayerPosition(Player player) {
         int pID = player.getPlayerID();
         int fieldID = player.getFieldID();
-        System.out.println("Játékos: " + pID + "mező: " + fieldID);
         if(pID != this.playerID) {
             pawns.get(pID).setLocation(arrayXY[fieldID][0], arrayXY[fieldID][1]);
             pawns.get(pID).repaint();
@@ -197,9 +216,19 @@ public class MonopolyGUI extends JFrame {
         }
     }
 
-    public void goingOnFields(int resultOfThrowing){
-        int newFieldID = (this.player.getFieldID() + resultOfThrowing) % 40;
-        this.player.startPassCheck(newFieldID);
+    public void goingOnFields(int setnewfieldID){
+        goingOnFields(setnewfieldID, false);
+    }
+
+    public void goingOnFields(int result, boolean resultsofThrowing){
+        int newFieldID;
+        if(resultsofThrowing){
+            newFieldID = (this.player.getFieldID() + result) % 40;
+        }
+        else{
+            newFieldID = result;
+        }
+        player.startPassCheck(newFieldID);
         this.player.setFieldID(newFieldID);
         System.out.println(newFieldID);
         System.out.println(this.playerID);
@@ -296,13 +325,15 @@ public class MonopolyGUI extends JFrame {
         });
 
         this.throwButton.addActionListener(e -> {
+
             SecureRandom random = new SecureRandom();
             int result1 = random.nextInt(6);
             int result2 = random.nextInt(6);
             this.die1Label.setIcon(dieIcons.get(result1));
             this.die2Label.setIcon(dieIcons.get(result2));
             this.dicePanel.repaint();
-            goingOnFields(result1 + result2 + 2);
+            //goingOnFields(result1 + result2 + 2);
+            goingOnFields(7, true);
             this.readyButton.setEnabled(true);
             this.throwButton.setEnabled(false);
             this.payButton.setEnabled(true);
@@ -320,7 +351,7 @@ public class MonopolyGUI extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             }break;
             case JOptionPane.INFORMATION_MESSAGE : {
-                JOptionPane.showMessageDialog(this, message, "Hiba",
+                JOptionPane.showMessageDialog(this, message, "Információ",
                         JOptionPane.INFORMATION_MESSAGE);
             }break;
             default: {
@@ -335,10 +366,10 @@ public class MonopolyGUI extends JFrame {
         ImageIcon hatIcon = new ImageIcon("src//Images//pawns//hat.png");
         ImageIcon boatIcon = new ImageIcon("src//Images//pawns//boat.png");
         ImageIcon carIcon = new ImageIcon("src//Images//pawns//car.jpg");
-        CustomLabel pawnShoeLabel = new CustomLabel(875, 900, 25, 25, shoeIcon);
-        CustomLabel pawnHatLabel = new CustomLabel(875, 925, 25, 25, hatIcon);
-        CustomLabel pawnBoatLabel = new CustomLabel(900, 900, 25, 25, boatIcon);
-        CustomLabel pawnCarLabel = new CustomLabel(900, 925, 25, 25, carIcon);
+        CustomLabel pawnShoeLabel = new CustomLabel(875, 925, 25, 25, shoeIcon);
+        CustomLabel pawnHatLabel = new CustomLabel(875, 950, 25, 25, hatIcon);
+        CustomLabel pawnBoatLabel = new CustomLabel(900, 925, 25, 25, boatIcon);
+        CustomLabel pawnCarLabel = new CustomLabel(900, 950, 25, 25, carIcon);
         CustomPanel pawnPanel = new CustomPanel(0, 0, 1000, 1000);
         pawnPanel.add(pawnShoeLabel);
         pawnPanel.add(pawnHatLabel);
