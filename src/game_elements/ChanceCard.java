@@ -92,9 +92,9 @@ public class ChanceCard extends Card {
                 }
                 break;
             case 12:
+                player.startPassCheck(11);
                 player.setOnFieldPosition(11);
                 monopolyGUI.goingOnFields(11);
-                player.setplayerpassgo(true);
                 break;
             case 13:
             case 14:
