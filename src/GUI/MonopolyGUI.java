@@ -405,6 +405,9 @@ public class MonopolyGUI extends JFrame {
                 updatePlayerLabels(p);
                 updatePlayerPosition(p);
             }
+            else {
+                updatePlayerLabels(this.player);
+            }
         }
     }
 
