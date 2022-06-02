@@ -1,5 +1,7 @@
 package game_elements;
 
+import networking.Transaction;
+
 import java.io.Serializable;
 
 public class Player extends GameElement implements Serializable {
@@ -11,11 +13,14 @@ public class Player extends GameElement implements Serializable {
     private int money;
     private int railRoadCounter;
     private int utilityCounter;
+    private int houseCounter;
+    private int hotelCounter;
     private int fieldID;
     private boolean isInJail;
     private boolean playerOnline;
     private boolean hasfreeJail;
     private String extras;
+    private Transaction transaction;
 
     public Player(int playerID, int onFieldPosition, int money) {
         this.playerID = playerID;
@@ -24,11 +29,14 @@ public class Player extends GameElement implements Serializable {
         this.money = money;
         this.railRoadCounter = 0;
         this.utilityCounter = 0;
+        this.houseCounter = 0;
+        this.hotelCounter = 0;
         this.fieldID = 0;
         this.isInJail = false;
         this.playerOnline = true;
         this.hasfreeJail = false;
         this.extras = "";
+        this.transaction = new Transaction();
     }
 
     public Player(Player player) {
@@ -43,6 +51,7 @@ public class Player extends GameElement implements Serializable {
         this.isInJail = player.isInJail();
         this.hasfreeJail = player.getfreeJail();
         this.extras = player.getExtras();
+        this.transaction = player.getTransaction();
     }
 
     public String getExtras() {
@@ -56,6 +65,14 @@ public class Player extends GameElement implements Serializable {
         else{
             this.extras = "";
         }
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 
     public boolean isOffline() {
@@ -80,6 +97,22 @@ public class Player extends GameElement implements Serializable {
 
     public Player(String playerName) {
         this.playerName = playerName;
+    }
+
+    public int getHouseCounter() {
+        return houseCounter;
+    }
+
+    public void setHouseCounter(int houseCounter) {
+        this.houseCounter = houseCounter;
+    }
+
+    public int getHotelCounter() {
+        return hotelCounter;
+    }
+
+    public void setHotelCounter(int hotelCounter) {
+        this.hotelCounter = hotelCounter;
     }
 
     @Override

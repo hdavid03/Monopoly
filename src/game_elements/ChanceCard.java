@@ -4,7 +4,9 @@ import GUI.MonopolyGUI;
 import game_elements.table_fields.property_fields.RailRoadField;
 import game_elements.table_fields.property_fields.StreetField;
 import game_elements.table_fields.property_fields.UtilityField;
+import networking.Transaction;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class ChanceCard extends Card {
@@ -32,7 +34,6 @@ public class ChanceCard extends Card {
                 player.changeBalance(150);
                 break;
             case 5:
-                player.startPassCheck(5);
                 monopolyGUI.goingOnFields(5);
                 break;
             case 6:
@@ -53,55 +54,38 @@ public class ChanceCard extends Card {
                 int fieldID = player.getFieldID();
                 int newFieldID = (Math.abs(fieldID - 12) > (Math.abs(fieldID - 28))) ? 28 : 12;
                 monopolyGUI.goingOnFields(newFieldID);
-                break;
-            case 10:
-                int Houses = 0; //25M
-                int Hotels = 0; //100M
-                for(int i=0;i<40;i++) {
-                    if(fields[i] instanceof StreetField streetField) {
-                        if(streetField.getOwnerID()==player.getPlayerID()) {
-                            if(streetField.isThereHotel()) {
-                                Hotels++;
-                            } else {
-                                Houses += streetField.getHouseCounter();
-                            }
-                        }
+                if(fields[newFieldID] instanceof UtilityField utilityField) {
+                    if(utilityField.isThereOwner()) {
+                        monopolyGUI.popUpMessage("Dobj egy számot, és fizess a tulajdonosnak!", JOptionPane.INFORMATION_MESSAGE);
+                        monopolyGUI.setUserInterAction(true);
+                        monopolyGUI.setThrowButton();
                     }
                 }
-                player.changeBalance(-25*Houses-100*Hotels);
+                break;
+            case 10:
+                player.changeBalance(-25*player.getHouseCounter()-100*player.getHotelCounter());
                 break;
             case 11:
-                //meglepetes12-es kép
-                //mindenkinek fizetsz 50milkát, te írod!!!!!
-                //kommentbe Bence things
-                /*
-                for(int i=0;i<players.size();i++) {
-                    if(players.get(i).getPlayerID()!=player.getPlayerID()) {
-                        player.changeBalance(-50);
-                        players.get(i).changeBalance(50);
-                    }
-                }*/
+                player.setTransaction(new Transaction(50));
+                player.changeBalance(- (players.size() - 1) * 50);
                 break;
             case 12:
-                player.startPassCheck(11);
                 monopolyGUI.goingOnFields(11);
                 break;
             case 13:
             case 14:
                 //vasútak: 5, 15, 25, 35
-                int newFieldID2 = player.getFieldID();
-                newFieldID2 = Math.abs(newFieldID2 - 5);
-                if((Math.abs(newFieldID2 - 15)) < newFieldID2){
-                    newFieldID2 = Math.abs(newFieldID2 - 15);
-                    player.setFieldID(15);
+                int fieldID2 = player.getFieldID();
+                int[] distances = {Math.abs(fieldID2 - 5), Math.abs(fieldID2 - 15), Math.abs(fieldID2 - 25), Math.abs(fieldID2 - 35)};
+                int min = distances[0];
+                int newFieldID2 = 5;
+                for(int i = 1; i < distances.length; i++) {
+                    if(distances[i] < min) {
+                        min = distances[i];
+                        newFieldID2 = 5 + i*10;
+                    }
                 }
-                if((Math.abs(newFieldID2 - 25)) < newFieldID2){
-                    newFieldID2 = Math.abs(newFieldID2 - 25);
-                    player.setFieldID(25);
-                }
-                if((Math.abs(newFieldID2 - 35)) < newFieldID2){
-                    player.setFieldID(35);
-                }
+                monopolyGUI.goingOnFields(newFieldID2);
                 break;
             case 15:
                 player.changeBalance(50);

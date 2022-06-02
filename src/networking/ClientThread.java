@@ -45,11 +45,14 @@ public class ClientThread implements Runnable {
         try {
             this.player = gameBoard.getPlayer();
             boolean ready = gameBoard.isReady();
-            boolean gameBoardIsUpdated = gameBoard.isGameBoardUpdated();
-            StatusMessage message = new StatusMessage(new Player(player), ready, gameBoardIsUpdated);
+            Transaction transaction = gameBoard.getPlayer().getTransaction();
+            StatusMessage message = new StatusMessage(new Player(player), ready);
             //ClientApplication.clientApplicationLogger.log(Level.INFO, player::toString);
             oos.writeObject(message);
             oos.flush();
+            if(transaction.isActive()) {
+                transaction.setActive(false);
+            }
             if(ready && gameBoard.isGameStarted()) gameBoard.setReady(false);
         }catch (IOException e) {
             e.printStackTrace();
