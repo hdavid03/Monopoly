@@ -18,9 +18,6 @@ public abstract class PropertyField extends Field {
         return thereIsOwner;
     }
 
-    public void setThereIsOwner(boolean thereIsOwner) {
-        this.thereIsOwner = thereIsOwner;
-    }
     public void setValue(int V) { this.value = V; }
     public int getValue() { return this.value; }
 

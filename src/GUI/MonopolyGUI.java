@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class MonopolyGUI extends JFrame {
@@ -183,7 +182,6 @@ public class MonopolyGUI extends JFrame {
         househotelLabel.setText("");
         if (field instanceof PropertyField) {
             cardLabel.setIcon(propertyCardIcons.get(tableFieldsID));
-
             if(field instanceof StreetField streetField){
                 String isHotel = streetField.isThereHotel() ? "Van" : "Nincs";
                 househotelLabel.setText("Ház: " + streetField.getHouseCounter() + " || Szálloda: " + isHotel);
@@ -295,23 +293,15 @@ public class MonopolyGUI extends JFrame {
         this.add(playerPanel);
     }
 
-    private void setActionListeners() {
-        this.payButton.addActionListener(e -> {
-           String comboBoxValue = (String)this.comboBox.getSelectedItem();
-           Field field = this.fields[this.player.getFieldID()];
-
-           if(field instanceof PropertyField propertyField){
-               System.out.println("ownership: " + propertyField.getOwnership());
-               if(!propertyField.getOwnership()){
-                   //csak lokálisan saját playernek mutatja, hogy megvette.
-                   propertyField.setOwnership(true);
-                   propertyField.setOwnerID(this.player.getPlayerID());
-                   this.player.changeBalance(-propertyField.getValue());
-                   System.out.println("ownership: " + propertyField.getOwnership());
-
-
+    private void showOwnershipOnFields() {
+       for(int i = 0; i < 40; i++) {
+           Field field = this.fields[i];
+           if(field == null) continue;
+           if (field instanceof PropertyField propertyField) {
+               if (propertyField.getOwnership()) {
+                   int ownerID = propertyField.getOwnerID();
                    Color colour = null;
-                   switch (this.player.getPlayerID()) {
+                   switch (ownerID) {
                        case 0:
                            colour = Color.GREEN;
                            break;
@@ -327,15 +317,28 @@ public class MonopolyGUI extends JFrame {
                        default:
                            System.out.println("Hiba a playerID switch szerkezetben!!");
                    }
+                       ownedPropertyIndicator.get(i).setBackground(colour);
+                       ownedPropertyIndicator.get(i).setOpaque(true);
+               } else {
+                       ownedPropertyIndicator.get(i).setVisible(false);
+                       ownedPropertyIndicator.get(i).setOpaque(true);
+               }
+           }
+       }
+    }
 
+    private void setActionListeners() {
+        this.payButton.addActionListener(e -> {
+           String comboBoxValue = (String)this.comboBox.getSelectedItem();
+           Field field = this.fields[this.player.getFieldID()];
 
-                   if (ownedPropertyIndicator.get(this.player.getFieldID()) != null) {
-                       System.out.println(colour);
-                       System.out.println(this.player.getFieldID());
-
-                       ownedPropertyIndicator.get(this.player.getFieldID()).setBackground(colour);
-                       ownedPropertyIndicator.get(this.player.getFieldID()).setOpaque(true);
-                   }
+           if(field instanceof PropertyField propertyField){
+               System.out.println("ownership: " + propertyField.getOwnership());
+               if(!propertyField.getOwnership()){
+                   //csak lokálisan saját playernek mutatja, hogy megvette.
+                   propertyField.setOwnership(true);
+                   propertyField.setOwnerID(this.player.getPlayerID());
+                   this.player.changeBalance(-propertyField.getValue());
                }
                else if(propertyField.getOwnerID() == this.player.getPlayerID()){
                    if(propertyField instanceof StreetField streetField){
@@ -396,9 +399,7 @@ public class MonopolyGUI extends JFrame {
                 this.die2Label.setIcon(dieIcons.get(result2));
                 this.dicePanel.repaint();
             if(!userInterAction) {
-                //goingOnFields(result1 + result2 + 2);
-                goingOnFields(3, true);
-
+                goingOnFields(result1 + result2 + 2);
                 if (fields[player.getFieldID()] instanceof PropertyField) {
                     this.payButton.setEnabled(true);
                 }
@@ -490,14 +491,12 @@ public class MonopolyGUI extends JFrame {
         System.out.println(message.getPlayers().toString());
         this.players.clear();
         this.players.addAll(message.getPlayers());
+        showOwnershipOnFields();
         int updatedPlayerCount = this.players.size();
         int nextPlayerID = message.getNextPlayerID();
         boolean gameIsReady = message.isGameIsReady();
         boolean anyPlayerDisconnected = playerCount > updatedPlayerCount;
         playerCount = updatedPlayerCount;
-        System.out.println("Lap: " + message.getLap());
-        System.out.println(gameIsReady);
-        System.out.println(nextPlayerID);
         startCheck(message, gameIsReady);
         if(nextPlayerID == this.playerID && gameIsReady) {
             initTurn();

@@ -19,6 +19,7 @@ public class Player extends GameElement implements Serializable {
     private boolean isInJail;
     private boolean playerOnline;
     private boolean hasfreeJail;
+    private boolean insolvency;
     private String extras;
     private Transaction transaction;
 
@@ -35,6 +36,7 @@ public class Player extends GameElement implements Serializable {
         this.isInJail = false;
         this.playerOnline = true;
         this.hasfreeJail = false;
+        this.insolvency = false;
         this.extras = "";
         this.transaction = new Transaction();
     }
@@ -50,12 +52,21 @@ public class Player extends GameElement implements Serializable {
         this.fieldID = player.getFieldID();
         this.isInJail = player.isInJail();
         this.hasfreeJail = player.getfreeJail();
+        this.insolvency = player.isInsolvency();
         this.extras = player.getExtras();
         this.transaction = player.getTransaction();
     }
 
     public String getExtras() {
         return extras;
+    }
+
+    public boolean isInsolvency() {
+        return insolvency;
+    }
+
+    public void setInsolvency(boolean insolvency) {
+        this.insolvency = insolvency;
     }
 
     public void setExtras() {
@@ -185,7 +196,13 @@ public class Player extends GameElement implements Serializable {
     }
 
     public void changeBalance(int change) {
-        this.setMoney(this.getMoney()+change);
+        if(Integer.signum(change) == -1) {
+            if(Math.abs(change) > this.getMoney()) {
+                this.setInsolvency(true);
+            }
+        } else {
+            this.setMoney(this.getMoney() + change);
+        }
     }
 
     public void startPassCheck(int newFieldID) {
