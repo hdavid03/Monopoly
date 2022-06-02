@@ -12,4 +12,8 @@ public class UtilityField extends PropertyField {
     protected void action() {
         //
     }
+
+    public int rent() {
+        return 100;
+    }
 }

@@ -55,7 +55,6 @@ public class MonopolyGUI extends JFrame {
     private CustomLabel die2Label;
     private CustomPanel dicePanel;
 
-    private JComboBox<String> comboBox;
     //arrayxy
     private final int[][] arrayXY = {{875,925},  {800,925},  {725,925},  {635,925},  {550,920},          //0
                                      {475,925},  {390,925},  {310,925},  {225,925},  {150,925},          //5
@@ -92,18 +91,9 @@ public class MonopolyGUI extends JFrame {
         this.add(actionPanel);
     }
 
-    public void initComboBox() {
-        String[] options = {"Telket", "Házat", "Szállodát"};
-        comboBox = new JComboBox<>(options);
-        comboBox.setBounds(50, 70, 250, 30);
-        comboBox.setSelectedIndex(0);
-    }
-
     private CustomPanel getCustomActionPanel() {
         CustomLabel actionTitleLabel = new CustomLabel("Akciók", 40, 10, 10, 200, 50);
         CustomPanel actionPanel = new CustomPanel(1000, 800, 800, 300, Color.CYAN);
-        initComboBox();
-        actionPanel.add(comboBox);
         setButtons(actionTitleLabel, actionPanel);
         return actionPanel;
     }
@@ -178,7 +168,6 @@ public class MonopolyGUI extends JFrame {
 
     public void fieldImage(Integer tableFieldsID) {
         Field field = this.fields[tableFieldsID];
-        //setComboBox();
         househotelLabel.setText("");
         if (field instanceof PropertyField) {
             cardLabel.setIcon(propertyCardIcons.get(tableFieldsID));
@@ -190,8 +179,6 @@ public class MonopolyGUI extends JFrame {
         else if (field instanceof CommunityChestField) {
             SecureRandom random = new SecureRandom();
             int cardID = random.nextInt(16);
-            //int cardID = 0;
-            //int cardID = 12;
             cardLabel.setIcon(surpriseCardIcons.get(cardID));
             popUpMessage("Húztál egy meglepetéskártyát!", JOptionPane.INFORMATION_MESSAGE);
             community.action(this.player, cardID, this.players, this.fields, this);
@@ -199,14 +186,9 @@ public class MonopolyGUI extends JFrame {
         else if (field instanceof ChanceField) {
             SecureRandom random = new SecureRandom();
             int cardID = random.nextInt(16);
-            //int cardID = 0;
-            //int cardID = 12;
             cardLabel.setIcon(chanceCardIcons.get(cardID));
             popUpMessage("Húztál egy szerencsekártyát", JOptionPane.INFORMATION_MESSAGE);
             chance.action(this.player, cardID, players, this.fields, this);
-            }
-        else {
-            // itt ne történjen semmi
         }
     }
 
@@ -329,58 +311,33 @@ public class MonopolyGUI extends JFrame {
 
     private void setActionListeners() {
         this.payButton.addActionListener(e -> {
-           String comboBoxValue = (String)this.comboBox.getSelectedItem();
            Field field = this.fields[this.player.getFieldID()];
-
            if(field instanceof PropertyField propertyField){
                System.out.println("ownership: " + propertyField.getOwnership());
                if(!propertyField.getOwnership()){
                    //csak lokálisan saját playernek mutatja, hogy megvette.
                    propertyField.setOwnership(true);
                    propertyField.setOwnerID(this.player.getPlayerID());
-                   this.player.changeBalance(-propertyField.getValue());
+                   this.player.changeBalance(-1 * propertyField.getValue());
                }
                else if(propertyField.getOwnerID() == this.player.getPlayerID()){
                    if(propertyField instanceof StreetField streetField){
-                       if(comboBoxValue == "Telket" && streetField.getHouseCounter() < 4 && !streetField.isThereHotel()){
+                       if(streetField.getHouseCounter() < 4 && !streetField.isThereHotel()){
                            streetField.setHouseCounter(streetField.getHouseCounter() + 1);
+                           this.player.changeBalance(-streetField.getHouseBuildCost());
+                           this.player.setHouseCounter(this.player.getHouseCounter()+1);
                        }
-                       else if(comboBoxValue == "Szállodát" && streetField.getHouseCounter() == 0 && !streetField.isThereHotel()){
+                       else if(streetField.getHouseCounter() == 4 && !streetField.isThereHotel()){
                            streetField.setHotel(true);
+                           streetField.setHouseCounter(0);
+                           this.player.setHouseCounter(this.player.getHouseCounter()-4);
+                           this.player.changeBalance(-streetField.getHotelBuildCost());
+                           this.player.setHotelCounter(this.player.getHotelCounter()+1);
                        }
                    }
                    //sajátja, nem kell fizetni
                }
-               else{
-                   // rent nincs megírva this.player.changeBalance(-propertyField.getrentValue());
-               }
            }
-
-
-
-/*
-           if (field instanceof PropertyField castedField) {
-               switch (Objects.requireNonNull(comboBoxValue)) {
-                   case "Telket" -> {
-                       if (castedField.isThereOwner()) {
-                           String ownerUserName = this.players.get(castedField.getOwnerID()).getPlayerName();
-                           popUpMessage(String.format("Nem veheted meg, mert %s birtokolja", ownerUserName), JOptionPane.WARNING_MESSAGE);
-                       }
-                       else {
-
-                       }
-                   }
-                   case "Házat" -> {
-
-                   }
-                   case "Szállodát" -> {
-
-                   }
-                   default -> {
-                   }
-               }
-            }
-           */
         });
 
         this.readyButton.addActionListener(e -> {
@@ -399,9 +356,25 @@ public class MonopolyGUI extends JFrame {
                 this.die2Label.setIcon(dieIcons.get(result2));
                 this.dicePanel.repaint();
             if(!userInterAction) {
-                goingOnFields(result1 + result2 + 2);
-                if (fields[player.getFieldID()] instanceof PropertyField) {
+                goingOnFields(result1 + result2 + 2, true);
+                if (fields[player.getFieldID()] instanceof PropertyField propertyField) {
                     this.payButton.setEnabled(true);
+                    if(propertyField.getOwnerID() != playerID && propertyField.getOwnership()) {
+                        if (propertyField instanceof StreetField streetField) {
+                            int value = streetField.rent();
+                            this.player.changeBalance(-value);
+                            this.player.setTransaction(new Transaction(value, streetField.getOwnerID()));
+                        } else if (propertyField instanceof UtilityField utilityField) {
+                            int value = utilityField.rent();
+                            this.player.changeBalance(-value);
+                            this.player.setTransaction(new Transaction(value, utilityField.getOwnerID()));
+                        } else {
+                            RailRoadField railRoadField = (RailRoadField) propertyField;
+                            int value = railRoadField.getRentValue();
+                            this.player.changeBalance(-value);
+                            this.player.setTransaction(new Transaction(value, railRoadField.getOwnerID()));
+                        }
+                    }
                 }
             } else {
                 userInterAction = false;
@@ -414,8 +387,6 @@ public class MonopolyGUI extends JFrame {
             this.throwButton.setEnabled(false);
         });
     }
-
-
 
     public void popUpMessage(String message, int messageType) {
         switch (messageType) {
@@ -593,8 +564,6 @@ public class MonopolyGUI extends JFrame {
             if( fields[i] instanceof PropertyField propertyField)
                 propertyField.setOwnership(false);
         }
-
-
     }
 
     private void updateBankruptcylabels(Player p){
@@ -609,7 +578,6 @@ public class MonopolyGUI extends JFrame {
         label.setText(String.format(""));
         label = playerExtraLabels.get(pID);
         label.setText("");
-
     }
 
     private void deleteDisconnectedPlayer(ArrayList<Player> oldPlayerList) {

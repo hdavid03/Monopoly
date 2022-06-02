@@ -3,18 +3,18 @@ package game_elements.table_fields.property_fields;
 import game_elements.table_fields.PropertyField;
 
 public class RailRoadField extends PropertyField {
-    private int rent;
+    private int rentValue;
     public RailRoadField(int fieldID, int value, int rent) {
         super(fieldID, value);
-        this.rent = rent;
+        this.rentValue = rent;
     }
 
-    public int getRent() {
-        return rent;
+    public int getRentValue() {
+        return rentValue;
     }
 
-    public void setRent(int rent) {
-        this.rent = rent;
+    public void setRentValue(int rentValue) {
+        this.rentValue = rentValue;
     }
 
     @Override

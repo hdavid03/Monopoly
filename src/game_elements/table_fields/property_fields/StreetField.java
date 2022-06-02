@@ -8,12 +8,12 @@ public class StreetField extends PropertyField {
     private boolean isThereHotel = false;
     private int houseBuildCost;
     private int hotelBuildCost;
-    private PropertyFieldColor EEnumerator;
+    private PropertyFieldColor color;
     //private int[] rentPrices;
 
     public StreetField(int fieldID, PropertyFieldColor color, int value, int house, int hotel) {
         super(fieldID, value);
-        this.EEnumerator = color;
+        this.color = color;
         this.houseBuildCost = house;
         this.hotelBuildCost = hotel;
     }
@@ -64,12 +64,26 @@ public class StreetField extends PropertyField {
         this.hotelBuildCost = hotelBuildCost;
     }
 
-    public PropertyFieldColor getEEnumerator() {
-        return EEnumerator;
+    public PropertyFieldColor getColor() {
+        return color;
     }
 
-    public void setEEnumerator(PropertyFieldColor EEnumerator) {
-        this.EEnumerator = EEnumerator;
+    public int rent() {
+        if(!isThereHotel) {
+            return switch (houseCounter) {
+                case 1 -> color.rentWith1House;
+                case 2 -> color.rentWith2House;
+                case 3 -> color.rentWith3House;
+                case 4 -> color.rentWith4House;
+                default -> color.rent;
+            };
+        } else {
+            return color.rentWithHotel;
+        }
+    }
+
+    public void setColor(PropertyFieldColor color) {
+        this.color = color;
     }
 
 }

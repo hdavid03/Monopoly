@@ -1,6 +1,8 @@
 package networking;
 
-public class Transaction {
+import java.io.Serializable;
+
+public class Transaction implements Serializable {
 
     private boolean all = false;
     private boolean active = false;

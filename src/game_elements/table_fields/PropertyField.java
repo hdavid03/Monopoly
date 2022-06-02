@@ -21,8 +21,8 @@ public abstract class PropertyField extends Field {
     public void setValue(int V) { this.value = V; }
     public int getValue() { return this.value; }
 
-    //public void setRent(int R) { this.rent = R; }
-    //public int getRent() { return this.rent; }
+    //public void setRentValue(int R) { this.rent = R; }
+    //public int getRentValue() { return this.rent; }
 
     public void setOwnerID(int O) { this.ownerID = O; }
     public int getOwnerID() { return this.ownerID; }

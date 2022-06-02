@@ -196,13 +196,13 @@ public class Player extends GameElement implements Serializable {
     }
 
     public void changeBalance(int change) {
+        System.out.println(change);
         if(Integer.signum(change) == -1) {
             if(Math.abs(change) > this.getMoney()) {
                 this.setInsolvency(true);
             }
-        } else {
-            this.setMoney(this.getMoney() + change);
         }
+        this.setMoney(this.getMoney() + change);
     }
 
     public void startPassCheck(int newFieldID) {
