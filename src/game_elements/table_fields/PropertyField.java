@@ -3,14 +3,15 @@ package game_elements.table_fields;
 import game_elements.Field;
 
 public abstract class PropertyField extends Field {
-    //private int value;
+    private int value;
     //private int rent;
     private int ownerID;
     private boolean thereIsOwner;
 
-    public PropertyField(int fieldID) {
+    public PropertyField(int fieldID, int value) {
         super(fieldID);
         this.thereIsOwner = false;
+        this.value = value;
     }
 
     public boolean isThereOwner() {
@@ -20,8 +21,8 @@ public abstract class PropertyField extends Field {
     public void setThereIsOwner(boolean thereIsOwner) {
         this.thereIsOwner = thereIsOwner;
     }
-//public void setValue(int V) { this.value = V; }
-    //public int getValue() { return this.value; }
+    public void setValue(int V) { this.value = V; }
+    public int getValue() { return this.value; }
 
     //public void setRent(int R) { this.rent = R; }
     //public int getRent() { return this.rent; }

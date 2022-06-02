@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class MonopolyGUI extends JFrame {
@@ -264,23 +265,25 @@ public class MonopolyGUI extends JFrame {
            String comboBoxValue = (String)this.comboBox.getSelectedItem();
            Field field = this.fields[this.player.getFieldID()];
            if (field instanceof PropertyField castedField) {
-                switch (comboBoxValue) {
-                    case "Telket": {
-                        if(castedField.isThereOwner()) {
-                            String ownerUserName = this.players.get(castedField.getOwnerID()).getPlayerName();
-                            popUpMessage(String.format("Nem veheted meg, mert %s birtokolja", ownerUserName), JOptionPane.WARNING_MESSAGE);
-                        }
-                    }
-                    break;
-                    case "Házat": {
+               switch (Objects.requireNonNull(comboBoxValue)) {
+                   case "Telket" -> {
+                       if (castedField.isThereOwner()) {
+                           String ownerUserName = this.players.get(castedField.getOwnerID()).getPlayerName();
+                           popUpMessage(String.format("Nem veheted meg, mert %s birtokolja", ownerUserName), JOptionPane.WARNING_MESSAGE);
+                       }
+                       else {
 
-                    }
-                    break;
-                    case "Szállodát": {
+                       }
+                   }
+                   case "Házat" -> {
 
-                    }break;
-                    default:
-                }
+                   }
+                   case "Szállodát" -> {
+
+                   }
+                   default -> {
+                   }
+               }
             }
         });
 
@@ -384,24 +387,31 @@ public class MonopolyGUI extends JFrame {
         System.out.println("Lap: " + message.getLap());
         System.out.println(gameIsReady);
         System.out.println(nextPlayerID);
-        if(message.getLap() == 0) {
-            setPawnsVisible();
-            if (gameIsReady) this.gameStarted = true;
-        }
+        startCheck(message, gameIsReady);
         if(nextPlayerID == this.playerID && gameIsReady) {
             this.throwButton.setEnabled(true);
-            System.out.println("ITT VAGYOK!!");
             this.ready = false;
         }
+        updateStatusOfPlayers();
+        if(anyPlayerDisconnected) {
+            deleteDisconnectedPlayer(oldPlayerList);
+        }
+    }
+
+    private void updateStatusOfPlayers() {
         for (Player p : this.players) {
             int pID = p.getPlayerID();
-            updatePlayerLabels(p);
             if(pID != playerID) {
+                updatePlayerLabels(p);
                 updatePlayerPosition(p);
             }
         }
-        if(anyPlayerDisconnected) {
-            deleteDisconnectedPlayer(oldPlayerList);
+    }
+
+    private void startCheck(ServerMessage message, boolean gameIsReady) {
+        if(message.getLap() == 0) {
+            setPawnsVisible();
+            if (gameIsReady) this.gameStarted = true;
         }
     }
 
@@ -637,28 +647,28 @@ public class MonopolyGUI extends JFrame {
 
             //Streets
             if(i==1 || i==3) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.BROWN,50,250);
+                this.fields[i] = new StreetField(i, PropertyFieldColor.BROWN, 30,50,250);
             }
             if(i==6 || i==8 || i==9) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.WHITE,50,250);
+                this.fields[i] = new StreetField(i, PropertyFieldColor.WHITE, 50,50,250);
             }
             if(i==11 || i==13 || i==14) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.PURPLE,100,500);
+                this.fields[i] = new StreetField(i, PropertyFieldColor.PURPLE, 70,100,500);
             }
             if(i==16 || i==18 || i==19) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.ORANGE,100,500);
+                this.fields[i] = new StreetField(i, PropertyFieldColor.ORANGE,90, 100,500);
             }
             if(i==21 || i==23 || i==24) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.ORANGE,150,750);
+                this.fields[i] = new StreetField(i, PropertyFieldColor.ORANGE, 110, 150,750);
             }
             if(i==26 || i==27 || i==29) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.YELLOW,150,750);
+                this.fields[i] = new StreetField(i, PropertyFieldColor.YELLOW, 130,150,750);
             }
             if(i==31 || i==32 || i==34) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.GREEN,200,1000);
+                this.fields[i] = new StreetField(i, PropertyFieldColor.GREEN, 150,200,1000);
             }
             if(i==37 || i==39) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.BLUE,200,1000);
+                this.fields[i] = new StreetField(i, PropertyFieldColor.BLUE, 175,200,1000);
             }
         }
     }
