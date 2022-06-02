@@ -336,7 +336,9 @@ public class MonopolyGUI extends JFrame {
             goingOnFields(7, true);
             this.readyButton.setEnabled(true);
             this.throwButton.setEnabled(false);
-            this.payButton.setEnabled(true);
+            if(fields[player.getFieldID()] instanceof PropertyField) {
+                this.payButton.setEnabled(true);
+            }
         });
     }
 

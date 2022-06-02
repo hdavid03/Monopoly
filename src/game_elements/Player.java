@@ -15,7 +15,6 @@ public class Player extends GameElement implements Serializable {
     private boolean isInJail;
     private boolean playerOnline;
     private boolean hasfreeJail;
-    private boolean hasplayerpassgo;
     private String extras;
 
     public Player(int playerID, int onFieldPosition, int money) {
@@ -29,7 +28,6 @@ public class Player extends GameElement implements Serializable {
         this.isInJail = false;
         this.playerOnline = true;
         this.hasfreeJail = false;
-        this.hasplayerpassgo = false;
         this.extras = "";
     }
 
@@ -44,7 +42,6 @@ public class Player extends GameElement implements Serializable {
         this.fieldID = player.getFieldID();
         this.isInJail = player.isInJail();
         this.hasfreeJail = player.getfreeJail();
-        this.hasplayerpassgo = player.getPlayerPassGo();
         this.extras = player.getExtras();
     }
 
@@ -53,14 +50,8 @@ public class Player extends GameElement implements Serializable {
     }
 
     public void setExtras() {
-        if(this.getfreeJail() == true && this.getPlayerPassGo() == false){
+        if(this.getfreeJail() == true) {
             this.extras = "Szabadulás";
-        }
-        else if(this.getfreeJail() == false && this.getPlayerPassGo() == true){
-            this.extras = "Pénzfelvétel";
-        }
-        else if(this.getfreeJail() == true && this.getPlayerPassGo() == true){
-            this.extras = "Szabadulás, Pénzfelvétel";
         }
         else{
             this.extras = "";
@@ -165,7 +156,7 @@ public class Player extends GameElement implements Serializable {
     }
 
     public void startPassCheck(int newFieldID) {
-        if (newFieldID < fieldID) {
+        if (newFieldID < fieldID && !isInJail) {
             this.changeBalance(200);
         }
     }
@@ -173,19 +164,11 @@ public class Player extends GameElement implements Serializable {
     public void setFreeJail(boolean isFreeJail) {
         this.setExtras();
         hasfreeJail = isFreeJail;
+        inJailTimer = 0;
     }
 
     public boolean getfreeJail() {
         return hasfreeJail;
-    }
-
-    public void setPlayerPassGo(boolean isPlayerPassGo) {
-        hasplayerpassgo = isPlayerPassGo;
-        this.setExtras();
-    }
-
-    public boolean getPlayerPassGo() {
-        return hasplayerpassgo;
     }
 
 }

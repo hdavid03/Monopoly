@@ -78,5 +78,6 @@ public class SurpriseCard extends Card {
             default:
                 System.out.println("HIBA");
         }
+
     }
 }

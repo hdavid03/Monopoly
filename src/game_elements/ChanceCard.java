@@ -15,55 +15,52 @@ public class ChanceCard extends Card {
 
         switch(cardID) {
             case 0:
-            case 5:
-                player.setPlayerPassGo(true);
-                System.out.println("Setting player pass-go");
-                System.out.println(player.getPlayerID() + " ID player setting playerpassgo " + player.getPlayerPassGo());
+                monopolyGUI.goingOnFields(24);
                 break;
             case 1:
                 player.changeBalance(15);
                 break;
             case 2:
-                player.setOnFieldPosition(0);
                 monopolyGUI.goingOnFields(0);
                 break;
             case 3:
                 player.setInJailTimer(3);
                 player.setInJail(true);
-                player.setOnFieldPosition(10);
                 monopolyGUI.goingOnFields(10);
                 break;
             case 4:
                 player.changeBalance(150);
                 break;
+            case 5:
+                player.startPassCheck(5);
+                monopolyGUI.goingOnFields(5);
+                break;
             case 6:
-                player.setOnFieldPosition(player.getOnFieldPosition()-3);
-                monopolyGUI.goingOnFields(player.getOnFieldPosition()-3);
+                monopolyGUI.goingOnFields(player.getFieldID()-3);
                 break;
             case 7:
-                player.setOnFieldPosition(39);
                 monopolyGUI.goingOnFields(39);
                 break;
             case 8:
-                player.setFreeJail(true);
+                if(player.isInJail()) {
+                    player.setInJail(false);
+                    player.setInJailTimer(0);
+                } else {
+                    player.setFreeJail(true);
+                }
                 break;
             case 9:
-                c = (int)(player.getOnFieldPosition()/20);
-                c = (c+1)*12;
-                player.setOnFieldPosition(c);
-                monopolyGUI.goingOnFields(c);
-                if(fields[c] instanceof UtilityField) {
-                    if(!((UtilityField) fields[c]).getOwnership()) {
+                int fieldID = player.getFieldID();
+                int newFieldID = (Math.abs(fieldID - 12) > (Math.abs(fieldID - 28))) ? 28 : 12;
+                monopolyGUI.goingOnFields(newFieldID);
+                if(fields[newFieldID] instanceof UtilityField utilityField) {
+                    if(!utilityField.getOwnership()) {
                         // Prompt Play to Buy
-                        ((UtilityField) fields[c]).setOwnership(true);
-                        ((UtilityField) fields[c]).setOwnerID(player.getPlayerID());
-                        player.changeBalance(((UtilityField) fields[c]).getValue());
+                        ((UtilityField) fields[fieldID]).setOwnership(true);
+                        ((UtilityField) fields[fieldID]).setOwnerID(player.getPlayerID());
+                        player.changeBalance(((UtilityField) fields[fieldID]).getValue());
                     }
                     else {
-                        int Die1 = player.throwDice();
-                        int Die2 = player.throwDice();
-                        player.changeBalance(-10*(Die1+Die2));
-                        players.get(((UtilityField) fields[c]).getOwnerID()).changeBalance(10*(Die1+Die2));
                     }
                 }
                 break;
@@ -111,10 +108,6 @@ public class ChanceCard extends Card {
                         player.changeBalance(-((RailRoadField) fields[c]).getValue());
                     }
                     else {
-                        int Die1 = player.throwDice();
-                        int Die2 = player.throwDice();
-                        player.changeBalance(-2*(Die1+Die2));
-                        players.get(((RailRoadField) fields[c]).getOwnerID()).changeBalance(2*(Die1+Die2));
                     }
                 }
                 break;
