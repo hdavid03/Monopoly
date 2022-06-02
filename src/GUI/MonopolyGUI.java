@@ -338,6 +338,7 @@ public class MonopolyGUI extends JFrame {
                    //sajátja, nem kell fizetni
                }
            }
+           this.payButton.setEnabled(false);
         });
 
         this.readyButton.addActionListener(e -> {
@@ -723,7 +724,7 @@ public class MonopolyGUI extends JFrame {
         ImageIcon PiacIcon = new ImageIcon("src//Images//cards//ar//Piac_ter_ar.jpg");
         ImageIcon SzinhazIcon = new ImageIcon("src//Images//cards//ar//Szinhaz_ter_ar.jpg");
         ImageIcon TorokIcon = new ImageIcon("src//Images//cards//ar//Torok_udvar_ar.jpg");
-        ImageIcon VizmuTarsasagIcon = new ImageIcon("src//Images//cards//ar//Vizmu_tarsasag.jpg");
+        ImageIcon VizmuTarsasagIcon = new ImageIcon("src//Images//cards//ar//Vizmu_tarsasag_ar.jpg");
         ImageIcon VorosmartyIcon = new ImageIcon("src//Images//cards//ar//Vorosmarty_ter_ar.jpg");
         propertyCardIcons.add(null);
         propertyCardIcons.add(PiacIcon);
@@ -769,52 +770,57 @@ public class MonopolyGUI extends JFrame {
 
     private void initFields() {
         this.fields = new Field[40];
-        for(int i=0;i<40;i++) {
             // Go Field
-            if(i==0) { this.fields[i] = new GoField(i); }
+            this.fields[0] = new GoField(0);
             // Jail Field
-            if(i==10) { this.fields[i] = new JailField(i); }
+            this.fields[10] = new JailField(10);
             // Free Parking Field
-            if(i==20) { this.fields[i] = new FreeParkingField(i); }
+            this.fields[20] = new FreeParkingField(20);
             // GoToJail Field
-            if(i==30) { this.fields[i] = new GoToJailField(i); }
+            this.fields[30] = new GoToJailField(30);
             // CC Field
-            if(i==2 || i==17 || i==33) { this.fields[i] = new CommunityChestField(i); }
+            this.fields[2] = new CommunityChestField(2);
+            this.fields[33] = new CommunityChestField(33);
+            this.fields[17] = new CommunityChestField(17);
             // Chance Field
-            if(i==7 || i==22 || i==36) { this.fields[i] = new ChanceField(i); }
+            this.fields[7] = new ChanceField(7);
+            this.fields[22] = new ChanceField(22);
+            this.fields[36] = new ChanceField(36);
             // Tax Field
-            if(i==4 || i==38) { this.fields[i] = new TaxField(i,100); }
+            this.fields[4] = new TaxField(4,100);
+            this.fields[38] = new TaxField(38,100);
 
             // Utilities Field
-            if(i==12 || i==28) { this.fields[i] = new UtilityField(i,150); }
+            this.fields[12] = new UtilityField(12,150);
+            this.fields[28] = new UtilityField(28,150);
             // Railroad Field
-            if(i==5 || i==15 || i== 25 || i==35) { this.fields[i] = new RailRoadField(i,200,25); }
+            this.fields[5] = new RailRoadField(5,200,25);
+            this.fields[15] = new RailRoadField(15,200,25);
+            this.fields[25] = new RailRoadField(25,200,25);
+            this.fields[35] = new RailRoadField(35,200,25);
 
             //Streets
-            if(i==1 || i==3) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.BROWN, 30,50,250);
-            }
-            if(i==6 || i==8 || i==9) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.WHITE, 50,50,250);
-            }
-            if(i==11 || i==13 || i==14) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.PURPLE, 70,100,500);
-            }
-            if(i==16 || i==18 || i==19) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.ORANGE,90, 100,500);
-            }
-            if(i==21 || i==23 || i==24) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.ORANGE, 110, 150,750);
-            }
-            if(i==26 || i==27 || i==29) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.YELLOW, 130,150,750);
-            }
-            if(i==31 || i==32 || i==34) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.GREEN, 150,200,1000);
-            }
-            if(i==37 || i==39) {
-                this.fields[i] = new StreetField(i, PropertyFieldColor.BLUE, 175,200,1000);
-            }
-        }
+            this.fields[1] = new StreetField(1, PropertyFieldColor.BROWN, 30,50,50);
+            this.fields[3] = new StreetField(3, PropertyFieldColor.BROWN_EXTRA, 30,50,50);
+            this.fields[6] = new StreetField(6, PropertyFieldColor.WHITE, 50,50,50);
+            this.fields[8] = new StreetField(8, PropertyFieldColor.WHITE, 50,50,50);
+            this.fields[9] = new StreetField(9, PropertyFieldColor.WHITE_EXTRA, 60,50,50);
+            this.fields[11] = new StreetField(11, PropertyFieldColor.PURPLE, 70,100,100);
+            this.fields[13] = new StreetField(13, PropertyFieldColor.PURPLE, 70,100,100);
+            this.fields[14] = new StreetField(14, PropertyFieldColor.PURPLE_EXTRA, 80,100,100);
+            this.fields[16] = new StreetField(16, PropertyFieldColor.ORANGE,90, 100,100);
+            this.fields[18] = new StreetField(18, PropertyFieldColor.ORANGE,90, 100,100);
+            this.fields[19] = new StreetField(19, PropertyFieldColor.ORANGE_EXTRA,100, 100,100);
+            this.fields[21] = new StreetField(21, PropertyFieldColor.RED, 110, 150,150);
+            this.fields[23] = new StreetField(23, PropertyFieldColor.RED, 110, 150,150);
+            this.fields[24] = new StreetField(24, PropertyFieldColor.RED_EXTRA, 120, 150,150);
+            this.fields[26] = new StreetField(26, PropertyFieldColor.YELLOW, 130,150,150);
+            this.fields[27] = new StreetField(27, PropertyFieldColor.YELLOW, 130,150,150);
+            this.fields[29] = new StreetField(29, PropertyFieldColor.YELLOW_EXTRA, 140,150,150);
+            this.fields[31] = new StreetField(31, PropertyFieldColor.GREEN, 150,200,200);
+            this.fields[32] = new StreetField(32, PropertyFieldColor.GREEN, 150,200,200);
+            this.fields[34] = new StreetField(34, PropertyFieldColor.GREEN_EXTRA, 160,200,200);
+            this.fields[37] = new StreetField(37, PropertyFieldColor.BLUE, 175,200,200);
+            this.fields[39] = new StreetField(39, PropertyFieldColor.BLUE_EXTRA, 200,200,200);
     }
 }
