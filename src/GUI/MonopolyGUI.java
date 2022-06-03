@@ -185,7 +185,7 @@ public class MonopolyGUI extends JFrame {
         else if (field instanceof ChanceField) {
             SecureRandom random = new SecureRandom();
             //int cardID = random.nextInt(16);
-            int cardID = 0;
+            int cardID = 3;
             cardLabel.setIcon(chanceCardIcons.get(cardID));
             popUpMessage("Húztál egy szerencsekártyát", JOptionPane.INFORMATION_MESSAGE);
             chance.action(this.player, cardID, players, this.fields, this);
@@ -379,15 +379,12 @@ public class MonopolyGUI extends JFrame {
                                 value, this.players.get(ownerID).getPlayerName()), JOptionPane.INFORMATION_MESSAGE);
                         this.player.changeBalance(-1 * value);
                         this.player.setTransaction(new Transaction(value, ownerID));
-                        Transaction transaction = new Transaction(value, ownerID);
-                        System.out.println("1: " + transaction);
-                        System.out.println("2: " + this.player.getTransaction());
                     }
                 }
             } else {
                 userInterAction = false;
                 int value = (result1 + result2) * 10;
-                this.player.changeBalance(-value);
+                this.player.changeBalance(-1 * value);
                 int ownerID = ((UtilityField)fields[player.getFieldID()]).getOwnerID();
                 this.player.setTransaction(new Transaction(value, ownerID));
             }
@@ -465,15 +462,25 @@ public class MonopolyGUI extends JFrame {
         this.add(dicePanel);
     }
 
+    private void updateBankruptedPlayers() {
+        for (Player p : this.players) {
+            if(p.isInsolvency()) {
+                setBankruptcy(p);
+            }
+        }
+    }
+
     public void updateGameBoard(ServerMessage message) {
         ArrayList<Player> oldPlayerList = new ArrayList<>(this.players);
         System.out.println(message.getPlayers().toString());
         this.players.clear();
         this.players.addAll(message.getPlayers());
+        updateBankruptedPlayers();
         updateOwnedFieldIDs();
         int updatedPlayerCount = this.players.size();
         int nextPlayerID = message.getNextPlayerID();
         boolean gameIsReady = message.isGameIsReady();
+        System.out.println("next: " + nextPlayerID);
         boolean anyPlayerDisconnected = playerCount > updatedPlayerCount;
         playerCount = updatedPlayerCount;
         startCheck(message, gameIsReady);
@@ -505,10 +512,9 @@ public class MonopolyGUI extends JFrame {
     private void initTurn() {
         if(this.player.isInJail()) {
             int inJailTimer = this.player.getInJailTimer();
+            this.player.setInJailTimer(inJailTimer - 1);
             this.readyButton.setEnabled(true);
-            if(inJailTimer > 0) {
-                this.player.setInJailTimer(inJailTimer - 1);
-            } else {
+            if((inJailTimer - 1) == 0) {
                 this.player.setInJail(false);
             }
         }else {
@@ -555,39 +561,47 @@ public class MonopolyGUI extends JFrame {
 
     private void updatePlayerLabels(Player p) {
         int pID = p.getPlayerID();
-        CustomLabel label = playerNameLabels.get(pID);
-        label.setText("Név: " + p.getPlayerName());
-        label = playerMoneyLabels.get(pID);
-        label.setText("Pénz: " + p.getMoney());
-        label = playerPropertyLabels.get(pID);
-        label.setText(String.format("Vasút: %d db || Közmű: %d db", p.getRailRoadCounter(), p.getUtilityCounter()));
-        label = playerJailLabels.get(pID);
-        label.setText(String.format("Börtön: %d kör", p.getInJailTimer()));
-        label = playerExtraLabels.get(pID);
-        label.setText("Extrák: " + p.getExtras());
+        if(!p.isInsolvency()) {
+            CustomLabel label = playerNameLabels.get(pID);
+            label.setText("Név: " + p.getPlayerName());
+            label = playerMoneyLabels.get(pID);
+            label.setText("Pénz: " + p.getMoney());
+            label = playerPropertyLabels.get(pID);
+            label.setText(String.format("Vasút: %d db || Közmű: %d db", p.getRailRoadCounter(), p.getUtilityCounter()));
+            label = playerJailLabels.get(pID);
+            label.setText(String.format("Börtön: %d kör", p.getInJailTimer()));
+            label = playerExtraLabels.get(pID);
+            label.setText("Extrák: " + p.getExtras());
+        }
     }
 
     //fingom sincs hova kell rakni/leellenőrizni
-    private void isBankruptcy(Player p){
-
+    private void setBankruptcy(Player p){
         //kiszedni a playerek között, hogy ne kapjon újabb kört
         //still megkapja az adatokat, tudja a többieket nézni
         updateBankruptcylabels(p);
-        pawns.get(this.playerID).setVisible(false);
+        pawns.get(p.getPlayerID()).setVisible(false);
         //gui rendesen pakolja a bábukat helyére, kiszedem a fieldid-t is
-        player.setFieldID(-1);
-        for (int i = 0; i < 40; i++) {
-            if (fields[i] instanceof StreetField streetField) {
-                if (streetField.getOwnerID() == player.getPlayerID()) {
-                    if (streetField.isThereHotel()) {
-                        streetField.setHotel(false);
+        p.setFieldID(0);
+        p.setUtilityCounter(0);
+        p.setRailRoadCounter(0);
+        p.setExtras("");
+        for (Integer i : p.getOwnedFieldIDs()) {
+            if (fields[i] instanceof PropertyField propertyField) {
+                if (propertyField instanceof StreetField streetField) {
+                    propertyField.setOwnership(false);
+                    if (streetField.getOwnerID() == p.getPlayerID()) {
+                        if (streetField.isThereHotel()) {
+                            streetField.setHotel(false);
+                        } else if (streetField.getHouseCounter() > 0) {
+                            streetField.setHouseCounter(0);
+                        }
                     }
-                    else if( streetField.getHouseCounter() > 0)
-                        streetField.setHouseCounter(0);
                 }
             }
-            if( fields[i] instanceof PropertyField propertyField)
+            if( fields[i] instanceof PropertyField propertyField) {
                 propertyField.setOwnership(false);
+            }
         }
     }
 

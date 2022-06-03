@@ -19,7 +19,7 @@ public class Player extends GameElement implements Serializable {
     private int fieldID;
     private boolean isInJail;
     private boolean playerOnline;
-    private boolean hasfreeJail;
+    private boolean hasFreeJail;
     private boolean insolvency;
     private ArrayList<Integer> ownedFieldIDs;
     private String extras;
@@ -37,7 +37,7 @@ public class Player extends GameElement implements Serializable {
         this.fieldID = 0;
         this.isInJail = false;
         this.playerOnline = true;
-        this.hasfreeJail = false;
+        this.hasFreeJail = false;
         this.insolvency = false;
         this.extras = "";
         this.ownedFieldIDs = new ArrayList<>();
@@ -54,7 +54,7 @@ public class Player extends GameElement implements Serializable {
         this.utilityCounter = player.getUtilityCounter();
         this.fieldID = player.getFieldID();
         this.isInJail = player.isInJail();
-        this.hasfreeJail = player.getfreeJail();
+        this.hasFreeJail = player.getfreeJail();
         this.insolvency = player.isInsolvency();
         this.extras = player.getExtras();
         this.ownedFieldIDs = new ArrayList<>(player.getOwnedFieldIDs());
@@ -90,7 +90,9 @@ public class Player extends GameElement implements Serializable {
     }
 
     public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
+        if(!isInsolvency()) {
+            this.transaction = transaction;
+        }
     }
 
     public boolean isOffline() {
@@ -207,8 +209,8 @@ public class Player extends GameElement implements Serializable {
     }
 
     public void changeBalance(int change) {
-        if(Integer.signum(change) == -1) {
-            if(Math.abs(change) > this.getMoney()) {
+        if (Integer.signum(change) == -1) {
+            if (Math.abs(change) > this.getMoney()) {
                 this.setInsolvency(true);
             }
         }
@@ -223,12 +225,12 @@ public class Player extends GameElement implements Serializable {
 
     public void setFreeJail(boolean isFreeJail) {
         this.setExtras("Szabadulás");
-        hasfreeJail = isFreeJail;
+        hasFreeJail = isFreeJail;
         inJailTimer = 0;
     }
 
     public boolean getfreeJail() {
-        return hasfreeJail;
+        return hasFreeJail;
     }
 
 }

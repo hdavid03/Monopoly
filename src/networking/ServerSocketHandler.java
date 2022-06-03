@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
@@ -15,10 +16,12 @@ import java.util.logging.Logger;
 public class ServerSocketHandler extends Thread {
     private static final int MAX_NUM_OF_CLIENTS = 4;
     private static final int SOCKET_TIMEOUT = 500;
+    private static final int STARTER_MONEY = 10;
     private final ServerSocket serverSocket;
     private final LinkedList<ClientSocketHandler> clientSocketHandlers;
     private final ConcurrentLinkedQueue<Player> players;
     private final ExecutorService executorService;
+    private final ArrayList<Integer> playerIDs = new ArrayList<>();
     private int nextPlayerID = 0;
     private int turn = 0;
     private boolean nextTurnReady = false;
@@ -46,7 +49,7 @@ public class ServerSocketHandler extends Thread {
         if(ready) {
             clientSocketHandlers.get(nextPlayerID).setClientReady(false);
             turn++;
-            nextPlayerID = turn % clientSocketHandlers.size();
+            nextPlayerID = playerIDs.get(turn % playerIDs.size());
         }
         return ready;
     }
@@ -67,8 +70,9 @@ public class ServerSocketHandler extends Thread {
 
     private void startClientHandler(Socket socket) {
         if(socket != null) {
-            Player player = new Player(players.size(), players.size(), 1500);
+            Player player = new Player(players.size(), players.size(), STARTER_MONEY);
             players.add(player);
+            playerIDs.add(player.getPlayerID());
             serverSocketHandlerLogger.log(Level.INFO, () -> player.toString() + " player has connected!");
             ClientSocketHandler clientSocketHandler = new ClientSocketHandler(socket, player);
             clientSocketHandlers.add(clientSocketHandler);
@@ -78,7 +82,7 @@ public class ServerSocketHandler extends Thread {
 
     private void waitForUpdateClients() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch(InterruptedException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
@@ -87,9 +91,17 @@ public class ServerSocketHandler extends Thread {
 
     private void updateStatusOfPlayers() {
         if(!clientSocketHandlers.isEmpty()) {
-            LinkedList<Player> updatedPlayers = new LinkedList<>();
+            ArrayList<Player> updatedPlayers = new ArrayList<>();
             for (ClientSocketHandler ch : clientSocketHandlers) {
                 updatedPlayers.add(ch.getPlayer());
+            }
+            for(int i = 0; i < players.size(); i++) {
+                if(updatedPlayers.get(i).isInsolvency()) {
+                    playerIDs.remove(i);
+                    updatedPlayers.remove(i);
+                    clientSocketHandlers.get(i).setLostConnection(true);
+                    break;
+                }
             }
             players.clear();
             players.addAll(updatedPlayers);
@@ -128,8 +140,8 @@ public class ServerSocketHandler extends Thread {
                     serverSocketHandlerLogger.log(Level.INFO, () -> String.valueOf(ch.isClientReady()));
                 }
                 waitForUpdateClients();
-                updateStatusOfPlayers();
                 nextTurnReady = isNextTurnReady();
+                updateStatusOfPlayers();
                 updateClientHandlers(this.nextTurnReady);
                 if (nextTurnReady) setNextTurn();
                 clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
