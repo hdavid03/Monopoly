@@ -120,7 +120,6 @@ public class ClientSocketHandler implements Runnable {
             }
             serverIsUpdated = false;
         }catch(InterruptedException e) {
-            
             e.printStackTrace();
             Thread.currentThread().interrupt();
         }

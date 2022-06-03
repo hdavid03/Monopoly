@@ -185,7 +185,8 @@ public class MonopolyGUI extends JFrame {
         }
         else if (field instanceof ChanceField) {
             SecureRandom random = new SecureRandom();
-            int cardID = random.nextInt(16);
+            //int cardID = random.nextInt(16);
+            int cardID = 6;
             cardLabel.setIcon(chanceCardIcons.get(cardID));
             popUpMessage("Húztál egy szerencsekártyát", JOptionPane.INFORMATION_MESSAGE);
             chance.action(this.player, cardID, players, this.fields, this);
@@ -218,10 +219,9 @@ public class MonopolyGUI extends JFrame {
         } else {
             player.startPassCheck(newFieldID);
         }
-        this.player.setFieldID(newFieldID);
-        setOnFieldPlayerPosition(this.playerID);
         pawns.get(this.playerID).setLocation(arrayXY[newFieldID][0], arrayXY[newFieldID][1]);
-        pawns.get(this.playerID).repaint();
+        setOnFieldPlayerPosition(this.playerID);
+        this.player.setFieldID(newFieldID);
         fieldImage(newFieldID);
     }
 
@@ -362,7 +362,8 @@ public class MonopolyGUI extends JFrame {
                 this.die2Label.setIcon(dieIcons.get(result2));
                 this.dicePanel.repaint();
             if(!userInterAction) {
-                goingOnFields(result1 + result2 + 2, true);
+                //goingOnFields(result1 + result2 + 2, true);
+                goingOnFields(7, true);
                 if (fields[player.getFieldID()] instanceof PropertyField propertyField) {
                     this.payButton.setEnabled(true);
                     if(propertyField.getOwnerID() != playerID && propertyField.getOwnership()) {
