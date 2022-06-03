@@ -12,6 +12,7 @@ public class LaunchPage implements ActionListener {
 
     //TEXTFIELDS
     CustomTextField usernameTextField;
+    CustomTextField ipaddressTextField;
     private boolean clientWantsToConnect = false;
 
     public CustomTextField getUsernameTextField() {
@@ -36,10 +37,12 @@ public class LaunchPage implements ActionListener {
         submitButton.addActionListener(this);
 
         usernameTextField = new CustomTextField(50, 50, 250, 40, "Felhasználónév");
+        ipaddressTextField = new CustomTextField(50, 100, 250, 40, "IP cím");
 
 
         launchFrame.add(submitButton);
         launchFrame.add(usernameTextField);
+        launchFrame.add(ipaddressTextField);
 
         launchFrame.setVisible(true);
 
