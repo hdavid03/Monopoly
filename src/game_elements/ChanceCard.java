@@ -26,8 +26,6 @@ public class ChanceCard extends Card {
                 monopolyGUI.goingOnFields(0);
                 break;
             case 3:
-                player.setInJailTimer(3);
-                player.setInJail(true);
                 monopolyGUI.goingOnFields(10);
                 break;
             case 4:

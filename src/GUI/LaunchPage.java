@@ -12,6 +12,7 @@ public class LaunchPage implements ActionListener {
 
     //TEXTFIELDS
     CustomTextField usernameTextField;
+    CustomTextField ipAddress;
     private boolean clientWantsToConnect = false;
 
     public CustomTextField getUsernameTextField() {

@@ -207,21 +207,21 @@ public class MonopolyGUI extends JFrame {
     }
 
     public void goingOnFields(int result, boolean resultsofThrowing){
-        int newFieldID;
+        int newFieldID = result;
         if(resultsofThrowing){
             newFieldID = (this.player.getFieldID() + result) % 40;
         }
-        else{
-            newFieldID = result;
+        if (newFieldID == 30) {
+            player.setInJailTimer(3);
+            player.setInJail(true);
+            newFieldID = 10;
+        } else {
+            player.startPassCheck(newFieldID);
         }
-        player.startPassCheck(newFieldID);
         this.player.setFieldID(newFieldID);
-        System.out.println(newFieldID);
-        System.out.println(this.playerID);
-        pawns.get(this.playerID).setLocation(arrayXY[newFieldID][0], arrayXY[newFieldID][1]);
-        System.out.println(Arrays.toString(arrayXY[newFieldID]));
-        pawns.get(this.playerID).repaint();
         setOnFieldPlayerPosition(this.playerID);
+        pawns.get(this.playerID).setLocation(arrayXY[newFieldID][0], arrayXY[newFieldID][1]);
+        pawns.get(this.playerID).repaint();
         fieldImage(newFieldID);
     }
 
@@ -311,34 +311,39 @@ public class MonopolyGUI extends JFrame {
 
     private void setActionListeners() {
         this.payButton.addActionListener(e -> {
-           Field field = this.fields[this.player.getFieldID()];
-           if(field instanceof PropertyField propertyField){
-               System.out.println("ownership: " + propertyField.getOwnership());
-               if(!propertyField.getOwnership()){
-                   //csak lokálisan saját playernek mutatja, hogy megvette.
+            int fieldID = this.player.getFieldID();
+            Field field = this.fields[fieldID];
+            if(field instanceof PropertyField propertyField){
+                if(!propertyField.getOwnership()){
                    propertyField.setOwnership(true);
                    propertyField.setOwnerID(this.player.getPlayerID());
+                   this.player.getOwnedFieldIDs().add(fieldID);
                    this.player.changeBalance(-1 * propertyField.getValue());
-               }
-               else if(propertyField.getOwnerID() == this.player.getPlayerID()){
-                   if(propertyField instanceof StreetField streetField){
-                       if(streetField.getHouseCounter() < 4 && !streetField.isThereHotel()){
-                           streetField.setHouseCounter(streetField.getHouseCounter() + 1);
-                           this.player.changeBalance(-streetField.getHouseBuildCost());
-                           this.player.setHouseCounter(this.player.getHouseCounter()+1);
-                       }
-                       else if(streetField.getHouseCounter() == 4 && !streetField.isThereHotel()){
-                           streetField.setHotel(true);
-                           streetField.setHouseCounter(0);
-                           this.player.setHouseCounter(this.player.getHouseCounter()-4);
-                           this.player.changeBalance(-streetField.getHotelBuildCost());
-                           this.player.setHotelCounter(this.player.getHotelCounter()+1);
-                       }
+                   if(propertyField instanceof UtilityField) {
+                       this.player.setUtilityCounter(this.player.getUtilityCounter() + 1);
+                   } else if (propertyField instanceof RailRoadField) {
+                       this.player.setRailRoadCounter(this.player.getRailRoadCounter() + 1);
                    }
+                }
+                else if(propertyField.getOwnerID() == this.player.getPlayerID()){
+                    if(propertyField instanceof StreetField streetField){
+                        if(streetField.getHouseCounter() < 4 && !streetField.isThereHotel()){
+                            streetField.setHouseCounter(streetField.getHouseCounter() + 1);
+                            this.player.changeBalance(-streetField.getHouseBuildCost());
+                            this.player.setHouseCounter(this.player.getHouseCounter()+1);
+                        }
+                        else if(streetField.getHouseCounter() == 4 && !streetField.isThereHotel()){
+                            streetField.setHotel(true);
+                            streetField.setHouseCounter(0);
+                            this.player.setHouseCounter(this.player.getHouseCounter()-4);
+                            this.player.changeBalance(-streetField.getHotelBuildCost());
+                            this.player.setHotelCounter(this.player.getHotelCounter()+1);
+                        }
+                    }
                    //sajátja, nem kell fizetni
-               }
-           }
-           this.payButton.setEnabled(false);
+                }
+            }
+            this.payButton.setEnabled(false);
         });
 
         this.readyButton.addActionListener(e -> {
@@ -391,19 +396,19 @@ public class MonopolyGUI extends JFrame {
 
     public void popUpMessage(String message, int messageType) {
         switch (messageType) {
-            case JOptionPane.WARNING_MESSAGE : {
+            case JOptionPane.WARNING_MESSAGE -> {
                 JOptionPane.showMessageDialog(this, message, "Figyelmeztetés",
                         JOptionPane.WARNING_MESSAGE);
-            }break;
-            case JOptionPane.ERROR_MESSAGE : {
+            }
+            case JOptionPane.ERROR_MESSAGE -> {
                 JOptionPane.showMessageDialog(this, message, "Hiba",
                         JOptionPane.ERROR_MESSAGE);
-            }break;
-            case JOptionPane.INFORMATION_MESSAGE : {
+            }
+            case JOptionPane.INFORMATION_MESSAGE -> {
                 JOptionPane.showMessageDialog(this, message, "Információ",
                         JOptionPane.INFORMATION_MESSAGE);
-            }break;
-            default: {
+            }
+            default -> {
                 JOptionPane.showMessageDialog(this, "Valami nincs rendben", "Hiba",
                         JOptionPane.ERROR_MESSAGE);
             }
@@ -463,6 +468,7 @@ public class MonopolyGUI extends JFrame {
         System.out.println(message.getPlayers().toString());
         this.players.clear();
         this.players.addAll(message.getPlayers());
+        updateOwnedFieldIDs();
         showOwnershipOnFields();
         int updatedPlayerCount = this.players.size();
         int nextPlayerID = message.getNextPlayerID();
@@ -479,12 +485,26 @@ public class MonopolyGUI extends JFrame {
         }
     }
 
+    private void updateOwnedFieldIDs() {
+        for(Player p : this.players) {
+            if(p.getPlayerID() != this.playerID) {
+                ArrayList<Integer> ownedFieldIDs = p.getOwnedFieldIDs();
+                for (Integer ownedFieldID : ownedFieldIDs) {
+                    if (this.fields[ownedFieldID] instanceof PropertyField propertyField) {
+                        propertyField.setOwnerID(p.getPlayerID());
+                    }
+                }
+            }
+        }
+    }
+
     private void initTurn() {
         if(this.player.isInJail()) {
             int inJailTimer = this.player.getInJailTimer();
+            this.readyButton.setEnabled(true);
             if(inJailTimer > 0) {
                 this.player.setInJailTimer(inJailTimer - 1);
-            }else {
+            } else {
                 this.player.setInJail(false);
             }
         }else {
@@ -497,9 +517,9 @@ public class MonopolyGUI extends JFrame {
         for (Player p : this.players) {
             int pID = p.getPlayerID();
             if(pID != playerID) {
-                updatePlayerLabels(p);
-                updatePlayerPosition(p);
                 executeTransaction(p);
+                updatePlayerPosition(p);
+                updatePlayerLabels(p);
             }
             else {
                 updatePlayerLabels(this.player);

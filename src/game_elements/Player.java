@@ -3,6 +3,7 @@ package game_elements;
 import networking.Transaction;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Player extends GameElement implements Serializable {
 
@@ -20,6 +21,7 @@ public class Player extends GameElement implements Serializable {
     private boolean playerOnline;
     private boolean hasfreeJail;
     private boolean insolvency;
+    private ArrayList<Integer> ownedFieldIDs;
     private String extras;
     private Transaction transaction;
 
@@ -38,6 +40,7 @@ public class Player extends GameElement implements Serializable {
         this.hasfreeJail = false;
         this.insolvency = false;
         this.extras = "";
+        this.ownedFieldIDs = new ArrayList<>();
         this.transaction = new Transaction();
     }
 
@@ -54,6 +57,7 @@ public class Player extends GameElement implements Serializable {
         this.hasfreeJail = player.getfreeJail();
         this.insolvency = player.isInsolvency();
         this.extras = player.getExtras();
+        this.ownedFieldIDs = player.getOwnedFieldIDs();
         this.transaction = player.getTransaction();
     }
 
@@ -69,13 +73,16 @@ public class Player extends GameElement implements Serializable {
         this.insolvency = insolvency;
     }
 
-    public void setExtras() {
-        if(this.getfreeJail() == true) {
-            this.extras = "Szabadulás";
-        }
-        else{
-            this.extras = "";
-        }
+    public void setExtras(String string) {
+        this.extras = new String(string);
+    }
+
+    public ArrayList<Integer> getOwnedFieldIDs() {
+        return ownedFieldIDs;
+    }
+
+    public void setOwnedFieldIDs(ArrayList<Integer> ownedFieldIDs) {
+        this.ownedFieldIDs = ownedFieldIDs;
     }
 
     public Transaction getTransaction() {
@@ -196,7 +203,6 @@ public class Player extends GameElement implements Serializable {
     }
 
     public void changeBalance(int change) {
-        System.out.println(change);
         if(Integer.signum(change) == -1) {
             if(Math.abs(change) > this.getMoney()) {
                 this.setInsolvency(true);
@@ -212,7 +218,7 @@ public class Player extends GameElement implements Serializable {
     }
 
     public void setFreeJail(boolean isFreeJail) {
-        this.setExtras();
+        this.setExtras("Szabadulás");
         hasfreeJail = isFreeJail;
         inJailTimer = 0;
     }
