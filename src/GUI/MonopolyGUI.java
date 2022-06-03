@@ -370,6 +370,7 @@ public class MonopolyGUI extends JFrame {
                 //goingOnFields(result1 + result2 + 2, true);
                 goingOnFields(1, true);
                 if (fields[player.getFieldID()] instanceof PropertyField propertyField) {
+                    this.payButton.setEnabled(true);
                     int ownerID = propertyField.getOwnerID();
                     if(ownerID != playerID && propertyField.getOwnership()) {
                         this.payButton.setEnabled(false);
