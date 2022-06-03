@@ -50,7 +50,9 @@ public class ClientThread implements Runnable {
             //ClientApplication.clientApplicationLogger.log(Level.INFO, player::toString);
             oos.writeObject(message);
             oos.flush();
+            System.out.println(transaction);
             if(transaction.isActive()) {
+                System.out.println("Fizetés történt!!!!!!!!!");
                 transaction.setActive(false);
             }
             if(ready && gameBoard.isGameStarted()) gameBoard.setReady(false);

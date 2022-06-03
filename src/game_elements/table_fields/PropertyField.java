@@ -4,14 +4,15 @@ import game_elements.Field;
 
 public abstract class PropertyField extends Field {
     private int value;
-    //private int rent;
+    protected int rent;
     private int ownerID;
     private boolean thereIsOwner;
 
-    public PropertyField(int fieldID, int value) {
+    public PropertyField(int fieldID, int value, int rent) {
         super(fieldID);
         this.thereIsOwner = false;
         this.value = value;
+        this.rent = rent;
     }
 
     public boolean isThereOwner() {
@@ -22,7 +23,7 @@ public abstract class PropertyField extends Field {
     public int getValue() { return this.value; }
 
     //public void setRentValue(int R) { this.rent = R; }
-    //public int getRentValue() { return this.rent; }
+    public abstract int rent();
 
     public void setOwnerID(int O) { this.ownerID = O; }
     public int getOwnerID() { return this.ownerID; }

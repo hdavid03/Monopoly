@@ -13,8 +13,6 @@ public class ChanceCard extends Card {
 
     @Override
     public void action(Player player, int cardID, ArrayList<Player> players, Field[] fields, MonopolyGUI monopolyGUI) {
-        int c;
-
         switch(cardID) {
             case 0:
                 monopolyGUI.goingOnFields(24);

@@ -12,7 +12,7 @@ public class StreetField extends PropertyField {
     //private int[] rentPrices;
 
     public StreetField(int fieldID, PropertyFieldColor color, int value, int house, int hotel) {
-        super(fieldID, value);
+        super(fieldID, value, color.rent);
         this.color = color;
         this.houseBuildCost = house;
         this.hotelBuildCost = hotel;
@@ -68,6 +68,7 @@ public class StreetField extends PropertyField {
         return color;
     }
 
+    @Override
     public int rent() {
         if(!isThereHotel) {
             return switch (houseCounter) {

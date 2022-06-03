@@ -5,7 +5,7 @@ import game_elements.table_fields.PropertyField;
 public class UtilityField extends PropertyField {
 
     public UtilityField(int fieldID, int value) {
-        super(fieldID, value);
+        super(fieldID, value, 100);
     }
 
     @Override
@@ -14,6 +14,6 @@ public class UtilityField extends PropertyField {
     }
 
     public int rent() {
-        return 100;
+        return rent;
     }
 }

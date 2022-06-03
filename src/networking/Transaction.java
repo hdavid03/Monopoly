@@ -24,13 +24,24 @@ public class Transaction implements Serializable {
     }
 
     public Transaction(int value) {
-        new Transaction(true, true, 0, value);
+        this(true, true, 0, value);
+    }
+
+    public Transaction(Transaction transaction) {
+        this.value = transaction.getValue();
+        this.all = transaction.isAll();
+        this.playerID = transaction.getPlayerID();
+        this.active = transaction.isActive();
     }
 
     public Transaction(int value, int playerID) {
-        new Transaction(false, true, playerID, value);
+        this(false, true, playerID, value);
     }
 
+    @Override
+    public String toString() {
+        return "id: " + playerID + "value : " + value + "active: " + active;
+    }
     public boolean isAll() {
         return all;
     }

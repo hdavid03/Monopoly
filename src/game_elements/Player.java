@@ -57,8 +57,8 @@ public class Player extends GameElement implements Serializable {
         this.hasfreeJail = player.getfreeJail();
         this.insolvency = player.isInsolvency();
         this.extras = player.getExtras();
-        this.ownedFieldIDs = player.getOwnedFieldIDs();
-        this.transaction = player.getTransaction();
+        this.ownedFieldIDs = new ArrayList<>(player.getOwnedFieldIDs());
+        this.transaction = new Transaction(player.getTransaction());
     }
 
     public String getExtras() {
@@ -131,6 +131,10 @@ public class Player extends GameElement implements Serializable {
 
     public void setHotelCounter(int hotelCounter) {
         this.hotelCounter = hotelCounter;
+    }
+
+    public void addOwnedFieldID(int fieldID) {
+        this.ownedFieldIDs.add(fieldID);
     }
 
     @Override
