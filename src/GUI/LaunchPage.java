@@ -12,7 +12,7 @@ public class LaunchPage implements ActionListener {
 
     //TEXTFIELDS
     CustomTextField usernameTextField;
-    CustomTextField ipAddress;
+    CustomTextField ipaddressTextField;
     private boolean clientWantsToConnect = false;
 
     public CustomTextField getUsernameTextField() {
@@ -27,7 +27,6 @@ public class LaunchPage implements ActionListener {
     JButton submitButton;
 
     public LaunchPage(){
-
         launchFrame.setTitle("Launch Page");
         launchFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         launchFrame.setSize(420, 420);
@@ -37,15 +36,12 @@ public class LaunchPage implements ActionListener {
         submitButton.addActionListener(this);
 
         usernameTextField = new CustomTextField(50, 50, 250, 40, "Felhasználónév");
-
-
+        ipaddressTextField = new CustomTextField(50, 100, 250, 40, "IP cím");
         launchFrame.add(submitButton);
         launchFrame.add(usernameTextField);
-
+        launchFrame.add(ipaddressTextField);
         launchFrame.setVisible(true);
-
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
