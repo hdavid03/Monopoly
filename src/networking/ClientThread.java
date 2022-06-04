@@ -54,6 +54,9 @@ public class ClientThread implements Runnable {
                 ClientApplication.clientApplicationLogger.log(Level.INFO, () -> transaction + " transaction executed.");
                 transaction.setActive(false);
             }
+            if(this.player.isInsolvency()) {
+                setRunning(false);
+            }
             if(ready && gameBoard.isGameStarted()) gameBoard.setReady(false);
         }catch (IOException e) {
             e.printStackTrace();
