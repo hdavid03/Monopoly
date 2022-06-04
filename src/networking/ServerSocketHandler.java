@@ -47,7 +47,7 @@ public class ServerSocketHandler extends Thread {
     }
 
     private boolean isNextTurnReady() {
-        if(clientSocketHandlers.size() > 0) {
+        if(!clientSocketHandlers.isEmpty()) {
             boolean ready = clientSocketHandlers.get(nextClientSocketHandlerID).isReadyDetect();
             if (ready) {
                 clientSocketHandlers.get(nextClientSocketHandlerID).setClientReady(false);

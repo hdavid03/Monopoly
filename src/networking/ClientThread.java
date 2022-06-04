@@ -16,6 +16,7 @@ public class ClientThread implements Runnable {
     private Player player;
     private final MonopolyGUI gameBoard;
     private boolean running;
+    private boolean insolvencyDetect = false;
 
     public ClientThread(MonopolyGUI gameBoard) {
         this.running = true;
@@ -54,9 +55,6 @@ public class ClientThread implements Runnable {
                 ClientApplication.clientApplicationLogger.log(Level.INFO, () -> transaction + " transaction executed.");
                 transaction.setActive(false);
             }
-            if(this.player.isInsolvency()) {
-                setRunning(false);
-            }
             if(ready && gameBoard.isGameStarted()) gameBoard.setReady(false);
         }catch (IOException e) {
             e.printStackTrace();
@@ -78,7 +76,7 @@ public class ClientThread implements Runnable {
             this.clientSocket = socket;
             oos.writeObject(new Player(this.player));
             oos.flush();
-            while(isRunning()) {
+            while(isRunning() && this.player.isOnline()) {
                 sendPlayerStatusToTheServer(oos);
                 ServerMessage serverMessage = (ServerMessage) ois.readObject();
                 gameBoard.updateGameBoard(serverMessage);
