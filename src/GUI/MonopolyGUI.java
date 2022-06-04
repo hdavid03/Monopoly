@@ -489,6 +489,17 @@ public class MonopolyGUI extends JFrame {
             initTurn();
         }
         updateStatusOfPlayers();
+        winCheck();
+    }
+
+    private void winCheck() {
+        if(this.players.size() == 1 && gameStarted) {
+            popUpMessage("Gratulálunk! Megnyerted a játékot", JOptionPane.INFORMATION_MESSAGE);
+            this.player.setOnline(false);
+            this.readyButton.setEnabled(false);
+            this.payButton.setEnabled(false);
+            this.throwButton.setEnabled(false);
+        }
     }
 
     private void updateOwnedFieldIDs() {

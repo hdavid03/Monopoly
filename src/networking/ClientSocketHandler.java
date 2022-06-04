@@ -80,6 +80,7 @@ public class ClientSocketHandler implements Runnable {
                 player = message.getPlayer();
                 clientReady = message.isReady();
                 clientIsUpdated = true;
+                System.out.println("READ CLIENT");
                 if(!readyDetect && clientReady) {
                     readyDetect = true;
                 }
