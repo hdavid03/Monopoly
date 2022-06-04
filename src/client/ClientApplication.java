@@ -26,7 +26,7 @@ public class ClientApplication {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
                 clientThread.setRunning(false);
-                if(clientThread.getPlayer() != null) clientThread.getPlayer().setPlayerOnline(false);
+                if(clientThread.getPlayer() != null) clientThread.getPlayer().setOnline(false);
                 try {
                     thread.join();
                 } catch (InterruptedException exception) {

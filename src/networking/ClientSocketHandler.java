@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -86,12 +85,12 @@ public class ClientSocketHandler implements Runnable {
                 }
             }
         } catch(IOException e ) {
-            clientSocketHandlerLogger.log(Level.SEVERE, "Megszakadt kapcsolat");
-            player.setPlayerOnline(false);
+            clientSocketHandlerLogger.log(Level.SEVERE, "Disconnected from the server");
+            player.setOnline(false);
             setLostConnection(true);
         }catch (ClassNotFoundException e) {
-            clientSocketHandlerLogger.log(Level.SEVERE, "Nem található osztály");
-            player.setPlayerOnline(false);
+            clientSocketHandlerLogger.log(Level.SEVERE, "Class not found exception");
+            player.setOnline(false);
             setLostConnection(true);
         }
     }
@@ -102,8 +101,8 @@ public class ClientSocketHandler implements Runnable {
                 oos.writeObject(serverMessage);
             }
         }catch (IOException e) {
-            clientSocketHandlerLogger.log(Level.SEVERE, e.getMessage());
-            player.setPlayerOnline(false);
+            clientSocketHandlerLogger.log(Level.SEVERE, "Lost message from server");
+            player.setOnline(false);
             setLostConnection(true);
         }
     }
@@ -133,10 +132,10 @@ public class ClientSocketHandler implements Runnable {
                 waitingForServerUpdate();
                 sendUpdatedStatusToTheClient(oos);
             }
-        } catch(IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch(IOException | ClassNotFoundException e) {
+            clientSocketHandlerLogger.log(Level.SEVERE, "Disconnected from the server");
+            player.setOnline(false);
+            setLostConnection(true);
         }
     }
 }

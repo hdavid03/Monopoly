@@ -175,17 +175,17 @@ public class MonopolyGUI extends JFrame {
             }
         }
         else if (field instanceof CommunityChestField) {
-            cardAction(community, "Húztál egy meglepetés kártyát!");
+            cardAction(community, surpriseCardIcons, "Húztál egy meglepetés kártyát!");
         }
         else if (field instanceof ChanceField) {
-            cardAction(chance, "Húztál egy szerencse kártyát!");
+            cardAction(chance, chanceCardIcons, "Húztál egy szerencse kártyát!");
         }
     }
 
-    private void cardAction(Card card, String message) {
+    private void cardAction(Card card, ArrayList<ImageIcon> cardIcons, String message) {
         SecureRandom random = new SecureRandom();
         int cardID = random.nextInt(16);
-        cardLabel.setIcon(surpriseCardIcons.get(cardID));
+        cardLabel.setIcon(cardIcons.get(cardID));
         popUpMessage(message, JOptionPane.INFORMATION_MESSAGE);
         card.action(this.player, cardID, this.players, this.fields, this);
     }
@@ -302,36 +302,10 @@ public class MonopolyGUI extends JFrame {
             Field field = this.fields[fieldID];
             if(field instanceof PropertyField propertyField){
                 if(!propertyField.getOwnership()) {
-                   propertyField.setOwnership(true);
-                   propertyField.setOwnerID(this.player.getPlayerID());
-                   this.player.addOwnedFieldID(fieldID);
-                   ClientApplication.clientApplicationLogger.log(Level.INFO, () -> ("Player ID: " + this.player.getPlayerID() + " bougth fleid ID: " + fieldID));
-                   this.player.changeBalance(-1 * propertyField.getValue());
-                   showOwnershipOnField(this.player);
-                   if(propertyField instanceof UtilityField) {
-                       this.player.setUtilityCounter(this.player.getUtilityCounter() + 1);
-                   } else if (propertyField instanceof RailRoadField) {
-                       this.player.setRailRoadCounter(this.player.getRailRoadCounter() + 1);
-                   }
+                    buyPropertyField(propertyField);
                 }
                 else if(propertyField.getOwnerID() == this.player.getPlayerID()){
-                    if(propertyField instanceof StreetField streetField){
-                        if(streetField.getHouseCounter() < 4 && !streetField.isThereHotel()){
-                            streetField.setHouseCounter(streetField.getHouseCounter() + 1);
-                            this.player.changeBalance(-streetField.getHouseBuildCost());
-                            this.player.setHouseCounter(this.player.getHouseCounter()+1);
-                        }
-                        else if(streetField.getHouseCounter() == 4 && !streetField.isThereHotel()){
-                            streetField.setHotel(true);
-                            streetField.setHouseCounter(0);
-                            this.player.setHouseCounter(this.player.getHouseCounter()-4);
-                            this.player.changeBalance(-streetField.getHotelBuildCost());
-                            this.player.setHotelCounter(this.player.getHotelCounter()+1);
-                        }
-                        String isHotel = streetField.isThereHotel() ? "Van" : "Nincs";
-                        househotelLabel.setText("Ház: " + streetField.getHouseCounter() + " || Szálloda: " + isHotel);
-                    }
-                   //sajátja, nem kell fizetni
+                    propertyFieldTypeOptions(propertyField);
                 }
             }
             this.payButton.setEnabled(false);
@@ -353,19 +327,9 @@ public class MonopolyGUI extends JFrame {
                 this.die2Label.setIcon(dieIcons.get(result2));
                 this.dicePanel.repaint();
             if(!userInterAction) {
-                goingOnFields(result1 + result2 + 2, true);
-                if (fields[player.getFieldID()] instanceof PropertyField propertyField) {
-                    this.payButton.setEnabled(true);
-                    int ownerID = propertyField.getOwnerID();
-                    if(ownerID != playerID && propertyField.getOwnership()) {
-                        this.payButton.setEnabled(false);
-                        int value = propertyField.rent();
-                        popUpMessage(String.format("Fizetned kell %dM bérleti díjat %s játékosnak!",
-                                value, this.players.get(ownerID).getPlayerName()), JOptionPane.INFORMATION_MESSAGE);
-                        this.player.changeBalance(-1 * value);
-                        this.player.setTransaction(new Transaction(value, ownerID));
-                    }
-                }
+                //goingOnFields(result1 + result2 + 2, true);
+                goingOnFields(1, true);
+                checkPropertyField();
             } else {
                 userInterAction = false;
                 int value = (result1 + result2) * 10;
@@ -376,6 +340,62 @@ public class MonopolyGUI extends JFrame {
             this.readyButton.setEnabled(true);
             this.throwButton.setEnabled(false);
         });
+    }
+
+    private void checkPropertyField() {
+        if (fields[player.getFieldID()] instanceof PropertyField propertyField) {
+            this.payButton.setEnabled(true);
+            int ownerID = propertyField.getOwnerID();
+            if(ownerID != playerID && propertyField.getOwnership()) {
+                this.payButton.setEnabled(false);
+                int value = propertyField.rent();
+                popUpMessage(String.format("Fizetned kell %dM bérleti díjat %s játékosnak!",
+                        value, this.players.get(ownerID).getPlayerName()), JOptionPane.INFORMATION_MESSAGE);
+                this.player.changeBalance(-1 * value);
+                this.player.setTransaction(new Transaction(value, ownerID));
+            }
+        }
+    }
+
+    private void propertyFieldTypeOptions(PropertyField propertyField) {
+        if(propertyField instanceof StreetField streetField){
+            if(streetField.getHouseCounter() < 4 && !streetField.isThereHotel() && streetField.getHouseBuildCost() < this.player.getMoney()) {
+                streetField.setHouseCounter(streetField.getHouseCounter() + 1);
+                this.player.changeBalance(-1 * streetField.getHouseBuildCost());
+                this.player.setHouseCounter(this.player.getHouseCounter()+1);
+            }
+            else if(streetField.getHouseCounter() == 4 && !streetField.isThereHotel() && streetField.getHotelBuildCost() < this.player.getMoney()){
+                streetField.setHotel(true);
+                streetField.setHouseCounter(0);
+                this.player.setHouseCounter(this.player.getHouseCounter()-4);
+                this.player.changeBalance(-1 * streetField.getHotelBuildCost());
+                this.player.setHotelCounter(this.player.getHotelCounter()+1);
+            } else {
+                String message = null;
+                if(streetField.isThereHotel()) {
+                    message = "A telken már van egy hotel, nem vásárolhatsz több épületet!";
+                } else {
+                    message = "Nincs elég pénzed az épületre!";
+                } popUpMessage(message, JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+
+    private void buyPropertyField(PropertyField propertyField) {
+        if(true/*propertyField.getValue() < this.player.getMoney()*/) {
+            int fieldID = propertyField.getFieldID();
+            propertyField.setOwnership(true);
+            propertyField.setOwnerID(this.player.getPlayerID());
+            this.player.addOwnedFieldID(fieldID);
+            ClientApplication.clientApplicationLogger.log(Level.INFO, () -> ("Player ID: " + this.player.getPlayerID() + " bougth fleid ID: " + fieldID));
+            this.player.changeBalance(-1 * propertyField.getValue());
+            showOwnershipOnField(this.player);
+            if (propertyField instanceof UtilityField) {
+                this.player.setUtilityCounter(this.player.getUtilityCounter() + 1);
+            } else if (propertyField instanceof RailRoadField) {
+                this.player.setRailRoadCounter(this.player.getRailRoadCounter() + 1);
+            }
+        } else popUpMessage("Nincs elég pénzed, hogy megvásárold a mezőt!", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void popUpMessage(String message, int messageType) {
@@ -445,11 +465,12 @@ public class MonopolyGUI extends JFrame {
         this.add(dicePanel);
     }
 
-    private void updateBankruptedPlayers(ArrayList<Player> players) {
-        for (Player p : players) {
-            if(p.isInsolvency()) {
-                setBankruptcy(p);
-            }
+    private void updateBankruptedPlayers() {
+       for (Player p : this.players) {
+           if(p.isInsolvency()) {
+               System.out.println("csődöt mondott " + p);
+               setBankruptcy(p);
+           }
         }
     }
 
@@ -457,7 +478,7 @@ public class MonopolyGUI extends JFrame {
         ArrayList<Player> oldPlayerList = new ArrayList<>(this.players);
         this.players.clear();
         this.players.addAll(message.getPlayers());
-        updateBankruptedPlayers(oldPlayerList);
+        updateBankruptedPlayers();
         updateOwnedFieldIDs();
         int updatedPlayerCount = this.players.size();
         int nextPlayerID = message.getNextPlayerID();
@@ -560,12 +581,16 @@ public class MonopolyGUI extends JFrame {
         pawns.get(pID).setVisible(false);
         if(pID == this.playerID) {
             popUpMessage("Kiestél a játékból!", JOptionPane.INFORMATION_MESSAGE);
+            this.readyButton.setEnabled(false);
+            this.player.setOnline(false);
+            this.ready = true;
         }
         //gui rendesen pakolja a bábukat helyére, kiszedem a fieldid-t is
         p.setFieldID(0);
         p.setUtilityCounter(0);
         p.setRailRoadCounter(0);
         p.setExtras("");
+        p.setOnline(false);
         for (Integer i : p.getOwnedFieldIDs()) {
             if (fields[i] instanceof PropertyField propertyField) {
                 propertyField.setOwnership(false);

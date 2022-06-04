@@ -1,7 +1,6 @@
 package game_elements;
 
 import networking.Transaction;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -18,7 +17,7 @@ public class Player extends GameElement implements Serializable {
     private int hotelCounter;
     private int fieldID;
     private boolean isInJail;
-    private boolean playerOnline;
+    private boolean online;
     private boolean hasFreeJail;
     private boolean insolvency;
     private ArrayList<Integer> ownedFieldIDs;
@@ -36,7 +35,7 @@ public class Player extends GameElement implements Serializable {
         this.hotelCounter = 0;
         this.fieldID = 0;
         this.isInJail = false;
-        this.playerOnline = true;
+        this.online = true;
         this.hasFreeJail = false;
         this.insolvency = false;
         this.extras = "";
@@ -54,6 +53,7 @@ public class Player extends GameElement implements Serializable {
         this.utilityCounter = player.getUtilityCounter();
         this.fieldID = player.getFieldID();
         this.isInJail = player.isInJail();
+        this.online = player.isOnline();
         this.hasFreeJail = player.getfreeJail();
         this.insolvency = player.isInsolvency();
         this.extras = player.getExtras();
@@ -95,12 +95,12 @@ public class Player extends GameElement implements Serializable {
         }
     }
 
-    public boolean isOffline() {
-        return !playerOnline;
+    public boolean isOnline() {
+        return online;
     }
 
-    public void setPlayerOnline(boolean playerOnline) {
-        this.playerOnline = playerOnline;
+    public void setOnline(boolean online) {
+        this.online = online;
     }
 
     public String getPlayerName() {
