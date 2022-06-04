@@ -74,7 +74,7 @@ public class Player extends GameElement implements Serializable {
     }
 
     public void setExtras(String string) {
-        this.extras = new String(string);
+        this.extras = string;
     }
 
     public ArrayList<Integer> getOwnedFieldIDs() {
@@ -141,7 +141,7 @@ public class Player extends GameElement implements Serializable {
 
     @Override
     public String toString() {
-        return "ID: " + this.playerID + "Name: " + this.playerName + " Money: " + this.money;
+        return "ID: " + this.playerID + " Name: " + this.playerName + " Money: " + this.money + " Owned field IDs : " + this.ownedFieldIDs;
     }
 
     public int getPlayerID() {
@@ -200,19 +200,13 @@ public class Player extends GameElement implements Serializable {
         this.fieldID = fieldID;
     }
 
-    public boolean getIsInJail() {
-        return isInJail;
-    }
-
     public void setInJail(boolean inJail) {
         isInJail = inJail;
     }
 
     public void changeBalance(int change) {
-        if (Integer.signum(change) == -1) {
-            if (Math.abs(change) > this.getMoney()) {
-                this.setInsolvency(true);
-            }
+        if (Integer.signum(change) == -1 && Math.abs(change) > this.getMoney()) {
+            this.setInsolvency(true);
         }
         this.setMoney(this.getMoney() + change);
     }

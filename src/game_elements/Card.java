@@ -7,10 +7,7 @@ import java.util.List;
 
 public abstract class Card {
 
-    int cardID;
     Field field;
-
-    String type;
 
     public Field getField() {
         return field;
@@ -20,10 +17,5 @@ public abstract class Card {
         this.field = field;
     }
 
-    public void action(Player P,int CardNumber) {
-
-    }
-    public void action(Player player, int cardID, ArrayList<Player> players, Field[] fields, MonopolyGUI monopolyGUI){
-
-    }
+    public abstract void action(Player player, int cardID, ArrayList<Player> players, Field[] fields, MonopolyGUI monopolyGUI);
 }

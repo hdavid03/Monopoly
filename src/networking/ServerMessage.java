@@ -3,7 +3,6 @@ package networking;
 import game_elements.Player;
 
 import java.io.Serializable;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ServerMessage implements Serializable {

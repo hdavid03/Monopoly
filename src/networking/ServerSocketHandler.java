@@ -23,6 +23,7 @@ public class ServerSocketHandler extends Thread {
     private final ExecutorService executorService;
     private final ArrayList<Integer> playerIDs = new ArrayList<>();
     private int nextPlayerID = 0;
+    private int nextClientSocketHandlerID = 0;
     private int turn = 0;
     private boolean nextTurnReady = false;
     private static final Logger serverSocketHandlerLogger = Logger.getLogger(ServerSocketHandler.class.getName());
@@ -45,11 +46,13 @@ public class ServerSocketHandler extends Thread {
     }
 
     private boolean isNextTurnReady() {
-        boolean ready = clientSocketHandlers.get(nextPlayerID).isReadyDetect();
+        boolean ready = clientSocketHandlers.get(nextClientSocketHandlerID).isReadyDetect();
         if(ready) {
-            clientSocketHandlers.get(nextPlayerID).setClientReady(false);
+            clientSocketHandlers.get(nextClientSocketHandlerID).setClientReady(false);
             turn++;
-            nextPlayerID = playerIDs.get(turn % playerIDs.size());
+            nextClientSocketHandlerID = turn % playerIDs.size();
+            ServerSocketHandler.serverSocketHandlerLogger.log(Level.INFO, "Next turn is ready.");
+            nextPlayerID = playerIDs.get(nextClientSocketHandlerID);
         }
         return ready;
     }
@@ -97,9 +100,11 @@ public class ServerSocketHandler extends Thread {
             }
             for(int i = 0; i < players.size(); i++) {
                 if(updatedPlayers.get(i).isInsolvency()) {
-                    playerIDs.remove(i);
-                    updatedPlayers.remove(i);
                     clientSocketHandlers.get(i).setLostConnection(true);
+                    String message = String.format("ID: %d name: %s is bankrupted.", playerIDs.get(i), updatedPlayers.get(i).getPlayerName());
+                    ServerSocketHandler.serverSocketHandlerLogger.log(Level.INFO, message);
+                    updatedPlayers.remove(i);
+                    playerIDs.remove(i);
                     break;
                 }
             }

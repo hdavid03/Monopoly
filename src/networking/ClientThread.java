@@ -12,9 +12,9 @@ import java.net.Socket;
 import java.util.logging.Level;
 
 public class ClientThread implements Runnable {
-    private Socket socket;
+    private Socket clientSocket;
     private Player player;
-    private MonopolyGUI gameBoard;
+    private final MonopolyGUI gameBoard;
     private boolean running;
 
     public ClientThread(MonopolyGUI gameBoard) {
@@ -28,9 +28,9 @@ public class ClientThread implements Runnable {
 
     public void setRunning(boolean running) {
         this.running = running;
-        if( !isRunning() && socket != null && !socket.isClosed() ) {
+        if( !isRunning() && clientSocket != null && !clientSocket.isClosed() ) {
             try {
-                socket.close();
+                clientSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -47,12 +47,11 @@ public class ClientThread implements Runnable {
             boolean ready = gameBoard.isReady();
             Transaction transaction = gameBoard.getPlayer().getTransaction();
             StatusMessage message = new StatusMessage(new Player(player), ready);
-            //ClientApplication.clientApplicationLogger.log(Level.INFO, player::toString);
+            ClientApplication.clientApplicationLogger.log(Level.INFO, player::toString);
             oos.writeObject(message);
             oos.flush();
-            System.out.println(transaction);
             if(transaction.isActive()) {
-                System.out.println("Fizetés történt!!!!!!!!!");
+                ClientApplication.clientApplicationLogger.log(Level.INFO, () -> transaction + " transaction executed.");
                 transaction.setActive(false);
             }
             if(ready && gameBoard.isGameStarted()) gameBoard.setReady(false);
@@ -73,7 +72,7 @@ public class ClientThread implements Runnable {
             this.player.setPlayerName(gameBoard.getUserName());
             this.gameBoard.setPlayerID(this.player.getPlayerID());
             this.gameBoard.setPlayer(new Player(this.player));
-            this.socket = socket;
+            this.clientSocket = socket;
             oos.writeObject(new Player(this.player));
             oos.flush();
             while(isRunning()) {

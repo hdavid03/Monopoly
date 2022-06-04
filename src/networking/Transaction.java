@@ -40,7 +40,7 @@ public class Transaction implements Serializable {
 
     @Override
     public String toString() {
-        return "id: " + playerID + "value : " + value + "active: " + active;
+        return "Address player ID: " + playerID + " value: " + value;
     }
     public boolean isAll() {
         return all;

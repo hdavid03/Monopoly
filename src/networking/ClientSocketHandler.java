@@ -13,7 +13,6 @@ public class ClientSocketHandler implements Runnable {
 
     private Socket socket;
     private Player player;
-    private Queue<Player> playerQueue;
     private ServerMessage serverMessage;
     private boolean serverIsUpdated = false;
     private boolean clientIsUpdated = false;
@@ -35,10 +34,6 @@ public class ClientSocketHandler implements Runnable {
 
     public void setClientIsUpdated(boolean clientIsUpdated) {
         this.clientIsUpdated = clientIsUpdated;
-    }
-
-    public void updatePlayerQueue(Queue<Player> players) {
-        this.playerQueue = players;
     }
 
     public void updateServerMessage(ServerMessage message) {
