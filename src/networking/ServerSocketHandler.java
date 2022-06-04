@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class ServerSocketHandler extends Thread {
     private static final int MAX_NUM_OF_CLIENTS = 4;
     private static final int SOCKET_TIMEOUT = 500;
-    private static final int STARTER_MONEY = 10;
+    private static final int STARTER_MONEY = 1500;
     private final ServerSocket serverSocket;
     private final LinkedList<ClientSocketHandler> clientSocketHandlers;
     private final ConcurrentLinkedQueue<Player> players;
@@ -151,10 +151,6 @@ public class ServerSocketHandler extends Thread {
     }
 
     private void game() {
-        for(ClientSocketHandler ch : clientSocketHandlers) {
-            String message = "player offline : " + String.valueOf(ch.getPlayer().isOnline());
-            serverSocketHandlerLogger.log(Level.INFO, message);
-        }
         waitForUpdateClients();
         updateStatusOfPlayers();
         nextTurnReady = isNextTurnReady();

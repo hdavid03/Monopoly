@@ -25,7 +25,6 @@ public class MonopolyGUI extends JFrame {
     private CustomButton readyButton;
     private CustomButton throwButton;
     private int playerID;
-    private int playerCount = 0;
     private Player player;
     private final String userName;
     private boolean ready = false;
@@ -200,13 +199,13 @@ public class MonopolyGUI extends JFrame {
         }
     }
 
-    public void goingOnFields(int setnewfieldID){
-        goingOnFields(setnewfieldID, false);
+    public void goingOnFields(int setNewfieldID){
+        goingOnFields(setNewfieldID, false);
     }
 
-    public void goingOnFields(int result, boolean resultsofThrowing){
+    public void goingOnFields(int result, boolean resultOfThrowing){
         int newFieldID = result;
-        if(resultsofThrowing){
+        if(resultOfThrowing){
             newFieldID = (this.player.getFieldID() + result) % 40;
         }
         if (newFieldID == 30) {
@@ -327,8 +326,7 @@ public class MonopolyGUI extends JFrame {
                 this.die2Label.setIcon(dieIcons.get(result2));
                 this.dicePanel.repaint();
             if(!userInterAction) {
-                //goingOnFields(result1 + result2 + 2, true);
-                goingOnFields(1, true);
+                goingOnFields(result1 + result2 + 2, true);
                 checkPropertyField();
             } else {
                 userInterAction = false;
@@ -382,7 +380,7 @@ public class MonopolyGUI extends JFrame {
     }
 
     private void buyPropertyField(PropertyField propertyField) {
-        if(true/*propertyField.getValue() < this.player.getMoney()*/) {
+        if(propertyField.getValue() < this.player.getMoney()) {
             int fieldID = propertyField.getFieldID();
             propertyField.setOwnership(true);
             propertyField.setOwnerID(this.player.getPlayerID());
@@ -468,22 +466,18 @@ public class MonopolyGUI extends JFrame {
     private void updateBankruptedPlayers() {
        for (Player p : this.players) {
            if(p.isInsolvency()) {
-               System.out.println("csődöt mondott " + p);
                setBankruptcy(p);
            }
         }
     }
 
     public void updateGameBoard(ServerMessage message) {
-        ArrayList<Player> oldPlayerList = new ArrayList<>(this.players);
         this.players.clear();
         this.players.addAll(message.getPlayers());
         updateBankruptedPlayers();
         updateOwnedFieldIDs();
-        int updatedPlayerCount = this.players.size();
         int nextPlayerID = message.getNextPlayerID();
         boolean gameIsReady = message.isGameIsReady();
-        playerCount = updatedPlayerCount;
         startCheck(message, gameIsReady);
         if(nextPlayerID == this.playerID && gameIsReady) {
             initTurn();
@@ -525,7 +519,7 @@ public class MonopolyGUI extends JFrame {
             if((inJailTimer - 1) == 0) {
                 this.player.setInJail(false);
             }
-        }else {
+        } else {
             this.throwButton.setEnabled(true);
             this.ready = false;
         }
@@ -588,7 +582,7 @@ public class MonopolyGUI extends JFrame {
         //kiszedni a playerek között, hogy ne kapjon újabb kört
         //still megkapja az adatokat, tudja a többieket nézni
         int pID = p.getPlayerID();
-        updateBankruptcylabels(p);
+        updateBankruptcyLabels(p);
         pawns.get(pID).setVisible(false);
         if(pID == this.playerID) {
             popUpMessage("Kiestél a játékból!", JOptionPane.INFORMATION_MESSAGE);
@@ -619,7 +613,7 @@ public class MonopolyGUI extends JFrame {
         }
     }
 
-    private void updateBankruptcylabels(Player p){
+    private void updateBankruptcyLabels(Player p){
         int pID = p.getPlayerID();
         CustomLabel label = playerNameLabels.get(pID);
         label.setText("Név: " + p.getPlayerName());

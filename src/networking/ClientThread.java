@@ -16,7 +16,6 @@ public class ClientThread implements Runnable {
     private Player player;
     private final MonopolyGUI gameBoard;
     private boolean running;
-    private boolean insolvencyDetect = false;
 
     public ClientThread(MonopolyGUI gameBoard) {
         this.running = true;
@@ -80,7 +79,7 @@ public class ClientThread implements Runnable {
                 sendPlayerStatusToTheServer(oos);
                 ServerMessage serverMessage = (ServerMessage) ois.readObject();
                 gameBoard.updateGameBoard(serverMessage);
-                Thread.sleep(500);
+                Thread.sleep(220);
             }
         } catch(IOException | ClassNotFoundException e) {
             e.printStackTrace();

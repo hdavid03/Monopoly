@@ -34,6 +34,7 @@ public class SurpriseCard extends Card {
                 player.setInJailTimer(3);
                 player.setInJail(true);
                 monopolyGUI.goingOnFields(10);
+                monopolyGUI.setReady(true);
             }
             case 9 -> player.changeBalance(10);
             case 11 -> player.changeBalance(200);
