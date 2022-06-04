@@ -31,10 +31,8 @@ public class LaunchPage implements ActionListener {
         launchFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         launchFrame.setSize(420, 420);
         launchFrame.setLayout(null);
-
         submitButton = new CustomButton(75, 160, 200, 40, "Csatlakozás");
         submitButton.addActionListener(this);
-
         usernameTextField = new CustomTextField(50, 50, 250, 40, "Felhasználónév");
         ipaddressTextField = new CustomTextField(50, 100, 250, 40, "IP cím");
         launchFrame.add(submitButton);
@@ -46,8 +44,6 @@ public class LaunchPage implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == submitButton){
-            // a felhasználónév megadásnál nem kell a portot megadni, mert azt majd a kliens tudni fogja
-            System.out.println("Üdvözlégy "+ usernameTextField.getText()+ "!");
             launchFrame.dispose();        //close frame
             clientWantsToConnect = true;
         }

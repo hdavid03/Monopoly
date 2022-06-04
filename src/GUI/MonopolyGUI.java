@@ -20,7 +20,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 
 public class MonopolyGUI extends JFrame {
-
     private CustomButton payButton;
     private CustomButton readyButton;
     private CustomButton throwButton;
@@ -577,10 +576,7 @@ public class MonopolyGUI extends JFrame {
         }
     }
 
-    //fingom sincs hova kell rakni/leellenőrizni
     private void setBankruptcy(Player p){
-        //kiszedni a playerek között, hogy ne kapjon újabb kört
-        //still megkapja az adatokat, tudja a többieket nézni
         int pID = p.getPlayerID();
         updateBankruptcyLabels(p);
         pawns.get(pID).setVisible(false);
@@ -590,7 +586,6 @@ public class MonopolyGUI extends JFrame {
             this.player.setOnline(false);
             this.ready = true;
         }
-        //gui rendesen pakolja a bábukat helyére, kiszedem a fieldid-t is
         p.setFieldID(0);
         p.setUtilityCounter(0);
         p.setRailRoadCounter(0);
