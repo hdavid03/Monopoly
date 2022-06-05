@@ -1,6 +1,8 @@
 package networking;
 
 import game_elements.Player;
+import server.ServerApplication;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -85,11 +87,11 @@ public class ClientSocketHandler implements Runnable {
                 }
             }
         } catch(IOException e ) {
-            clientSocketHandlerLogger.log(Level.SEVERE, "Disconnected from the server");
+            clientSocketHandlerLogger.log(Level.SEVERE, () -> "Disconnected from the server ID:" + this.player.getPlayerID());
             player.setOnline(false);
             setLostConnection(true);
         }catch (ClassNotFoundException e) {
-            clientSocketHandlerLogger.log(Level.SEVERE, "Class not found exception");
+            clientSocketHandlerLogger.log(Level.SEVERE,  () -> "Class not found exception ID: " + this.player.getPlayerID());
             player.setOnline(false);
             setLostConnection(true);
         }
@@ -101,7 +103,7 @@ public class ClientSocketHandler implements Runnable {
                 oos.writeObject(serverMessage);
             }
         }catch (IOException e) {
-            clientSocketHandlerLogger.log(Level.SEVERE, "Lost message from server");
+            clientSocketHandlerLogger.log(Level.SEVERE, () -> "Lost message from server ID: " + this.player.getPlayerID());
             player.setOnline(false);
             setLostConnection(true);
         }
@@ -114,7 +116,7 @@ public class ClientSocketHandler implements Runnable {
             }
             serverIsUpdated = false;
         }catch(InterruptedException e) {
-            e.printStackTrace();
+            clientSocketHandlerLogger.log(Level.SEVERE, () -> "Client socket handler thread interrupted while it was sleeping ID: " + this.player.getPlayerID());
             Thread.currentThread().interrupt();
         }
     }
@@ -133,7 +135,7 @@ public class ClientSocketHandler implements Runnable {
                 sendUpdatedStatusToTheClient(oos);
             }
         } catch(IOException | ClassNotFoundException e) {
-            clientSocketHandlerLogger.log(Level.SEVERE, "Disconnected from the server");
+            clientSocketHandlerLogger.log(Level.SEVERE, () -> "Disconnected from the server ID: " + this.player.getPlayerID());
             player.setOnline(false);
             setLostConnection(true);
         }

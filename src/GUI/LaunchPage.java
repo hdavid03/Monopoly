@@ -1,23 +1,26 @@
 package GUI;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class LaunchPage implements ActionListener {
+public class LaunchPage extends Component implements ActionListener {
 
     //FRAME
     JFrame launchFrame = new JFrame();
 
     //TEXTFIELDS
     CustomTextField usernameTextField;
-    CustomTextField ipaddressTextField;
+    CustomTextField ipAddressTextField;
     private boolean clientWantsToConnect = false;
 
     public CustomTextField getUsernameTextField() {
         return usernameTextField;
     }
+
+    public CustomTextField getIpAddressTextField() { return ipAddressTextField; }
 
     public boolean clientWantToConnect() {
         return clientWantsToConnect;
@@ -34,18 +37,22 @@ public class LaunchPage implements ActionListener {
         submitButton = new CustomButton(75, 160, 200, 40, "Csatlakozás");
         submitButton.addActionListener(this);
         usernameTextField = new CustomTextField(50, 50, 250, 40, "Felhasználónév");
-        ipaddressTextField = new CustomTextField(50, 100, 250, 40, "IP cím");
+        ipAddressTextField = new CustomTextField(50, 100, 250, 40, "IP cím");
         launchFrame.add(submitButton);
         launchFrame.add(usernameTextField);
-        launchFrame.add(ipaddressTextField);
+        launchFrame.add(ipAddressTextField);
         launchFrame.setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == submitButton){
-            launchFrame.dispose();        //close frame
-            clientWantsToConnect = true;
+            if(ipAddressTextField.getText().compareTo("127.0.0.1") == 0) {
+                launchFrame.dispose();        //close frame
+                clientWantsToConnect = true;
+            } else {
+                JOptionPane.showMessageDialog(this, "Helytelen IP cím, próbáld újra!", "Hiba", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 }

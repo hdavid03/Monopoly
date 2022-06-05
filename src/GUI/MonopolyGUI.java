@@ -444,7 +444,7 @@ public class MonopolyGUI extends JFrame {
                 icons.add(new ImageIcon(path));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            ClientApplication.clientApplicationLogger.log(Level.SEVERE, "Loading image icons from file failed");
         }
     }
 

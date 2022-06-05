@@ -5,6 +5,7 @@ import GUI.MonopolyGUI;
 import networking.ClientThread;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ClientApplication {
@@ -17,7 +18,7 @@ public class ClientApplication {
         }
 
         MonopolyGUI gui = new MonopolyGUI(launchPage.getUsernameTextField().getText());
-        ClientThread clientThread = new ClientThread(gui);
+        ClientThread clientThread = new ClientThread(gui, launchPage.getIpAddressTextField().getText());
         Thread thread = new Thread(clientThread);
         thread.start();
 
@@ -30,7 +31,7 @@ public class ClientApplication {
                 try {
                     thread.join();
                 } catch (InterruptedException exception) {
-                    exception.printStackTrace();
+                    ClientApplication.clientApplicationLogger.log(Level.SEVERE, "Client interrupted before closing window");
                     Thread.currentThread().interrupt();
                 }
             }
@@ -41,7 +42,7 @@ public class ClientApplication {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            ClientApplication.clientApplicationLogger.log(Level.SEVERE, "Client interrupted when while it was waiting");
             Thread.currentThread().interrupt();
         }
     }

@@ -15,11 +15,13 @@ public class ClientThread implements Runnable {
     private Socket clientSocket;
     private Player player;
     private final MonopolyGUI gameBoard;
+    private String ipAddress;
     private boolean running;
 
-    public ClientThread(MonopolyGUI gameBoard) {
+    public ClientThread(MonopolyGUI gameBoard, String ipAddress) {
         this.running = true;
         this.gameBoard = gameBoard;
+        this.ipAddress = ipAddress;
     }
 
     public boolean isRunning() {
@@ -32,7 +34,7 @@ public class ClientThread implements Runnable {
             try {
                 clientSocket.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                ClientApplication.clientApplicationLogger.log(Level.SEVERE, "There was a problem with closing the client socket");
             }
         }
     }
@@ -56,7 +58,7 @@ public class ClientThread implements Runnable {
             }
             if(ready && gameBoard.isGameStarted()) gameBoard.setReady(false);
         }catch (IOException e) {
-            e.printStackTrace();
+            ClientApplication.clientApplicationLogger.log(Level.SEVERE, "Client could not send last message to the server");
             setRunning(false);
         }
     }
@@ -65,7 +67,7 @@ public class ClientThread implements Runnable {
     public void run() {
         ObjectInputStream ois = null;
         ObjectOutputStream oos = null;
-        try(Socket socket = new Socket(ServerApplication.HOST, ServerApplication.PORT)) {
+        try(Socket socket = new Socket(ipAddress, ServerApplication.PORT)) {
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
             this.player = (Player) ois.readObject();
@@ -82,10 +84,10 @@ public class ClientThread implements Runnable {
                 Thread.sleep(220);
             }
         } catch(IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            ClientApplication.clientApplicationLogger.log(Level.SEVERE, "Client disconnected from the server");
             setRunning(false);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            ClientApplication.clientApplicationLogger.log(Level.SEVERE, "Client disconnected from the server");
             setRunning(false);
             Thread.currentThread().interrupt();
         }
