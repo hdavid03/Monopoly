@@ -87,7 +87,7 @@ public class ServerSocketHandler extends Thread {
         try {
             socket = serverSocket.accept();
         } catch(SocketTimeoutException e) {
-            serverSocketHandlerLogger.log(Level.INFO, "Client could not connect to the server");
+            serverSocketHandlerLogger.log(Level.INFO, "Waiting for connections");
         }
         return socket;
     }
@@ -146,7 +146,7 @@ public class ServerSocketHandler extends Thread {
                 game();
             }
         } catch(IOException e) {
-            serverSocketHandlerLogger.log(Level.SEVERE, e::getMessage);
+            serverSocketHandlerLogger.log(Level.SEVERE, "There was a problem with server-client communication");
         }
     }
 
@@ -169,6 +169,7 @@ public class ServerSocketHandler extends Thread {
         for(ClientSocketHandler ch : clientSocketHandlers) {
             serverSocketHandlerLogger.log(Level.INFO, () -> ch.getPlayer().toString() + " player is online");
         }
+        clientSocketHandlers.removeIf(ClientSocketHandler::isLostConnection);
         return start;
     }
 
