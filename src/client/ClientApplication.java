@@ -42,7 +42,7 @@ public class ClientApplication {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
-            ClientApplication.clientApplicationLogger.log(Level.SEVERE, "Client interrupted when while it was waiting");
+            ClientApplication.clientApplicationLogger.log(Level.SEVERE, "Client interrupted while it was waiting");
             Thread.currentThread().interrupt();
         }
     }

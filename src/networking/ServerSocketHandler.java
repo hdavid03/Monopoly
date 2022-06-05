@@ -87,7 +87,7 @@ public class ServerSocketHandler extends Thread {
         try {
             socket = serverSocket.accept();
         } catch(SocketTimeoutException e) {
-            serverSocketHandlerLogger.log(Level.INFO, e::getMessage);
+            serverSocketHandlerLogger.log(Level.INFO, "Client could not connect to the server");
         }
         return socket;
     }

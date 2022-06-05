@@ -70,13 +70,7 @@ public class ClientThread implements Runnable {
         try(Socket socket = new Socket(ipAddress, ServerApplication.PORT)) {
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
-            this.player = (Player) ois.readObject();
-            this.player.setPlayerName(gameBoard.getUserName());
-            this.gameBoard.setPlayerID(this.player.getPlayerID());
-            this.gameBoard.setPlayer(new Player(this.player));
-            this.clientSocket = socket;
-            oos.writeObject(new Player(this.player));
-            oos.flush();
+            initPlayer(ois, oos, socket);
             while(isRunning() && this.player.isOnline()) {
                 sendPlayerStatusToTheServer(oos);
                 ServerMessage serverMessage = (ServerMessage) ois.readObject();
@@ -91,5 +85,15 @@ public class ClientThread implements Runnable {
             setRunning(false);
             Thread.currentThread().interrupt();
         }
+    }
+
+    private void initPlayer(ObjectInputStream ois, ObjectOutputStream oos, Socket socket) throws IOException, ClassNotFoundException {
+        this.player = (Player) ois.readObject();
+        this.player.setPlayerName(gameBoard.getUserName());
+        this.gameBoard.setPlayerID(this.player.getPlayerID());
+        this.gameBoard.setPlayer(new Player(this.player));
+        this.clientSocket = socket;
+        oos.writeObject(new Player(this.player));
+        oos.flush();
     }
 }
