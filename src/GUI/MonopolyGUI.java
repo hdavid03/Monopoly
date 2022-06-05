@@ -46,7 +46,7 @@ public class MonopolyGUI extends JFrame {
     private transient ChanceCard chance = new ChanceCard();
 
     private CustomLabel cardLabel;
-    private CustomLabel househotelLabel;
+    private CustomLabel houseHotelLabel;
     private CustomLabel die1Label;
     private CustomLabel die2Label;
     private CustomPanel dicePanel;
@@ -96,12 +96,12 @@ public class MonopolyGUI extends JFrame {
 
     private CustomPanel getCustomCardsPanel() {
         CustomLabel cardTitleLabel = new CustomLabel("Kártyák", 40, 10, 10, 200, 50);
-        househotelLabel = new CustomLabel("", 30, 200, 10, 400, 50);
+        houseHotelLabel = new CustomLabel("", 30, 200, 10, 400, 50);
         CustomPanel cardsPanel = new CustomPanel(1000, 400, 600, 400, Color.WHITE);
         cardLabel = new CustomLabel(110, 60, 600, 350, null);
         cardsPanel.add(cardTitleLabel);
         cardsPanel.add(cardLabel);
-        cardsPanel.add(househotelLabel);
+        cardsPanel.add(houseHotelLabel);
         return cardsPanel;
     }
 
@@ -164,12 +164,12 @@ public class MonopolyGUI extends JFrame {
 
     public void fieldImage(Integer tableFieldsID) {
         Field field = this.fields[tableFieldsID];
-        househotelLabel.setText("");
+        houseHotelLabel.setText("");
         if (field instanceof PropertyField) {
             cardLabel.setIcon(propertyCardIcons.get(tableFieldsID));
             if(field instanceof StreetField streetField){
                 String isHotel = streetField.isThereHotel() ? "Van" : "Nincs";
-                househotelLabel.setText("Ház: " + streetField.getHouseCounter() + " || Szálloda: " + isHotel);
+                houseHotelLabel.setText("Ház: " + streetField.getHouseCounter() + " || Szálloda: " + isHotel);
             }
         }
         else if (field instanceof CommunityChestField) {
@@ -274,9 +274,8 @@ public class MonopolyGUI extends JFrame {
         this.add(playerPanel);
     }
 
-    private void showOwnershipOnField(Player p) {
-        int pID = p.getPlayerID();
-        Field field = this.fields[p.getFieldID()];
+    private void showOwnershipOnField(int ownedFieldID, int pID) {
+        Field field = this.fields[ownedFieldID];
         if (field instanceof PropertyField propertyField && propertyField.getOwnership()) {
             Color colour = null;
             switch (pID) {
@@ -287,9 +286,9 @@ public class MonopolyGUI extends JFrame {
                 default ->
                         ClientApplication.clientApplicationLogger.log(Level.SEVERE,"Error in the showOwnershipOnField(Player p) method.");
                 }
-                if (ownedPropertyIndicator.get(p.getFieldID()) != null) {
-                    ownedPropertyIndicator.get(p.getFieldID()).setBackground(colour);
-                    ownedPropertyIndicator.get(p.getFieldID()).setOpaque(true);
+                if (ownedPropertyIndicator.get(ownedFieldID) != null) {
+                    ownedPropertyIndicator.get(ownedFieldID).setBackground(colour);
+                    ownedPropertyIndicator.get(ownedFieldID).setOpaque(true);
                 }
             }
     }
@@ -355,13 +354,13 @@ public class MonopolyGUI extends JFrame {
     }
 
     private void propertyFieldTypeOptions(PropertyField propertyField) {
-        if(propertyField instanceof StreetField streetField){
+        if(propertyField instanceof StreetField streetField) {
             if(streetField.getHouseCounter() < 4 && !streetField.isThereHotel() && streetField.getHouseBuildCost() < this.player.getMoney()) {
                 streetField.setHouseCounter(streetField.getHouseCounter() + 1);
                 this.player.changeBalance(-1 * streetField.getHouseBuildCost());
                 this.player.setHouseCounter(this.player.getHouseCounter()+1);
             }
-            else if(streetField.getHouseCounter() == 4 && !streetField.isThereHotel() && streetField.getHotelBuildCost() < this.player.getMoney()){
+            else if(streetField.getHouseCounter() == 4 && !streetField.isThereHotel() && streetField.getHotelBuildCost() < this.player.getMoney()) {
                 streetField.setHotel(true);
                 streetField.setHouseCounter(0);
                 this.player.setHouseCounter(this.player.getHouseCounter()-4);
@@ -375,6 +374,8 @@ public class MonopolyGUI extends JFrame {
                     message = "Nincs elég pénzed az épületre!";
                 } popUpMessage(message, JOptionPane.INFORMATION_MESSAGE);
             }
+            String isHotel = streetField.isThereHotel() ? "Van" : "Nincs";
+            houseHotelLabel.setText("Ház: " + streetField.getHouseCounter() + " || Szálloda: " + isHotel);
         }
     }
 
@@ -386,7 +387,7 @@ public class MonopolyGUI extends JFrame {
             this.player.addOwnedFieldID(fieldID);
             ClientApplication.clientApplicationLogger.log(Level.INFO, () -> ("Player ID: " + this.player.getPlayerID() + " bougth fleid ID: " + fieldID));
             this.player.changeBalance(-1 * propertyField.getValue());
-            showOwnershipOnField(this.player);
+            showOwnershipOnField(fieldID, this.playerID);
             if (propertyField instanceof UtilityField) {
                 this.player.setUtilityCounter(this.player.getUtilityCounter() + 1);
             } else if (propertyField instanceof RailRoadField) {
@@ -497,13 +498,14 @@ public class MonopolyGUI extends JFrame {
 
     private void updateOwnedFieldIDs() {
         for(Player p : this.players) {
-            if(p.getPlayerID() != this.playerID) {
+            int pID = p.getPlayerID();
+            if(pID != this.playerID) {
                 ArrayList<Integer> ownedFieldIDs = p.getOwnedFieldIDs();
                 for (Integer ownedFieldID : ownedFieldIDs) {
                     if (this.fields[ownedFieldID] instanceof PropertyField propertyField) {
                         propertyField.setOwnerID(p.getPlayerID());
                         propertyField.setOwnership(true);
-                        showOwnershipOnField(p);
+                        showOwnershipOnField(ownedFieldID, pID);
                     }
                 }
             }
